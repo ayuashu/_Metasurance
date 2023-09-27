@@ -1,0 +1,186 @@
+---
+Organizations:
+    - &OrdererOrg
+      Name: OrdererOrg
+      ID: OrdererMSP
+      MSPDir: crypto-config/ordererOrganizations/example.com/msp
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('OrdererMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('OrdererMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('OrdererMSP.admin')"
+
+    - &Insurer
+      Name: InsurerMSP
+      ID: InsurerMSP
+      MSPDir: crypto-config/peerOrganizations/insurer.example.com/msp
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('InsurerMSP.admin', 'InsurerMSP.peer', 'InsurerMSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('InsurerMSP.admin', 'InsurerMSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('InsurerMSP.admin')"
+
+    - &User
+      Name: UserMSP
+      ID: UserMSP
+      MSPDir: crypto-config/peerOrganizations/user.example.com/msp
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('UserMSP.admin', 'UserMSP.peer', 'UserMSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('UserMSP.admin', 'UserMSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('UserMSP.admin')"
+
+    - &Assets
+      Name: AssetsMSP
+      ID: AssetsMSP
+      MSPDir: crypto-config/peerOrganizations/assets.example.com/msp
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('AssetsMSP.admin', 'AssetsMSP.peer', 'AssetsMSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('AssetsMSP.admin', 'AssetsMSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('AssetsMSP.admin')"
+
+    - &MetaAdmin
+      Name: MetaAdminMSP
+      ID: MetaAdminMSP
+      MSPDir: crypto-config/peerOrganizations/exampleadmin.example.com/msp
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('MetaAdminMSP.admin', 'MetaAdminMSP.peer', 'MetaAdminMSP.client')"
+          Writers:
+              Type: Signature
+              Rule: "OR('MetaAdminMSP.admin', 'MetaAdminMSP.client')"
+          Admins:
+              Type: Signature
+              Rule: "OR('MetaAdminMSP.admin')"
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V1_4_3: true
+        V1_3: false
+        V1_1: false
+    Orderer: &OrdererCapabilities
+        V1_4_2: true
+        V1_1: false
+    Application: &ApplicationCapabilities
+        V1_4_2: true
+        V1_3: false
+        V1_2: false
+        V1_1: false
+
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    Addresses:
+        - orderer0.example.com:7050
+
+    BatchTimeout: 250ms
+    BatchSize:
+        MaxMessageCount: 50
+        AbsoluteMaxBytes: 100 MB
+        PreferredMaxBytes: 1 MB
+
+    MaxChannels: 0
+    EtcdRaft:
+        Consenters:
+            - Host: orderer0.example.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    METAOrderGenesis:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Insurer
+                    - *User
+                    - *Assets
+                    - *MetaAdmin
+
+    METAChannel:
+        Consortium: SampleConsortium
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Insurer
+                - *User
+                - *Assets
+                - *MetaAdmin
+
+            Capabilities:
+                <<: *ApplicationCapabilities

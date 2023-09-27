@@ -1,0 +1,188 @@
+version: "2"
+
+volumes:
+    orderer0.example.com:
+    peer0.insurer.example.com:
+    peer0.user.example.com:
+    peer0.assets.example.com:
+    peer0.exampleadmin.example.com:
+    ca.insurer.example.com:
+    ca.user.example.com:
+    ca.assets.example.com:
+    ca.exampleadmin.example.com:
+
+networks:
+    byfn:
+
+services:
+    orderer0.example.com:
+        extends:
+            file: base/docker-compose-base.yaml
+            service: orderer0.example.com
+        container_name: orderer0.example.com
+        networks:
+            - byfn
+        depends_on:
+            - ca.insurer.example.com
+            - ca.user.example.com
+            - ca.assets.example.com
+            - ca.exampleadmin.example.com
+
+    peer0.insurer.example.com:
+        container_name: peer0.insurer.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.insurer.example.com
+        networks:
+            - byfn
+        depends_on:
+            - orderer0.example.com
+            - couchdb.peer0.insurer.example.com
+
+    peer0.user.example.com:
+        container_name: peer0.user.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.user.example.com
+        networks:
+            - byfn
+        depends_on:
+            - orderer0.example.com
+            - couchdb.peer0.user.example.com
+
+    peer0.assets.example.com:
+        container_name: peer0.assets.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.assets.example.com
+        networks:
+            - byfn
+        depends_on:
+            - orderer0.example.com
+            - couchdb.peer0.assets.example.com
+
+    peer0.exampleadmin.example.com:
+        container_name: peer0.exampleadmin.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.exampleadmin.example.com
+        networks:
+            - byfn
+        depends_on:
+            - orderer0.example.com
+            - couchdb.peer0.exampleadmin.example.com
+
+    ca.insurer.example.com:
+        container_name: ca.insurer.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: ca.insurer.example.com
+        networks:
+            - byfn
+
+    ca.user.example.com:
+        container_name: ca.user.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: ca.user.example.com
+        networks:
+            - byfn
+
+    ca.assets.example.com:
+        container_name: ca.assets.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: ca.assets.example.com
+        networks:
+            - byfn
+
+    ca.exampleadmin.example.com:
+        container_name: ca.exampleadmin.example.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: ca.exampleadmin.example.com
+        networks:
+            - byfn
+
+    couchdb.peer0.insurer.example.com:
+        container_name: couchdb.peer0.insurer.example.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "5984:5984"
+        networks:
+            - byfn
+
+    couchdb.peer0.user.example.com:
+        container_name: couchdb.peer0.user.example.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "6984:5984"
+        networks:
+            - byfn
+
+    couchdb.peer0.assets.example.com:
+        container_name: couchdb.peer0.assets.example.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "7984:5984"
+        networks:
+            - byfn
+
+    couchdb.peer0.exampleadmin.example.com:
+        container_name: couchdb.peer0.exampleadmin.example.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "8984:5984"
+        networks:
+            - byfn
+
+    cli:
+        container_name: cli
+        image: hyperledger/fabric-tools:$IMAGE_TAG
+        tty: true
+        stdin_open: true
+        environment:
+            - GOPATH=/opt/gopath
+            - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+            #- FABRIC_LOGGING_SPEC=DEBUG
+            - FABRIC_LOGGING_SPEC=INFO
+            - CORE_PEER_ID=cli
+            - CORE_PEER_ADDRESS=peer0.insurer.example.com:7051
+            - CORE_PEER_LOCALMSPID=InsurerMSP
+            - CORE_PEER_TLS_ENABLED=true
+            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/server.crt
+            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/server.key
+            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/ca.crt
+            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/users/Admin@insurer.example.com/msp
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+        command: /bin/bash
+        volumes:
+            - /var/run/:/host/var/run/
+            - ./../chaincode/:/opt/gopath/src/
+            - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+            - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+            - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        depends_on:
+            - orderer0.example.com
+            - peer0.insurer.example.com
+            - peer0.user.example.com
+            - peer0.assets.example.com
+            - peer0.exampleadmin.example.com
+            - ca.insurer.example.com
+            - ca.user.example.com
+            - ca.assets.example.com
+            - ca.exampleadmin.example.com
+        networks:
+            - byfn

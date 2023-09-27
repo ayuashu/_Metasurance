@@ -1,0 +1,39 @@
+OrdererOrgs:
+    - Name: Orderer
+      Domain: example.com
+      EnableNodeOUs: true
+      Template:
+          Count: 1
+
+PeerOrgs:
+    - Name: Insurer
+      Domain: insurer.example.com
+      EnableNodeOUs: true
+      Template:
+          Count: 1
+      Users:
+          Count: 1
+
+    - Name: User
+      Domain: user.example.com
+      EnableNodeOUs: true
+      Template:
+          Count: 1
+      Users:
+          Count: 1
+
+    - Name: Assets
+      Domain: assets.example.com
+      EnableNodeOUs: true
+      Template:
+          Count: 1
+      Users:
+          Count: 1
+
+    - Name: MetaAdmin
+      Domain: exampleadmin.example.com
+      EnableNodeOUs: true
+      Template:
+          Count: 1
+      Users:
+          Count: 1
