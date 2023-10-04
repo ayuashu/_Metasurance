@@ -155,7 +155,7 @@ Channel: &ChannelDefaults
         <<: *ChannelCapabilities
 
 Profiles:
-    METAOrderGenesis:
+    METAOrderGenesis: # profile of genesis block
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
@@ -171,7 +171,7 @@ Profiles:
                     - *Assets
                     - *MetaAdmin
 
-    METAChannel:
+    CommonChannel:  # profile of channel
         Consortium: SampleConsortium
         <<: *ChannelDefaults
         Application:
@@ -179,8 +179,12 @@ Profiles:
             Organizations:
                 - *Insurer
                 - *User
-                - *Assets
-                - *MetaAdmin
 
             Capabilities:
                 <<: *ApplicationCapabilities
+    UserChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *User
