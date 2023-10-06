@@ -2,7 +2,7 @@
 ls
 cd ..
 export IMAGE_TAG=1.4
-export PATH=$PATH:/home/ubuntu/fabric-samples/bin 
+export PATH=$PATH:/home/fishnak/fabric-samples/bin 
 echo "Generating cryto material for peers..."
 
 mkdir ./channel-artifacts
@@ -11,7 +11,8 @@ cryptogen generate --config=./crypto-config.yaml
 
 echo "Generating channel artifacts and genesis block..."
 configtxgen -profile METAOrderGenesis -outputBlock ./channel-artifacts/genesis.block
-configtxgen -profile METAChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID mychannel
+configtxgen -profile CommonChannel -outputCreateChannelTx ./channel-artifacts/commonChannel.tx -channelID commonchannel
+configtxgen -profile UserChannel -outputCreateChannelTx ./channel-artifacts/userChannel.tx -channelID userchannel
 
 CURRENT_DIR=$PWD
 cd ./base
