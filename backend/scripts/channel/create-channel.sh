@@ -17,5 +17,5 @@ cat log.txt
 #peer channel create -o orderer0.example.com:7050 /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -c mychannel -f ./channel-artifacts/channel.tx
 sleep 10
 echo
-echo "Channel created, joining commonchannel..."
+echo "Channel created, insurer joining commonchannel..."
 peer channel join -b commonchannel.block
