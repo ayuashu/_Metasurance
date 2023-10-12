@@ -5,10 +5,10 @@ docker-compose -f docker-compose-cli.yaml up -d
 # create a channel, insurer already in channel
 docker exec -it cli bash ./scripts/channel/create-channel.sh
 # docker exec -it cli bash ./scripts/channel/create-channel-user.sh
-
 # make peers join the channel
 docker exec -it cli bash ./scripts/channel/join-peer.sh peer0 user UserMSP 8051 1.0
 echo "Joined user"
+
 echo "Installing user_cc"
 docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh user_cc peer0 user UserMSP 8051 1.0 # install in common channel now
 echo "Instantiating user_cc"

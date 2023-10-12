@@ -1,111 +1,111 @@
 version: "2"
 
 volumes:
-    orderer0.example.com:
-    peer0.insurer.example.com:
-    peer0.user.example.com:
-    peer0.assets.example.com:
-    peer0.exampleadmin.example.com:
-    ca.insurer.example.com:
-    ca.user.example.com:
-    ca.assets.example.com:
-    ca.exampleadmin.example.com:
+    orderer0.metasurance.com:
+    peer0.insurer.metasurance.com:
+    peer0.user.metasurance.com:
+    peer0.assets.metasurance.com:
+    peer0.exampleadmin.metasurance.com:
+    ca.insurer.metasurance.com:
+    ca.user.metasurance.com:
+    ca.assets.metasurance.com:
+    ca.exampleadmin.metasurance.com:
 
 networks:
     byfn:
 
 services:
-    orderer0.example.com:
+    orderer0.metasurance.com:
         extends:
             file: base/docker-compose-base.yaml
-            service: orderer0.example.com
-        container_name: orderer0.example.com
+            service: orderer0.metasurance.com
+        container_name: orderer0.metasurance.com
         networks:
             - byfn
         depends_on:
-            - ca.insurer.example.com
-            - ca.user.example.com
-            - ca.assets.example.com
-            - ca.exampleadmin.example.com
+            - ca.insurer.metasurance.com
+            - ca.user.metasurance.com
+            - ca.assets.metasurance.com
+            - ca.exampleadmin.metasurance.com
 
-    peer0.insurer.example.com:
-        container_name: peer0.insurer.example.com
+    peer0.insurer.metasurance.com:
+        container_name: peer0.insurer.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.insurer.example.com
+            service: peer0.insurer.metasurance.com
         networks:
             - byfn
         depends_on:
-            - orderer0.example.com
-            - couchdb.peer0.insurer.example.com
+            - orderer0.metasurance.com
+            - couchdb.peer0.insurer.metasurance.com
 
-    peer0.user.example.com:
-        container_name: peer0.user.example.com
+    peer0.user.metasurance.com:
+        container_name: peer0.user.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.user.example.com
+            service: peer0.user.metasurance.com
         networks:
             - byfn
         depends_on:
-            - orderer0.example.com
-            - couchdb.peer0.user.example.com
+            - orderer0.metasurance.com
+            - couchdb.peer0.user.metasurance.com
 
-    peer0.assets.example.com:
-        container_name: peer0.assets.example.com
+    peer0.assets.metasurance.com:
+        container_name: peer0.assets.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.assets.example.com
+            service: peer0.assets.metasurance.com
         networks:
             - byfn
         depends_on:
-            - orderer0.example.com
-            - couchdb.peer0.assets.example.com
+            - orderer0.metasurance.com
+            - couchdb.peer0.assets.metasurance.com
 
-    peer0.exampleadmin.example.com:
-        container_name: peer0.exampleadmin.example.com
+    peer0.exampleadmin.metasurance.com:
+        container_name: peer0.exampleadmin.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.exampleadmin.example.com
+            service: peer0.exampleadmin.metasurance.com
         networks:
             - byfn
         depends_on:
-            - orderer0.example.com
-            - couchdb.peer0.exampleadmin.example.com
+            - orderer0.metasurance.com
+            - couchdb.peer0.exampleadmin.metasurance.com
 
-    ca.insurer.example.com:
-        container_name: ca.insurer.example.com
+    ca.insurer.metasurance.com:
+        container_name: ca.insurer.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: ca.insurer.example.com
+            service: ca.insurer.metasurance.com
         networks:
             - byfn
 
-    ca.user.example.com:
-        container_name: ca.user.example.com
+    ca.user.metasurance.com:
+        container_name: ca.user.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: ca.user.example.com
+            service: ca.user.metasurance.com
         networks:
             - byfn
 
-    ca.assets.example.com:
-        container_name: ca.assets.example.com
+    ca.assets.metasurance.com:
+        container_name: ca.assets.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: ca.assets.example.com
+            service: ca.assets.metasurance.com
         networks:
             - byfn
 
-    ca.exampleadmin.example.com:
-        container_name: ca.exampleadmin.example.com
+    ca.exampleadmin.metasurance.com:
+        container_name: ca.exampleadmin.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: ca.exampleadmin.example.com
+            service: ca.exampleadmin.metasurance.com
         networks:
             - byfn
 
-    couchdb.peer0.insurer.example.com:
-        container_name: couchdb.peer0.insurer.example.com
+    couchdb.peer0.insurer.metasurance.com:
+        container_name: couchdb.peer0.insurer.metasurance.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -115,8 +115,8 @@ services:
         networks:
             - byfn
 
-    couchdb.peer0.user.example.com:
-        container_name: couchdb.peer0.user.example.com
+    couchdb.peer0.user.metasurance.com:
+        container_name: couchdb.peer0.user.metasurance.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -126,8 +126,8 @@ services:
         networks:
             - byfn
 
-    couchdb.peer0.assets.example.com:
-        container_name: couchdb.peer0.assets.example.com
+    couchdb.peer0.assets.metasurance.com:
+        container_name: couchdb.peer0.assets.metasurance.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -137,8 +137,8 @@ services:
         networks:
             - byfn
 
-    couchdb.peer0.exampleadmin.example.com:
-        container_name: couchdb.peer0.exampleadmin.example.com
+    couchdb.peer0.exampleadmin.metasurance.com:
+        container_name: couchdb.peer0.exampleadmin.metasurance.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -159,13 +159,13 @@ services:
             #- FABRIC_LOGGING_SPEC=DEBUG
             - FABRIC_LOGGING_SPEC=INFO
             - CORE_PEER_ID=cli
-            - CORE_PEER_ADDRESS=peer0.insurer.example.com:7051
+            - CORE_PEER_ADDRESS=peer0.insurer.metasurance.com:7051
             - CORE_PEER_LOCALMSPID=InsurerMSP
             - CORE_PEER_TLS_ENABLED=true
-            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/server.crt
-            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/server.key
-            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/peers/peer0.insurer.example.com/tls/ca.crt
-            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.example.com/users/Admin@insurer.example.com/msp
+            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.metasurance.com/peers/peer0.insurer.metasurance.com/tls/server.crt
+            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.metasurance.com/peers/peer0.insurer.metasurance.com/tls/server.key
+            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.metasurance.com/peers/peer0.insurer.metasurance.com/tls/ca.crt
+            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/insurer.metasurance.com/users/Admin@insurer.metasurance.com/msp
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: /bin/bash
         volumes:
@@ -175,14 +175,14 @@ services:
             - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
             - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
         depends_on:
-            - orderer0.example.com
-            - peer0.insurer.example.com
-            - peer0.user.example.com
-            - peer0.assets.example.com
-            - peer0.exampleadmin.example.com
-            - ca.insurer.example.com
-            - ca.user.example.com
-            - ca.assets.example.com
-            - ca.exampleadmin.example.com
+            - orderer0.metasurance.com
+            - peer0.insurer.metasurance.com
+            - peer0.user.metasurance.com
+            - peer0.assets.metasurance.com
+            - peer0.exampleadmin.metasurance.com
+            - ca.insurer.metasurance.com
+            - ca.user.metasurance.com
+            - ca.assets.metasurance.com
+            - ca.exampleadmin.metasurance.com
         networks:
             - byfn
