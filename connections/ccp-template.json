@@ -11,20 +11,6 @@
             }
         }
     },
-    "channel":{
-        "name":"commonchannel",
-        "orderers":[
-            "orderer.metasurance.com"
-        ],
-        "peers":{
-            "peer0.${ORG}.metasurance.com":{
-                "endorsingPeer": true,
-                "chaincodeQuery": true,
-                "ledgerQuery": true,
-                "eventSource": true
-            }
-        }
-    },
     "organizations": {
         "${ORG}": {
             "mspid": "${ORGMSP}MSP",

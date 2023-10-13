@@ -11,20 +11,6 @@
             }
         }
     },
-    "channel":{
-        "name":"commonchannel",
-        "orderers":[
-            "orderer.metasurance.com"
-        ],
-        "peers":{
-            "peer0.user.metasurance.com":{
-                "endorsingPeer": true,
-                "chaincodeQuery": true,
-                "ledgerQuery": true,
-                "eventSource": true
-            }
-        }
-    },
     "organizations": {
         "user": {
             "mspid": "UserMSP",
@@ -40,7 +26,7 @@
         "peer0.user.metasurance.com": {
             "url": "grpcs://localhost:8051",
             "tlsCACerts": {
-                "pem": "-----BEGIN CERTIFICATE-----\nMIICaDCCAg6gAwIBAgIRAP7S+EzHUksK36S6FKljs94wCgYIKoZIzj0EAwIwfjEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xHTAbBgNVBAoTFHVzZXIubWV0YXN1cmFuY2UuY29tMSMwIQYDVQQD\nExp0bHNjYS51c2VyLm1ldGFzdXJhbmNlLmNvbTAeFw0yMzEwMTIxNjU5MDBaFw0z\nMzEwMDkxNjU5MDBaMH4xCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlh\nMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMR0wGwYDVQQKExR1c2VyLm1ldGFzdXJh\nbmNlLmNvbTEjMCEGA1UEAxMadGxzY2EudXNlci5tZXRhc3VyYW5jZS5jb20wWTAT\nBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS5ejMFDedYRzSzxrXX0tkIdd0Ras6KpDKn\nYORB5E4x+Pn4JrhjACQVXsazdQEa5RcQhjiHuyfQbZ6DrSBgDLD/o20wazAOBgNV\nHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMA8GA1Ud\nEwEB/wQFMAMBAf8wKQYDVR0OBCIEIH/d/UwfGqVDdcAYKsTuZ21cvFy6G9uP62lp\nbsLy8TBAMAoGCCqGSM49BAMCA0gAMEUCIQD8t3cQnQm3UxPm487ebIOFA13B9RKE\njbkg5WwnerSZKgIgdeXgsxlgTMHL3S41nXPu4fz1KCQaTjggn4B8mYV0uw0=\n-----END CERTIFICATE-----\n"
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICZjCCAg2gAwIBAgIQY4vLKIiHY5oiSWJDtMSk8jAKBggqhkjOPQQDAjB+MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEdMBsGA1UEChMUdXNlci5tZXRhc3VyYW5jZS5jb20xIzAhBgNVBAMT\nGnRsc2NhLnVzZXIubWV0YXN1cmFuY2UuY29tMB4XDTIzMTAxMzA3NDIwMFoXDTMz\nMTAxMDA3NDIwMFowfjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWEx\nFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28xHTAbBgNVBAoTFHVzZXIubWV0YXN1cmFu\nY2UuY29tMSMwIQYDVQQDExp0bHNjYS51c2VyLm1ldGFzdXJhbmNlLmNvbTBZMBMG\nByqGSM49AgEGCCqGSM49AwEHA0IABF1KUmgXYt2MAhQQ3/x6DwDFY7iRTfHSxAU4\nDFD6qppBVHaYBrBaT6V/UiWCo1hxJpaweJ1ItJjv2bOIHwDtLlajbTBrMA4GA1Ud\nDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0T\nAQH/BAUwAwEB/zApBgNVHQ4EIgQgpPiBFWz3Vxsild4mS7sVcO0nlVNr36elipnp\nSPhhRgkwCgYIKoZIzj0EAwIDRwAwRAIgdk1OgAmG35WyeakvPuzkPYbGzwEE48n7\nIjmJWUykcBQCIGZhVgmERMg7mLEIyVarSHy1rzuyNQx8rxRN0cP7T6az\n-----END CERTIFICATE-----\n"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.user.metasurance.com",
@@ -53,7 +39,7 @@
             "url": "https://localhost:8054",
             "caName": "ca-user",
             "tlsCACerts": {
-                "pem": "-----BEGIN CERTIFICATE-----\nMIICYDCCAgegAwIBAgIQT8ckVF7tr8H36FwNuNTagDAKBggqhkjOPQQDAjB7MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEdMBsGA1UEChMUdXNlci5tZXRhc3VyYW5jZS5jb20xIDAeBgNVBAMT\nF2NhLnVzZXIubWV0YXN1cmFuY2UuY29tMB4XDTIzMTAxMjE2NTkwMFoXDTMzMTAw\nOTE2NTkwMFowezELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAU\nBgNVBAcTDVNhbiBGcmFuY2lzY28xHTAbBgNVBAoTFHVzZXIubWV0YXN1cmFuY2Uu\nY29tMSAwHgYDVQQDExdjYS51c2VyLm1ldGFzdXJhbmNlLmNvbTBZMBMGByqGSM49\nAgEGCCqGSM49AwEHA0IABBtwnqdMoSNG6bE/fF3S75ubnSWdZi2v2qLmkmIC7l8g\nVesKoNwxl6zeIe+gZFoEfTLO6CrnHeUJv0qzutgN5ZWjbTBrMA4GA1UdDwEB/wQE\nAwIBpjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUw\nAwEB/zApBgNVHQ4EIgQgFlGFDrxpT+rMaaHhvoo4uziKauHeHD7hUZoCcqpCChgw\nCgYIKoZIzj0EAwIDRwAwRAIgc9LDxuIEbfhIF1FlJ2EUOpUBDFYouR2E62TAkKvJ\nQK0CIAGe9bX9RcU57gTCMbVJJT19VJz9Y9FvXNtZJ983PNK6\n-----END CERTIFICATE-----\n"
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICYTCCAgigAwIBAgIRAMotB/B3OsZHNn1b/+lmXtowCgYIKoZIzj0EAwIwezEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xHTAbBgNVBAoTFHVzZXIubWV0YXN1cmFuY2UuY29tMSAwHgYDVQQD\nExdjYS51c2VyLm1ldGFzdXJhbmNlLmNvbTAeFw0yMzEwMTMwNzQyMDBaFw0zMzEw\nMTAwNzQyMDBaMHsxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw\nFAYDVQQHEw1TYW4gRnJhbmNpc2NvMR0wGwYDVQQKExR1c2VyLm1ldGFzdXJhbmNl\nLmNvbTEgMB4GA1UEAxMXY2EudXNlci5tZXRhc3VyYW5jZS5jb20wWTATBgcqhkjO\nPQIBBggqhkjOPQMBBwNCAARHR6GH6ROeZwBg0Bm8jFzEQ1ICmDi8u2tsi3odu5Du\nCjH/TjAgeKk1rnAvOLp9W48r4zZxWiv8kOpJSccsiwmVo20wazAOBgNVHQ8BAf8E\nBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMA8GA1UdEwEB/wQF\nMAMBAf8wKQYDVR0OBCIEILzM3rZlQGhAZZYrvkMPZRWaMY61AOohJ9WcHm26wwli\nMAoGCCqGSM49BAMCA0cAMEQCIGMm+eD9Ffz1if3CJPYDe7xeaduzm9eB8h1m+voc\nJvavAiBYQRD59fOhinAXD/fndgpRN96AuiLIsuE6W/Q3y7Vb+w==\n-----END CERTIFICATE-----\n"
             },
             "httpOptions": {
                 "verify": false

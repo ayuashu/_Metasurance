@@ -17,6 +17,6 @@ CORE_PEER_TLS_ENABLED=true
 #export ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/msp/tlscacerts/tlsca.metasurance.com-cert.pem
 
 #peer chaincode instantiate -o orderer0.metasurance.com:7050 --tls true --cafile $ORDERER_CA -C mychannel -n $CHAINCODE -v 1.0 -c '{"Args":[]}' >&log.txt
-peer chaincode instantiate -o orderer0.metasurance.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/msp/tlscacerts/tlsca.metasurance.com-cert.pem -v 1.0 -c '{"Args":[]}' -C commonchannel -n $CHAINCODE
+peer chaincode instantiate -o orderer0.metasurance.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/msp/tlscacerts/tlsca.metasurance.com-cert.pem -v $VERSION -c '{"Args":[]}' -C commonchannel -n $CHAINCODE
 
 #cat log.txt

@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"os/exec"
 
+	"github.com/google/uuid"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
 )
@@ -36,24 +36,21 @@ func (t *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return t.login(stub, args)
 	}
 
-	return shim.Error("Invalid function name. Expecting 'register', 'readUserProfile', or 'checkUser'")
+	return shim.Success([]byte("{\"error\":\"Invalid function name. Expecting 'register', 'readUserProfile', or 'checkUser'\"}"))
 }
 
 func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4: name, email, phone, password")
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 4: name, email, phone, password\"}"))
 	}
 
-	newUUID, err := exec.Command("uuidgen").Output() 
-    if err != nil { 
-        return shim.Error("Cannot generate uuid") 
-    }
+	newUUID := uuid.New()
 
 	name := args[0]
 	email := args[1]
 	phone := args[2]
 	password := args[3]
-	uniqueID := string(newUUID)
+	uniqueID := newUUID.String()
 
 	user := User{
 		Name:     name,
@@ -65,31 +62,31 @@ func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) pe
 
 	userJSON, err := json.Marshal(user)
 	if err != nil {
-		return shim.Error("Error converting user to JSON")
+		return shim.Success([]byte("{\"error\":\"Error converting user data to JSON\"}"))
 	}
 
 	err = stub.PutState(email, userJSON)
 	if err != nil {
-		return shim.Error("Failed to register user")
+		return shim.Success([]byte("{\"error\":\"Failed to register user\"}"))
 	}
 
-	return shim.Success([]byte("The unique id of this user is: "+ uniqueID))
+	return shim.Success([]byte("{\"uniqueId\":\""+ uniqueID + "\"} "))
 }
 
 func (t *Chaincode) readUserProfile(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1: email")
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: email\"}"))
 	}
 
 	email := args[0]
 
 	userJSON, err := stub.GetState(email)
 	if err != nil {
-		return shim.Error("Failed to get user profile")
+		return shim.Success([]byte("{\"error\":\"Failed to get user profile\"}"))
 	}
 
 	if userJSON == nil {
-		return shim.Error("User not found")
+		return shim.Success([]byte("{\"error\":\"User not found\"}"))
 	}
 
 	return shim.Success(userJSON)
@@ -97,28 +94,28 @@ func (t *Chaincode) readUserProfile(stub shim.ChaincodeStubInterface, args []str
 
 func (t *Chaincode) checkUserExists(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 2: email, password")
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 2: email, password\"}"))
 	}
 	userid := args[0]
 
 	userJSON, err := stub.GetState(userid)
 	if err != nil {
-		return shim.Error("Failed to check user")
+		return shim.Success([]byte("{\"error\":\"Failed to check user\"}"))
 	}
 	var user User
 	err = json.Unmarshal(userJSON, &user)
 	if err != nil {
-		return shim.Error("Error unmarshaling user data")
+		return shim.Success([]byte("{\"error\":\"Error unmarshaling user data\"}"))
 	}
 	if user.Email != "" {
-		return shim.Success([]byte("User exists"))
+		return shim.Success([]byte("{\"exists\":\"true\"}"))
 	}
-	return shim.Success([]byte("User does not exist"))
+	return shim.Success([]byte("{\"exists\":\"false\"}"))
 }
 
 func (t *Chaincode) login(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2: email, password")
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 2: email, password\"}"))
 	}
 
 	email := args[0]
@@ -126,26 +123,26 @@ func (t *Chaincode) login(stub shim.ChaincodeStubInterface, args []string) peer.
 
 	userJSON, err := stub.GetState(email)
 	if err != nil {
-		return shim.Error("Failed to check user")
+		return shim.Success([]byte("{\"error\":\"Failed to check user\"}"))
 	}
 
 	if userJSON == nil {
-		return shim.Error("User not found")
+		return shim.Success([]byte("{\"error\":\"User not found\"}"))
 	}
 
 	var user User
 	err = json.Unmarshal(userJSON, &user)
 	if err != nil {
-		return shim.Error("Error unmarshaling user data")
+		return shim.Success([]byte("{\"error\":\"Error unmarshaling user data\"}"))
 	}
 
 	if user.Password != password {
-		return shim.Error("Invalid password")
+		return shim.Success([]byte("{\"error\":\"Invalid password\"}"))
 	}
 
 	userBytes, err := json.Marshal(user)
 	if err != nil {
-		return shim.Error("Error marshaling user data")
+		return shim.Success([]byte("{\"error\":\"Error marshaling user data\"}"))
 	}
 
 	return shim.Success(userBytes)
