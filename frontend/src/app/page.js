@@ -5,6 +5,8 @@ import PolicyAnimation from './components/PolicyAnimation/PolicyAnimation'
 import Video from './components/Video/page'
 import Navigation from './components/Navigation/page'
 import Footer from './components/Footer/footer'
+import Account from './components/Account/page'
+import PolicyAnimation1 from './components/PolicyAnimation1/PolicyAnimation'
 
 
 const Page = () => {
@@ -23,7 +25,7 @@ const Page = () => {
               <PolicyAnimation />
             </div>
           </div>
-          
+     
           <div className="basis-1/3">
           <div className='w-full' style={{paddingTop: '150px'}}>
               <h1 className="text-5xl text-center text-indigo-100" >Welcome to</h1> 
@@ -34,18 +36,22 @@ const Page = () => {
           </div>
           
           <div className='basis-1/3 flex flex-col p-5 w-full'>
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-end pr-20">
+              <a href="/" className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24" id="user-account" fill="white" strokeWidth="1.5" stroke="currentColor" className="w-20 h-20"><g>
+                  <path d="M12 4c1.7 0 3 1.3 3 3s-1.3 3-3 3S9 8.7 9 7 10.3 4 12 4M12 2C9.2 2 7 4.2 7 7s2.2 5 5 5 5-2.2 5-5S14.8 2 12 2L12 2zM19 22c-.4 0-.8-.3-1-.7l-1-3.4C16.6 16.2 15 15 13.2 15h-2.5c-1.8 0-3.4 1.2-3.8 2.9l-1 3.4c-.2.5-.7.8-1.2.7-.5-.2-.8-.7-.7-1.2l1-3.4c.7-2.6 3.1-4.4 5.8-4.4h2.5c2.7 0 5 1.8 5.8 4.4l1 3.4c.2.5-.2 1.1-.7 1.2C19.2 22 19.1 22 19 22z"></path>
+                  </g>
+                </svg>
+              </a>
+            </div>
+            <div className="flex items-center justify-end pr-5">
               <button
-                onClick={() => navigate('/components/registration/userRegistration')}
+                onClick={() => navigate('/components/Account')}
                 className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                    <b>User</b>   
-              </button>
-              <button
-                onClick={() => navigate('/components/registration/companyRegistration')}
-                className="h-10 px-7 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                <b>Company</b>
+                    <b>Welcome Back</b>   
               </button>
             </div>
+            
             <div className="p-10 mt-auto w-full ">
                 <Video />
             </div>  

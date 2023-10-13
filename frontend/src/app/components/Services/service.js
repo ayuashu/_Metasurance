@@ -2,7 +2,7 @@ const Products = [
         {
             id: '1',
             name: 'Car Insurance',
-            image: 'images/car.jpg',
+            image: '/Images/car.jpg',
             category: 'car',
             description: 'Any four wheel vehicle',
             plans: '',
@@ -10,7 +10,7 @@ const Products = [
         {
             id: '2',
             name: 'Bike Insurance',
-            image: 'images/bike.png',
+            image: '/Images/bike.png',
             category: 'bike',
             description: 'Any two/three wheel vehicle',
             plans: '',
@@ -18,7 +18,7 @@ const Products = [
         {
             id: '3',
             name: 'Home Insurance',
-            image: 'images/home.jpg',
+            image: '/Images/home.jpg',
             category: 'home',
             description: 'A place where people reside',
             plans: '',
@@ -26,7 +26,7 @@ const Products = [
         {
             id: '4',
             name: 'Life Insurance',
-            image: 'images/life.png',
+            image: '/Images/life.png',
             category: 'life',
             description: 'Your life values the most',
             plans: '',
@@ -34,7 +34,7 @@ const Products = [
         {
             id: '5',
             name: 'Health Insurance',
-            image: 'images/health.jpg',
+            image: '/Images/health.jpg',
             category: 'health',
             description: 'Prevention is better then Cure',
             plans: '',
