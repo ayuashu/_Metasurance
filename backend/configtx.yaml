@@ -3,7 +3,7 @@ Organizations:
     - &OrdererOrg
       Name: OrdererOrg
       ID: OrdererMSP
-      MSPDir: crypto-config/ordererOrganizations/example.com/msp
+      MSPDir: crypto-config/ordererOrganizations/metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -18,7 +18,7 @@ Organizations:
     - &Insurer
       Name: InsurerMSP
       ID: InsurerMSP
-      MSPDir: crypto-config/peerOrganizations/insurer.example.com/msp
+      MSPDir: crypto-config/peerOrganizations/insurer.metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -33,7 +33,7 @@ Organizations:
     - &User
       Name: UserMSP
       ID: UserMSP
-      MSPDir: crypto-config/peerOrganizations/user.example.com/msp
+      MSPDir: crypto-config/peerOrganizations/user.metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -48,7 +48,7 @@ Organizations:
     - &Assets
       Name: AssetsMSP
       ID: AssetsMSP
-      MSPDir: crypto-config/peerOrganizations/assets.example.com/msp
+      MSPDir: crypto-config/peerOrganizations/assets.metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -63,7 +63,7 @@ Organizations:
     - &MetaAdmin
       Name: MetaAdminMSP
       ID: MetaAdminMSP
-      MSPDir: crypto-config/peerOrganizations/exampleadmin.example.com/msp
+      MSPDir: crypto-config/peerOrganizations/exampleadmin.metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -108,7 +108,7 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
     OrdererType: etcdraft
     Addresses:
-        - orderer0.example.com:7050
+        - orderer0.metasurance.com:7050
 
     BatchTimeout: 250ms
     BatchSize:
@@ -119,10 +119,10 @@ Orderer: &OrdererDefaults
     MaxChannels: 0
     EtcdRaft:
         Consenters:
-            - Host: orderer0.example.com
+            - Host: orderer0.metasurance.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
+              ClientTLSCert: crypto-config/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/tls/server.crt
 
     Organizations:
 

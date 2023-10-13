@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/fsouza/go-dockerclient v1.6.0 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
 	github.com/hyperledger/fabric v1.4.4
 	github.com/hyperledger/fabric-amcl v0.0.0-20190902191507-f66264322317 // indirect

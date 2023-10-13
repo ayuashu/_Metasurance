@@ -20,8 +20,8 @@ ORG=insurer
 ORGMSP=Insurer
 P0PORT=7051
 CAPORT=7054
-PEERPEM=../crypto-config/peerOrganizations/insurer.example.com/tlsca/tlsca.insurer.example.com-cert.pem
-CAPEM=../crypto-config/peerOrganizations/insurer.example.com/ca/ca.insurer.example.com-cert.pem
+PEERPEM=../crypto-config/peerOrganizations/insurer.metasurance.com/tlsca/tlsca.insurer.metasurance.com-cert.pem
+CAPEM=../crypto-config/peerOrganizations/insurer.metasurance.com/ca/ca.insurer.metasurance.com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-insurer.json
 
@@ -29,16 +29,16 @@ ORG=user
 ORGMSP=User
 P0PORT=8051
 CAPORT=8054
-PEERPEM=../crypto-config/peerOrganizations/user.example.com/tlsca/tlsca.user.example.com-cert.pem
-CAPEM=../crypto-config/peerOrganizations/user.example.com/ca/ca.user.example.com-cert.pem
+PEERPEM=../crypto-config/peerOrganizations/user.metasurance.com/tlsca/tlsca.user.metasurance.com-cert.pem
+CAPEM=../crypto-config/peerOrganizations/user.metasurance.com/ca/ca.user.metasurance.com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-user.json
 ORG=assets
 ORGMSP=Assets
 P0PORT=9051
 CAPORT=9054
-PEERPEM=../crypto-config/peerOrganizations/assets.example.com/tlsca/tlsca.assets.example.com-cert.pem
-CAPEM=../crypto-config/peerOrganizations/assets.example.com/ca/ca.assets.example.com-cert.pem
+PEERPEM=../crypto-config/peerOrganizations/assets.metasurance.com/tlsca/tlsca.assets.metasurance.com-cert.pem
+CAPEM=../crypto-config/peerOrganizations/assets.metasurance.com/ca/ca.assets.metasurance.com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-assets.json
 
@@ -46,7 +46,7 @@ ORG=exampleadmin
 ORGMSP=MetaAdmin
 P0PORT=10051
 CAPORT=10054
-PEERPEM=../crypto-config/peerOrganizations/exampleadmin.example.com/tlsca/tlsca.exampleadmin.example.com-cert.pem
-CAPEM=../crypto-config/peerOrganizations/exampleadmin.example.com/ca/ca.exampleadmin.example.com-cert.pem
+PEERPEM=../crypto-config/peerOrganizations/exampleadmin.metasurance.com/tlsca/tlsca.exampleadmin.metasurance.com-cert.pem
+CAPEM=../crypto-config/peerOrganizations/exampleadmin.metasurance.com/ca/ca.exampleadmin.metasurance.com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-exampleadmin.json
