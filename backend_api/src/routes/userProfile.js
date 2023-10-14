@@ -29,8 +29,25 @@ router.post("/register", async (req, res) => {
         );
         res.status(200).send({ reply, message: "User Successfully Registered." });
     } catch (error) {
-        res.status(500).send({ message: "User NOT Registered!" });
+        res.status(500).send({ error: "User NOT Registered!" });
     }
 })
+
+router.get("/readprofile", async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.email === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields" });
+            return;
+        }
+        let reply = await UserContract.ReadProfile(
+            { username: req.body.username, organization: "user" },
+            [req.body.email]
+        );
+        res.status(200).send({ reply, message: "User Profile Successfully Read." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "User Profile NOT Read!" });
+    }
+});
 
 module.exports = router;

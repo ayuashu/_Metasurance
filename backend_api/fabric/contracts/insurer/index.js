@@ -1,6 +1,6 @@
-const RegisterUser = require("./registerUser")
+const RegisterCompany = require("./registerCompany")
 const ReadProfile = require("./readProfile")
 module.exports = {
-    RegisterUser,
+    RegisterCompany,
     ReadProfile
 }
