@@ -10,4 +10,3 @@ cd $ROOT_DIR/backend_api/fabric/ccp
 rm connection-*.json
 cd $ROOT_DIR/connections/
 rm connection-*.json
-

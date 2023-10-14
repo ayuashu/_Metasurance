@@ -73,6 +73,7 @@ func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) pe
 	return shim.Success([]byte("{\"uniqueId\":\""+ uniqueID + "\"} "))
 }
 
+// TODO: convert based reading to userid based reading
 func (t *Chaincode) readUserProfile(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: email\"}"))

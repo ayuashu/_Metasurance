@@ -14,8 +14,8 @@ docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh user_cc peer0
 echo "Instantiating user_cc"
 docker exec -it cli bash ./scripts/install-cc/instantiate.sh user_cc peer0 user UserMSP 8051 1.3
 echo "Installing insurer_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh insurer_cc peer0 insurer InsurerMSP 7051 1.3 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh insurer_cc peer0 insurer InsurerMSP 7051 1.4 # install in common channel now
 echo "Instantiating insurer_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh insurer_cc peer0 insurer InsurerMSP 7051 1.3
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh insurer_cc peer0 insurer InsurerMSP 7051 1.4
 
 echo "All Done!"
