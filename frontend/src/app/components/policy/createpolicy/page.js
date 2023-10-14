@@ -24,7 +24,8 @@ const PolicyWebsite = () => {
 
   return (
     <>
-    <Navigation/>
+    <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
+      <Navigation />
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:min-w-xl sm:mx-auto lg:min-w-[500px]">
         <div className="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
@@ -102,6 +103,7 @@ const PolicyWebsite = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
       <Footer/>
       </div>

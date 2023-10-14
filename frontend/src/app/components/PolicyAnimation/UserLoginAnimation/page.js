@@ -1,8 +1,8 @@
 import React from "react";
 import Lottie from "react-lottie";
-import animationData from '@/app/components/assets/lottie/lottie1.json'
+import animationData from '@/app/components/assets/lottie/userlogin.json'
 
-function PolicyAnimation1() {
+function UserLoginAnimation() {
     const defaultOptions = {
         loop: true,
         autoplay: true,
@@ -14,4 +14,4 @@ function PolicyAnimation1() {
     return <Lottie options={defaultOptions} height={200} width={200} />;
 }
 
-export default PolicyAnimation1;
+export default UserLoginAnimation;

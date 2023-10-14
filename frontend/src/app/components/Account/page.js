@@ -27,16 +27,16 @@ const Account = () => {
             </div>
           </div>
           <div className="col-span-2 ...">
-              <div className="flex items-center justify-end pt-5">
+              <div className="flex items-center justify-end pt-5 gap-4">
                 <button
                   onClick={() => navigate('/components/Account/userRegistration')}
-                  className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                      <b>Use Service</b>   
+                  className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900">
+                      <b>Use Service<p>(USER)</p></b>   
                 </button>
                 <button
                   onClick={() => navigate('/components/Account/companyRegistration')}
-                  className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                      <b>Give Service</b>   
+                  className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900">
+                      <b>Give Service<p>(COMPANY)</p></b>   
                 </button>      
               </div>
             </div>  

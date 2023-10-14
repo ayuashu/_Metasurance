@@ -1,30 +1,27 @@
-"use client"
 import React, { useRef } from 'react';
-import ReactPlayer from 'react-player';
 
 const Video = () => {
   const videoSrc = '/Videos/myvideo.mp4';
-  const playerRef = useRef(null);
+  const videoRef = useRef(null);
 
-  const handleVideoProgress = ({ playedSeconds, loadedSeconds }) => {
-    // Check if the video has reached the end and manually restart it
-    if (playedSeconds >= loadedSeconds) {
-      playerRef.current.seekTo(0); // Restart the video
-    }
+  const handleVideoEnded = () => {
+    videoRef.current.currentTime = 0; // Restart the video
   };
 
   return (
     <div className="rounded-full">
-      <ReactPlayer
-        ref={playerRef}
-        url={videoSrc}
-        playing={true}
-        muted={true}
-        controls={true}
+      <video
+        src={videoSrc}
+        controls
+        autoPlay // Autoplay the video
+        muted // Mute the video by default
         width={450}
         height={250}
-        onProgress={handleVideoProgress} // Call the event handler on video progress
-      />
+        onEnded={handleVideoEnded} // Call the event handler when the video ends
+        ref={videoRef}
+      >
+        Your browser does not support the video tag.
+      </video>
     </div>
   );
 };

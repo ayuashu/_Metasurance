@@ -33,26 +33,29 @@ const CompanyRegistration = ({}) => {
                 <div className="flex-1 pt-10 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
                     <div className="flex flex-col md:flex-row">
                         <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">
-                            <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsAViZMnOVPRXHp8DW5tVMNadxV16MtQT-NA&usqp=CAU"
+                            <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110" 
+                                src="/Images/companyLogin.jpg"
                                 alt="img" />
                         </div>
                         <div className="flex items-center justify-center p-2 sm:p-12 md:w-1/2">
                             <div className="w-full">
                                 <div className="flex justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 text-blue-600" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                                    </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" enable-background="new 0 0 64 64" viewBox="0 0 64 64" id="key"><path fill="#7DA4C3" d="M37.05,29.245l-2.667-2.666c-0.291-0.291-0.38-0.728-0.226-1.109c2.678-6.615,1.147-14.151-3.898-19.198
+                                        c-6.912-6.911-18.161-6.911-25.074,0c-6.913,6.913-6.913,18.161,0,25.074c5.045,5.045,12.58,6.576,19.197,3.899
+                                        c0.125-0.051,0.256-0.075,0.385-0.075c0.268,0,0.529,0.104,0.725,0.301l2.667,2.666L37.05,29.245z M16.22,17.89
+                                        c-1.2,1.199-2.775,1.8-4.352,1.8c-1.576,0-3.152-0.601-4.352-1.8c-2.399-2.399-2.399-6.304,0-8.703s6.304-2.399,8.703,0
+                                        C18.62,11.586,18.62,15.491,16.22,17.89z"></path><path fill="#6691AD" d="M36.964,32.23l-6.09,6.09l4.075,4.074l3.338-0.135c0.517-0.041,0.981,0.357,1.056,0.878l0.506,3.498
+                                        l2.825-0.294c0.308-0.038,0.612,0.075,0.831,0.294l4.153,4.152c0.249,0.249,0.353,0.606,0.276,0.949l-0.622,2.777l2.792-0.029
+                                        c0.51,0.013,0.951,0.371,1.025,0.88l0.414,2.879l2.65,0.098c0.388,0.014,0.733,0.244,0.895,0.597l1.703,3.709l6.678,0.266
+                                        L64,59.266L36.964,32.23z"></path>
+                                </svg>
                                 </div>
                                 <h1 className="mb-1 text-2xl font-bold text-center text-gray-700">Login to Your Account</h1>
                                 <div>
-                                    <label className="block mt-2 text-sm">CompanyTokenId</label>
+                                    <label className="block mt-2 text-sm">UserName</label>
                                     <input type="text"
                                         className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                        placeholder="Enter CompanyToken Id" />
+                                        placeholder="Enter Your UserName" />
                                 </div>
                                 <div>
                                     <label className="block mt-2 text-sm">Email</label>
@@ -60,12 +63,6 @@ const CompanyRegistration = ({}) => {
                                         className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                         placeholder="abc@email.com" />
                                 </div>
-                                <div>
-                                        <label className="block mt-2 text-sm">Phone Number</label>
-                                        <input type="tel" name="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                            className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                            placeholder="333-444-5555" />
-                                    </div>
                                 <div>
                                     <label className="block mt-2 text-sm">Password</label>
                                     <input

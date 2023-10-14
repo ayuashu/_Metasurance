@@ -32,21 +32,22 @@ const CompanyRegister = () => {
                 <div className="flex-1 pt-10 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
                     <div className="flex flex-col md:flex-row">
                         <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">
-                            <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsAViZMnOVPRXHp8DW5tVMNadxV16MtQT-NA&usqp=CAU"
+                            <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110" 
+                                src="/Images/companyRegister.jpg"
                                 alt="img" />
                         </div>
                         <div className="flex items-center justify-center p-2 sm:p-12 md:w-1/2">
                             <div className="w-full">
                                 <div className="flex justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 text-blue-600" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 48 48" id="lock"><g><g><ellipse cx="21.4" cy="45.1" fill="#45413c" opacity=".15" rx="13" ry="1.5"></ellipse><path fill="#ffe500" d="M28.5 38.3H7c-1.7 0-3-1.3-3-3v-16c0-1.7 1.3-3 3-3h21.5c1.7 0 3 1.3 3 3v16c0 1.6-1.4 3-3 3z"></path><path fill="#fff48c" d="M28.5 16.3H7c-1.7 0-3 1.3-3 3v4c0-1.7 1.3-3 3-3h21.5c1.7 0 3 1.3 3 3v-4c0-1.7-1.4-3-3-3z"></path><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M28.5 38.3H7c-1.7 0-3-1.3-3-3v-16c0-1.7 1.3-3 3-3h21.5c1.7 0 3 1.3 3 3v16c0 1.6-1.4 3-3 3z"></path><path fill="#daedf7" d="M17.7 1.3C11.8 1.3 7 6.1 7 12v4.2h4.5V12c0-3.5 2.8-6.2 6.3-6.2S24 8.6 24 12v4.2h4.5V12c0-5.9-4.8-10.7-10.8-10.7z"></path><path fill="#fff" d="M17.7 1.3C11.8 1.3 7 6.1 7 12v2.5C7 8.6 11.8 3.8 17.7 3.8s10.8 4.8 10.8 10.8V12c0-5.9-4.8-10.7-10.8-10.7z"></path><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7 1.3C11.8 1.3 7 6.1 7 12v4.2h4.5V12c0-3.5 2.8-6.2 6.3-6.2S24 8.6 24 12v4.2h4.5V12c0-5.9-4.8-10.7-10.8-10.7z"></path><path fill="#ffaa54" d="M41.8 23.9c-2.9-2.9-7.7-2.9-10.6 0-2.3 2.3-2.8 5.7-1.5 8.5L20.2 42c-.2.2-.3.5-.3.8l.2 1.9c.1.5.4.8.9.9l1.9.2c.3 0 .6-.1.8-.3l1.1-1.1c.2-.2.3-.4.3-.7v-1h1c.3 0 .5-.1.7-.3l.9-.9c.2-.2.3-.4.3-.7v-.6c0-.3.1-.5.3-.7l1.2-1.2c.2-.2.4-.3.7-.3h.6c.3 0 .5-.1.7-.3l1.7-1.7c2.8 1.3 6.2.8 8.5-1.5 3-2.9 3-7.7.1-10.6zm-3.5 3.5c-.6-.6-.6-1.5 0-2.1.6-.6 1.5-.6 2.1 0 .6.6.6 1.5 0 2.1-.6.6-1.5.6-2.1 0z"></path><g><path fill="#fc9" d="M31.2 27.1c2-2 4.8-2.6 7.3-1.9.6-.4 1.4-.4 1.9.2.3.3.4.6.4.9.4.2.7.5 1 .8 1.1 1.1 1.7 2.4 2 3.7.5-2.4-.2-5-2-6.9-2.9-2.9-7.7-2.9-10.6 0-1.9 1.9-2.5 4.5-2 6.9.3-1.4 1-2.7 2-3.7zM20.3 45.1l9.5-9.5c-.4-.8-.6-1.6-.7-2.5L20.2 42c-.2.2-.3.5-.3.8l.2 1.9c.1.1.1.2.2.4z"></path></g><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M41.8 23.9c-2.9-2.9-7.7-2.9-10.6 0-2.3 2.3-2.8 5.7-1.5 8.5L20.2 42c-.2.2-.3.5-.3.8l.2 1.9c.1.5.4.8.9.9l1.9.2c.3 0 .6-.1.8-.3l1.1-1.1c.2-.2.3-.4.3-.7v-1h1c.3 0 .5-.1.7-.3l.9-.9c.2-.2.3-.4.3-.7v-.6c0-.3.1-.5.3-.7l1.2-1.2c.2-.2.4-.3.7-.3h.6c.3 0 .5-.1.7-.3l1.7-1.7c2.8 1.3 6.2.8 8.5-1.5 3-2.9 3-7.7.1-10.6zm-3.5 3.5c-.6-.6-.6-1.5 0-2.1.6-.6 1.5-.6 2.1 0 .6.6.6 1.5 0 2.1-.6.6-1.5.6-2.1 0zM20.3 44.8l9.1-9.2"></path></g></g></svg>
                                 </div>
-                                <h1 className="mb-1 text-2xl font-bold text-center text-gray-700">Register</h1>
+                                <h1 className="mb-1 text-2xl font-bold text-center text-gray-700">Register with New Account</h1>
+                                <div>
+                                    <label className="block mt-2 text-sm">UserName</label>
+                                    <input type="text"
+                                        className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                        placeholder="Enter Your UserName" />
+                                </div>
                                 <div>
                                     <label className="block mt-2 text-sm">Name</label>
                                     <input type="text"

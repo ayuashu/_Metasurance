@@ -5,8 +5,6 @@ import PolicyAnimation from './components/PolicyAnimation/PolicyAnimation'
 import Video from './components/Video/page'
 import Navigation from './components/Navigation/page'
 import Footer from './components/Footer/footer'
-import Account from './components/Account/page'
-import PolicyAnimation1 from './components/PolicyAnimation1/PolicyAnimation'
 
 
 const Page = () => {
@@ -35,7 +33,7 @@ const Page = () => {
             </div>
           </div>
           
-          <div className='basis-1/3 flex flex-col p-5 w-full'>
+          <div className='basis-1/3 flex flex-col w-full'>
             <div className="flex items-center justify-end pr-20">
               <a href="/" className="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24" id="user-account" fill="white" strokeWidth="1.5" stroke="currentColor" className="w-20 h-20"><g>
@@ -44,11 +42,11 @@ const Page = () => {
                 </svg>
               </a>
             </div>
-            <div className="flex items-center justify-end pr-5">
+            <div className="flex items-center justify-end pr-9">
               <button
                 onClick={() => navigate('/components/Account')}
-                className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                    <b>Welcome Back</b>   
+                className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-500 rounded-full focus:shadow-outline hover:bg-slate-900">
+                    <b>Welcome</b>   
               </button>
             </div>
             

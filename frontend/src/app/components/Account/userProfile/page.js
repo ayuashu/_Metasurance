@@ -20,7 +20,7 @@ const UserProfile = () => {
             <div className="w-full max-w-sm min-h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex flex-col items-center pb-10 pt-20">
                     <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt=""/>
-                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">User name</h5>
+                    <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">UserName</h5>
                     <h3 className="mb-1 text-xl font-medium text-gray-800 dark:text-white">Email id</h3>
                 </div>
                 <div className="flex items-center justify-center">
