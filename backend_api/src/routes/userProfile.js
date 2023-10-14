@@ -50,4 +50,21 @@ router.get("/readprofile", async (req, res) => {
     }
 });
 
+router.post("/login", async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.email === undefined || req.body.password === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain three fields" });
+            return;
+        }
+        let reply = await UserContract.Login(
+            { username: req.body.username, organization: "user" },
+            [req.body.email, req.body.password]
+        );
+        res.status(200).send({ reply, message: "User Successfully Logged In." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "User NOT Logged In!" });
+    }
+});
+
 module.exports = router;
