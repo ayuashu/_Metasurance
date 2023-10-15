@@ -73,7 +73,6 @@ func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) pe
 	return shim.Success([]byte("{\"uniqueId\":\""+ uniqueID + "\"} "))
 }
 
-// TODO: convert email based reading to uniqueid based reading
 func (t *Chaincode) readCompanyProfile(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: email\"}"))
@@ -96,11 +95,11 @@ func (t *Chaincode) readCompanyProfile(stub shim.ChaincodeStubInterface, args []
 //TODO: Check if it works
 func (t *Chaincode) checkCompanyExists(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
-		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: uniqueId\"}"))
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: email\"}"))
 	}
-	uniqueId := args[0]
+	email := args[0]
 
-	companyJSON, err := stub.GetState(uniqueId)
+	companyJSON, err := stub.GetState(email)
 	if err != nil {
 		return shim.Success([]byte("{\"error\":\"Failed to check user\"}"))
 	}
