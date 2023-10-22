@@ -1,5 +1,6 @@
 const express = require("express");
 const UserContract = require("../../fabric/contracts/user")
+const AssetContract = require("../../fabric/contracts/asset")
 
 const router = new express.Router();
 
@@ -66,5 +67,56 @@ router.post("/login", async (req, res) => {
         res.status(500).send({ error: "User NOT Logged In!" });
     }
 });
+
+router.post('/asset/add', async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.assetName === undefined || req.body.assetType === undefined || req.body.userid === undefined || req.body.value === undefined || req.body.age === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain six fields" });
+            return;
+        }
+        let reply = await AssetContract.CreateAsset(
+            { username: req.body.username, organization: "user" },
+            [req.body.assetName, req.body.assetType, req.body.value, req.body.age, req.body.userid ]
+        )
+        res.status(200).send({ reply, message: "Asset Successfully Added." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Asset NOT Added!" });
+    }
+})
+
+router.delete("/asset/delete", async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.assetid === undefined || req.body.userid === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields: username and assetid" });
+            return;
+        }
+        let reply = await AssetContract.DeleteAsset(
+            { username: req.body.username, organization: "user" },
+            [ req.body.userid, req.body.assetid ]
+        )
+        res.status(200).send({ reply, message: "Asset Successfully Deleted." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Asset NOT Deleted!" });
+    }
+})
+
+router.get("/asset/get", async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.userid === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields: username and assetid" });
+            return;
+        }
+        let reply = await AssetContract.QueryAsset(
+            { username: req.body.username, organization: "user" },
+            [ req.body.userid ]
+        )
+        res.status(200).send({ reply, message: "Asset Successfully Queried." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Unable to query asset!" });
+    }
+})
 
 module.exports = router;

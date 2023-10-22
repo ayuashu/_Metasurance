@@ -1,0 +1,4 @@
+issue with current implementation:
+1. Login: uniqueid cannot be used as if we use uniqueid to locate user accounts, then user needs to specify the uniqueid while login which is tedious to remember. But email, on the other hand can be used but it renders uniqueid use less.
+2. login sensitive info is stored currently stored in localstorage, so it is a security vulnerability. Solution: cookie based authentication from backend.
+3. 
