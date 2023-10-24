@@ -74,6 +74,7 @@ router.post('/asset/add', async (req, res) => {
             res.status(400).send({ error: "Invalid Request! Request must contain six fields" });
             return;
         }
+        // TODO: check if user requesting exists or not
         let reply = await AssetContract.CreateAsset(
             { username: req.body.username, organization: "user" },
             [req.body.assetName, req.body.assetType, req.body.value, req.body.age, req.body.userid ]
@@ -91,6 +92,7 @@ router.delete("/asset/delete", async (req, res) => {
             res.status(400).send({ error: "Invalid Request! Request must contain two fields: username and assetid" });
             return;
         }
+        // TODO: check if asset belongs to user
         let reply = await AssetContract.DeleteAsset(
             { username: req.body.username, organization: "user" },
             [ req.body.userid, req.body.assetid ]
