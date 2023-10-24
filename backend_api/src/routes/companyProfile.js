@@ -1,5 +1,6 @@
 const express = require("express");
 const InsurerContract = require("../../fabric/contracts/insurer")
+const PolicyContract = require("../../fabric/contracts/policy")
 
 const router = new express.Router();
 
@@ -29,7 +30,7 @@ router.post("/register", async (req, res) => {
         );
         res.status(200).send({ reply, message: "Company Successfully Registered." });
     } catch (error) {
-        res.status(500).send({ error: "Company NOT Registered!" });
+        res.status(500).send({ error: "Company NOT Registered!", error });
     }
 })
 
@@ -46,7 +47,7 @@ router.get("/readprofile", async (req, res) => {
         res.status(200).send({ reply, message: "Company Profile Successfully Read." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Company Profile NOT Read!" });
+        res.status(500).send({ error: "Company Profile NOT Read!", error });
     }
 });
 
@@ -63,8 +64,74 @@ router.post("/login", async (req, res) => {
         res.status(200).send({ reply, message: "Company Successfully Logged In." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Company NOT Logged In!" });
+        res.status(500).send({ error: "Company NOT Logged In!", error });
     }
 });
 
-module.exports = router;
+router.post("/createPolicy", async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.policyname === undefined || req.body.premiumamount === undefined || req.body.insurancecover === undefined || req.body.insurancetype === undefined){
+            res.status(400).send({ error: "Invalid Request! Request must contain seven fields" });
+            return;
+        }
+        let reply = await PolicyContract.CreatePolicy(
+            { username: req.body.username, organization: "insurer" },
+            [req.body.policyname, req.body.username, req.body.premiumamount, req.body.insurancecover, req.body.insurancetype] //send username as company name
+        );
+        // check if error key exists in reply
+        if ("error" in reply) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policy Successfully Created." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Policy NOT Created!", error });
+    }
+});
+
+router.get("/getPolicies", async (req, res) => {
+    try {
+        if(req.body.username === undefined){
+            res.status(400).send({ error: "Invalid Request! Request must contain one field" });
+            return;
+        }
+        let reply = await PolicyContract.GetPolicies(
+            { username: req.body.username, organization: "insurer" },
+            [ req.body.username ]
+        );
+        // check if error key exists in reply
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policies Successfully Read." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Policies NOT Read!", error });
+    }
+})
+
+router.delete("/deletePolicy", async (req, res) => {
+    try {
+        if(req.body.username === undefined || req.body.policyid === undefined){
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields" });
+            return;
+        }
+        let reply = await PolicyContract.DeletePolicy(
+            { username: req.body.username, organization: "insurer" },
+            [ req.body.username, req.body.policyid ]
+        );
+        // check if error key exists in reply
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policy Successfully Deleted." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Policy NOT Deleted!", error });
+    }
+})
+
+module.exports = router
