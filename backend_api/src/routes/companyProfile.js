@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
         );
         res.status(200).send({ reply, message: "Company Successfully Registered." });
     } catch (error) {
-        res.status(500).send({ error: "Company NOT Registered!" });
+        res.status(500).send({ error: "Company NOT Registered!", error });
     }
 })
 
@@ -47,7 +47,7 @@ router.get("/readprofile", async (req, res) => {
         res.status(200).send({ reply, message: "Company Profile Successfully Read." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Company Profile NOT Read!" });
+        res.status(500).send({ error: "Company Profile NOT Read!", error });
     }
 });
 
@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
         res.status(200).send({ reply, message: "Company Successfully Logged In." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Company NOT Logged In!" });
+        res.status(500).send({ error: "Company NOT Logged In!", error });
     }
 });
 
@@ -86,7 +86,7 @@ router.post("/createPolicy", async (req, res) => {
         res.status(200).send({ reply, message: "Policy Successfully Created." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Policy NOT Created!" });
+        res.status(500).send({ error: "Policy NOT Created!", error });
     }
 });
 
@@ -108,7 +108,29 @@ router.get("/getPolicies", async (req, res) => {
         res.status(200).send({ reply, message: "Policies Successfully Read." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Policies NOT Read!" });
+        res.status(500).send({ error: "Policies NOT Read!", error });
+    }
+})
+
+router.delete("/deletePolicy", async (req, res) => {
+    try {
+        if(req.body.username === undefined || req.body.policyid === undefined){
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields" });
+            return;
+        }
+        let reply = await PolicyContract.DeletePolicy(
+            { username: req.body.username, organization: "insurer" },
+            [ req.body.username, req.body.policyid ]
+        );
+        // check if error key exists in reply
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policy Successfully Deleted." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: "Policy NOT Deleted!", error });
     }
 })
 

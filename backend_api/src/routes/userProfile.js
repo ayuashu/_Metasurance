@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
         );
         res.status(200).send({ reply, message: "User Successfully Registered." });
     } catch (error) {
-        res.status(500).send({ error: "User NOT Registered!" });
+        res.status(500).send({ error: "User NOT Registered!", error });
     }
 })
 
@@ -47,7 +47,7 @@ router.get("/readprofile", async (req, res) => {
         res.status(200).send({ reply, message: "User Profile Successfully Read." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "User Profile NOT Read!" });
+        res.status(500).send({ error: "User Profile NOT Read!", error });
     }
 });
 
@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
         res.status(200).send({ reply, message: "User Successfully Logged In." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "User NOT Logged In!" });
+        res.status(500).send({ error: "User NOT Logged In!", error });
     }
 });
 
@@ -82,7 +82,7 @@ router.post('/asset/add', async (req, res) => {
         res.status(200).send({ reply, message: "Asset Successfully Added." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Asset NOT Added!" });
+        res.status(500).send({ error: "Asset NOT Added!", error });
     }
 })
 
@@ -100,7 +100,7 @@ router.delete("/asset/delete", async (req, res) => {
         res.status(200).send({ reply, message: "Asset Successfully Deleted." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Asset NOT Deleted!" });
+        res.status(500).send({ error: "Asset NOT Deleted!", error });
     }
 })
 
@@ -117,7 +117,7 @@ router.get("/asset/get", async (req, res) => {
         res.status(200).send({ reply, message: "Asset Successfully Queried." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Unable to query asset!" });
+        res.status(500).send({ error: "Unable to query asset!", error });
     }
 })
 

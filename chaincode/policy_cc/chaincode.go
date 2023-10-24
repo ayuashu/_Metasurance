@@ -37,6 +37,8 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response{
 		return ac.postPolicy(stub, args)
 	}else if fn == "viewAllPolicies"{
 		return ac.viewAllPolicies(stub, args)
+	}else if fn == "deletePolicy"{
+		return ac.deletePolicy(stub, args)
 	}
 	return shim.Error("{\"error\":\"Invalid function name. Expecting 'createAsset', 'queryAsset', or 'queryAllAssets'\"}")
 }
@@ -78,6 +80,31 @@ func (ac *Chaincode) viewAllPolicies(stub shim.ChaincodeStubInterface, args []st
 		return shim.Success([]byte("{\"error\": \"Failed to get existing company policies: " + err.Error() + "\"}"))
 	}else if policyMap != nil{
 		return shim.Success(policyMap)
+	}else{
+		return shim.Success([]byte("{\"error\": \"No policies found for company " + args[0] + "\"}"))
+	}
+}
+
+// args: [username, policyid]
+func (ac *Chaincode) deletePolicy(stub shim.ChaincodeStubInterface, args []string) peer.Response{
+	if len(args) != 2{
+		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 2: companyname, policyid\"}"))
+	}
+	policyMap, err := stub.GetState(args[0])
+	if err != nil{
+		return shim.Success([]byte("{\"error\": \"Failed to get existing company policies: " + err.Error() + "\"}"))
+	}else if policyMap != nil{
+		var policyContract PolicyContract
+		json.Unmarshal(policyMap, &policyContract)
+		for i, policy := range policyContract.Policies{
+			if policy.PolicyID == args[1]{
+				policyContract.Policies = append(policyContract.Policies[:i], policyContract.Policies[i+1:]...)
+				policyMap, _ = json.Marshal(policyContract)
+				stub.PutState(args[0], policyMap)
+				return shim.Success([]byte("{\"success\": \"Policy deleted successfully\"}"))
+			}
+		}
+		return shim.Success([]byte("{\"error\": \"Policy not found\"}"))
 	}else{
 		return shim.Success([]byte("{\"error\": \"No policies found for company " + args[0] + "\"}"))
 	}
