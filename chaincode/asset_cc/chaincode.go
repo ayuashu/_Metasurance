@@ -11,7 +11,6 @@ import (
 )
 
 type UserAssetMap struct{
-	Userid string `json:"userid"`
 	Assets []Asset `json:"assets"`
 }
 
@@ -49,7 +48,7 @@ func (ac *Chaincode) createAsset(stub shim.ChaincodeStubInterface, args []string
 		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 5\"}")
 	}
 	var asset = Asset{AssetID: uuid.New().String(), AssetName: args[0], AssetType: args[1], Value: args[2], Age: args[3]}
-	assetMap, err := stub.GetState(args[4]) // userid
+	assetMap, err := stub.GetState(args[4]) // username
 	if err != nil{
 		return shim.Error("{\"error\": \"Failed to get existing user assets: " + err.Error() + "\"}")
 	}else if assetMap != nil{
@@ -59,7 +58,6 @@ func (ac *Chaincode) createAsset(stub shim.ChaincodeStubInterface, args []string
 		assetMap, _ = json.Marshal(userAssetMap)
 	}else{
 		var userAssetMap UserAssetMap
-		userAssetMap.Userid = args[4]
 		userAssetMap.Assets = append(userAssetMap.Assets, asset)
 		assetMap, _ = json.Marshal(userAssetMap)
 	}
@@ -67,12 +65,12 @@ func (ac *Chaincode) createAsset(stub shim.ChaincodeStubInterface, args []string
 	fmt.Print("asset created: ")
 	fmt.Print(assetMap)
 	fmt.Print("for user " + args[4])
-	return shim.Success([]byte("{\"uniqueID\":\""+asset.AssetID+"\"}"))
+	return shim.Success([]byte("{\"assetID\":\""+asset.AssetID+"\"}"))
 }
 
 func (ac *Chaincode) deleteAsset(stub shim.ChaincodeStubInterface, args []string) peer.Response{
 	if len(args) != 2{
-		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 2: userid, assetid\"}")
+		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 2: username, assetid\"}")
 	}
 	assetMap, err := stub.GetState(args[0])
 	if err != nil{
@@ -94,7 +92,7 @@ func (ac *Chaincode) deleteAsset(stub shim.ChaincodeStubInterface, args []string
 
 func (ac *Chaincode) queryAsset(stub shim.ChaincodeStubInterface, args []string) peer.Response{
 	if len(args) != 1{
-		return shim.Error("\"error\": \"Incorrect number of arguments. Expecting 1: userid\"}")
+		return shim.Error("\"error\": \"Incorrect number of arguments. Expecting 1: username\"}")
 	}
 	assetAsBytes, _ := stub.GetState(args[0])
 	fmt.Println(assetAsBytes)

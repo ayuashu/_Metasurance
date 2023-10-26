@@ -2,7 +2,12 @@ const FabricAPI = require("../../api");
 
 module.exports = async (user, params) => {
     try {
-        await FabricAPI.Account.RegisterUser({ orgName: user.organization, username: user.username })
+        const response = await FabricAPI.Account.RegisterUser({ orgName: user.organization, username: user.username })
+        if(!response.success){
+            return {
+                error: "Failed to register user. Username is not unique"
+            }
+        }
         let reply = await FabricAPI.Contract.SubmitTransaction(
             {
                 name: "user_cc",

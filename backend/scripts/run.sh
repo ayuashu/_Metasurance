@@ -10,20 +10,20 @@ docker exec -it cli bash ./scripts/channel/join-peer.sh peer0 user UserMSP 8051 
 echo "Joined user"
 
 echo "Installing user_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh user_cc peer0 user UserMSP 8051 1.5 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh user_cc peer0 user UserMSP 8051 1.8 # install in common channel now
 echo "Instantiating user_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh user_cc peer0 user UserMSP 8051 1.5
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh user_cc peer0 user UserMSP 8051 1.8
 echo "Installing insurer_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh insurer_cc peer0 insurer InsurerMSP 7051 1.6 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh insurer_cc peer0 insurer InsurerMSP 7051 1.9 # install in common channel now
 echo "Instantiating insurer_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh insurer_cc peer0 insurer InsurerMSP 7051 1.6
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh insurer_cc peer0 insurer InsurerMSP 7051 1.9
 echo "Installing asset_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh asset_cc peer0 user UserMSP 8051 1.5 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh asset_cc peer0 user UserMSP 8051 1.7 # install in common channel now
 echo "Instantiating asset_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh asset_cc peer0 user UserMSP 8051 1.5
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh asset_cc peer0 user UserMSP 8051 1.7
 echo "Installing policy_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 insurer InsurerMSP 7051 1.3 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 insurer InsurerMSP 7051 1.7 # install in common channel now
 echo "Instantiating policy_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 insurer InsurerMSP 7051 1.3
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 insurer InsurerMSP 7051 1.7
 
 echo "All Done!"

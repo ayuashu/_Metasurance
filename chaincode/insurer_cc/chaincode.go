@@ -5,7 +5,6 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
-	"github.com/google/uuid"
 )
 
 type Company struct {
@@ -13,7 +12,7 @@ type Company struct {
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
-	UniqueID string `json:"uniqueID"`
+	Username string `json:"username"`
 }
 
 type Chaincode struct {
@@ -40,24 +39,22 @@ func (t *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 }
 
 func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 4 {
-		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 4: name, email, phone, password\"}"))
+	if len(args) != 5 {
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 5: username, name, email, phone, password\"}"))
 	}
 
-	newUUID := uuid.New()
-
-	name := args[0]
-	email := args[1]
-	phone := args[2]
-	password := args[3]
-	uniqueID := newUUID.String()
+	username := args[0]
+	name := args[1]
+	email := args[2]
+	phone := args[3]
+	password := args[4]
 
 	user := Company{
 		Name:     name,
 		Email:    email,
 		Phone:    phone,
 		Password: password,
-		UniqueID: uniqueID,
+		Username: username,
 	}
 
 	userJSON, err := json.Marshal(user)
@@ -65,22 +62,22 @@ func (t *Chaincode) register(stub shim.ChaincodeStubInterface, args []string) pe
 		return shim.Success([]byte("{\"error\":\"Error converting company data to JSON\"}"))
 	}
 
-	err = stub.PutState(email, userJSON)
+	err = stub.PutState(username, userJSON)
 	if err != nil {
 		return shim.Success([]byte("{\"error\":\"Failed to register company\"}"))
 	}
 
-	return shim.Success([]byte("{\"uniqueId\":\""+ uniqueID + "\"} "))
+	return shim.Success(userJSON)
 }
 
 func (t *Chaincode) readCompanyProfile(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
-		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: email\"}"))
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 1: username\"}"))
 	}
 
-	email := args[0]
+	username := args[0]
 
-	userJSON, err := stub.GetState(email)
+	userJSON, err := stub.GetState(username)
 	if err != nil {
 		return shim.Success([]byte("{\"error\":\"Failed to get company profile\"}"))
 	}
@@ -116,13 +113,13 @@ func (t *Chaincode) checkCompanyExists(stub shim.ChaincodeStubInterface, args []
 
 func (t *Chaincode) login(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 2 {
-		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 2: email, password\"}"))
+		return shim.Success([]byte("{\"error\":\"Incorrect number of arguments. Expecting 2: username, password\"}"))
 	}
 
-	email := args[0]
+	username := args[0]
 	password := args[1]
 
-	companyJSON, err := stub.GetState(email)
+	companyJSON, err := stub.GetState(username)
 	if err != nil {
 		return shim.Success([]byte("{\"error\":\"Failed to check company\"}"))
 	}
@@ -138,7 +135,7 @@ func (t *Chaincode) login(stub shim.ChaincodeStubInterface, args []string) peer.
 	}
 
 	if company.Password != password {
-		return shim.Success([]byte("{\"error\":\"Invalid password\"}"))
+		return shim.Success([]byte("{\"error\":\"Wrong/invalid credentials\"}"))
 	}
 
 	companyBytes, err := json.Marshal(company)

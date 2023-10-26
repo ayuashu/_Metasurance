@@ -34,8 +34,13 @@ const RegisterUser = async (user) => {
         );
         await wallet.import(user.username, userIdentity);
         console.log(`Added user <${user.username}>`);
+        return {
+            success: true,
+            message: `Successfully registered and enrolled user <${user.username}> and imported it into the wallet`,
+        };
     } catch (error) {
-        console.error(`Failed to enroll user <${user.username}>: ${error.message}`);
+        console.error(`Failed to register user <${user.username}>: ${error}`);
+        return { success: false, message: `Failed to enroll user <${user.username}>: ${error.message}` };
     }
 };
 
