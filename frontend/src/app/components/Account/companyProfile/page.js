@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Footer from '../../Footer/footer'
 import Navigation from '../../Navigation/page'
+import PolicyCard from './policyCard'
 
 const CompanyProfile = () => {
   const router = useRouter()
@@ -26,7 +27,7 @@ const CompanyProfile = () => {
       navigate('/')
     }
   }, [])
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     localStorage.removeItem('company')
     navigate('/')
   }
@@ -35,6 +36,13 @@ const CompanyProfile = () => {
     <>
       <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen" >
         <Navigation />
+        <div className="flex items-center justify-end pt-5">
+          <button
+            onClick={() => navigate('/')}
+            className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
+            <b>Home</b>
+          </button>
+        </div>
         <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
           <div className="..." style={{ height: '80vh' }}>
             <div className="w-full max-w-sm min-h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -46,9 +54,9 @@ const CompanyProfile = () => {
               </div>
               <div className="flex items-center justify-center pt-5">
                 <button
-                  onClick={() => navigate('/components/Services')}
+                  onClick={() => navigate('/components/Account/addAsset')}
                   className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                  <b>Post a service</b>
+                  <b>Add Policy</b>
                 </button>
               </div>
               <div className="flex items-center justify-center pt-5">
@@ -60,14 +68,8 @@ const CompanyProfile = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2 ...">
-            <div className="flex items-center justify-end pt-5">
-              <button
-                onClick={() => navigate('/')}
-                className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                <b>Home</b>
-              </button>
-            </div>
+          <div className="col-span-2 ..." style={{ border: "2px solid white" }}>
+            <PolicyCard userName={username}/>
           </div>
         </div>
         <Footer />

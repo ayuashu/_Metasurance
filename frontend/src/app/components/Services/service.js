@@ -36,7 +36,7 @@ const Products = [
             name: 'Health Insurance',
             image: '/Images/health.jpg',
             category: 'health',
-            description: 'Prevention is better then Cure',
+            description: 'Prevention is better than Cure',
             plans: '',
         },
     ];

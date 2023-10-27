@@ -35,12 +35,10 @@ const Services = () => {
 
   return (
     <>
-      <div className='bg-slate-700'> 
+      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"> 
         <Navigation/>
-        <div> 
-          <Navbarr filterItem={filterItem} itemList={itemList} />
-        </div>
-        <div className='bg-slate-700'>  
+        <div>
+          <Navbarr filterItem={filterItem} itemList={itemList} />  
           <ServiceItem itemData={itemData} />
         </div>
         <Footer/> 
