@@ -1,84 +1,139 @@
 const express = require("express");
+const fetchuser = require("../middleware/fetchuser");
 const UserContract = require("../../fabric/contracts/user")
 const AssetContract = require("../../fabric/contracts/asset")
+const db = require('../utils/db');
+const getSessionToken = require('../utils/getSessionToken');
 
 const router = new express.Router();
 
-/**
- * request format:
- * ```json
- * {
- *  username: "user1",
- *  name: "User One",
- *  email: ",
- *  phone: "",
- *  password: "password"
- * }
- * ```
- * 
- */
 
+/**
+ * Registers a user with the given information.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user.
+ * @param {string} req.body.name - The name of the user.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.phone - The phone number of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @returns {Promise<Object>} The response object.
+ */
 router.post("/register", async (req, res) => {
     try {
         if(req.body.username === undefined || req.body.name === undefined || req.body.email === undefined || req.body.phone === undefined || req.body.password === undefined){
             res.status(400).send({ error: "Invalid Request! Request must contain five fields" });
             return;
         }
+        const username = req.body.username
+        const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
         let reply = await UserContract.RegisterUser(
-            { username: req.body.username, organization: "user" },
-            [req.body.name, req.body.email, req.body.phone, req.body.password]
+            { username, organization: "user" },
+            [req.body.username, req.body.name, req.body.email, req.body.phone, req.body.password]
         );
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        const token = getSessionToken(username);
+        db.set(token, username, expiresAt);
+        res.cookie("auth", token, { httpOnly: true, maxAge: expiresAt });
         res.status(200).send({ reply, message: "User Successfully Registered." });
     } catch (error) {
-        res.status(500).send({ error: "User NOT Registered!", error });
+        res.status(500).send({ error });
     }
 })
 
-router.get("/readprofile", async (req, res) => {
-    try {
-        if (req.body.username === undefined || req.body.email === undefined) {
-            res.status(400).send({ error: "Invalid Request! Request must contain two fields" });
-            return;
-        }
-        let reply = await UserContract.ReadProfile(
-            { username: req.body.username, organization: "user" },
-            [req.body.email]
-        );
-        res.status(200).send({ reply, message: "User Profile Successfully Read." });
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({ error: "User Profile NOT Read!", error });
-    }
-});
-
+/**
+ * Logs in a user with the provided username and password.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user to log in.
+ * @param {string} req.body.password - The password of the user to log in.
+ * @returns {Promise} A promise that resolves with the login response.
+ */
 router.post("/login", async (req, res) => {
     try {
-        if (req.body.username === undefined || req.body.email === undefined || req.body.password === undefined) {
-            res.status(400).send({ error: "Invalid Request! Request must contain three fields" });
+        if (req.body.username === undefined || req.body.password === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain two fields" });
             return;
         }
         let reply = await UserContract.Login(
             { username: req.body.username, organization: "user" },
-            [req.body.email, req.body.password]
+            [req.body.username, req.body.password]
         );
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        const username = req.body.username
+        const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
+        const token = getSessionToken(username);
+        db.remove(req.cookies.auth);
+        db.set(token, username, expiresAt);
+        res.cookie("auth", token, { httpOnly: true, maxAge: expiresAt });
         res.status(200).send({ reply, message: "User Successfully Logged In." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "User NOT Logged In!", error });
+        res.status(500).send({ message: "User NOT Logged In!", error });
     }
 });
 
-router.post('/asset/add', async (req, res) => {
+/**
+ * Reads the user profile from the blockchain.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user whose profile is to be read.
+ * @returns {Promise<Object>} The profile of the user.
+ */
+router.get("/readprofile", fetchuser, async (req, res) => {
     try {
-        if (req.body.username === undefined || req.body.assetName === undefined || req.body.assetType === undefined || req.body.userid === undefined || req.body.value === undefined || req.body.age === undefined) {
-            res.status(400).send({ error: "Invalid Request! Request must contain six fields" });
+        if (req.body.username === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain username" });
+            return;
+        }
+        let reply = await UserContract.ReadProfile(
+            { username: req.body.username, organization: "user" },
+            [req.body.username]
+        );
+        if(reply.error){
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "User Profile Successfully Read." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "User Profile NOT Read!", error });
+    }
+});
+
+
+/**
+ * Creates a new asset using the AssetContract.CreateAsset method.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user creating the asset.
+ * @param {string} req.body.assetName - The name of the asset.
+ * @param {string} req.body.assetType - The type of the asset.
+ * @param {number} req.body.value - The value of the asset.
+ * @param {number} req.body.age - The age of the asset.
+ * @returns {Promise} A promise that resolves with the result of the CreateAsset method.
+ */
+router.post('/asset/add', fetchuser, async (req, res) => {
+    try {
+        if (req.body.username === undefined || req.body.assetName === undefined || req.body.assetType === undefined || req.body.value === undefined || req.body.age === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain five fields" });
             return;
         }
         // TODO: check if user requesting exists or not
         let reply = await AssetContract.CreateAsset(
             { username: req.body.username, organization: "user" },
-            [req.body.assetName, req.body.assetType, req.body.value, req.body.age, req.body.userid ]
+            [req.body.assetName, req.body.assetType, req.body.value, req.body.age, req.body.username ]
         )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
         res.status(200).send({ reply, message: "Asset Successfully Added." });
     } catch (error) {
         console.log(error)
@@ -86,17 +141,29 @@ router.post('/asset/add', async (req, res) => {
     }
 })
 
-router.delete("/asset/delete", async (req, res) => {
+/**
+ * Deletes an asset from the blockchain.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user who owns the asset.
+ * @param {string} req.body.assetid - The ID of the asset to be deleted.
+ * @returns {Promise} A promise that resolves with the result of the delete operation.
+ */
+router.delete("/asset/delete", fetchuser, async (req, res) => {
     try {
-        if (req.body.username === undefined || req.body.assetid === undefined || req.body.userid === undefined) {
-            res.status(400).send({ error: "Invalid Request! Request must contain two fields: username and assetid" });
+        if (req.body.username === undefined || req.body.assetid === undefined) {
+            res.status(400).send({ error: "Invalid Request! Request must contain assetid" });
             return;
         }
         // TODO: check if asset belongs to user
         let reply = await AssetContract.DeleteAsset(
             { username: req.body.username, organization: "user" },
-            [ req.body.userid, req.body.assetid ]
+            [req.body.username, req.body.assetid ]
         )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
         res.status(200).send({ reply, message: "Asset Successfully Deleted." });
     } catch (error) {
         console.log(error)
@@ -104,20 +171,28 @@ router.delete("/asset/delete", async (req, res) => {
     }
 })
 
-router.get("/asset/get", async (req, res) => {
+/**
+ * Queries an asset from the AssetContract using the provided username and organization.
+ * @async
+ * @function
+ * @param {Object} req - The request object.
+ * @param {string} req.body.username - The username to query the asset for.
+ * @returns {Promise<Object>} - The asset object returned by the AssetContract.
+ */
+router.get("/asset/get", fetchuser, async (req, res) => {
     try {
-        if (req.body.username === undefined || req.body.userid === undefined) {
-            res.status(400).send({ error: "Invalid Request! Request must contain two fields: username and assetid" });
-            return;
-        }
         let reply = await AssetContract.QueryAsset(
             { username: req.body.username, organization: "user" },
-            [ req.body.userid ]
+            [ req.body.username ]
         )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
         res.status(200).send({ reply, message: "Asset Successfully Queried." });
     } catch (error) {
         console.log(error)
-        res.status(500).send({ error: "Unable to query asset!", error });
+        res.status(500).send({ message: "Unable to query asset!", error });
     }
 })
 
