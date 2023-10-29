@@ -39,6 +39,8 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response{
 		return ac.queryAllAssets(stub)
 	}else if fn == "deleteAsset"{
 		return ac.deleteAsset(stub, args)
+	}else if fn == "checkAssetBelongsToUser"{
+		return ac.checkAssetBelongsToUser(stub, args)
 	}
 	return shim.Error("{\"error\":\"Invalid function name. Expecting 'createAsset', 'queryAsset', or 'queryAllAssets'\"}")
 }
@@ -117,4 +119,24 @@ func (ac *Chaincode) queryAllAssets(stub shim.ChaincodeStubInterface) peer.Respo
 	}
 	buffer += "]"
 	return shim.Success([]byte(buffer))
+}
+
+//args: [username, assetid]
+func (ac *Chaincode) checkAssetBelongsToUser(stub shim.ChaincodeStubInterface, args []string) peer.Response{
+	if len(args) != 2{
+		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 2: username, assetid\"}")
+	}
+	assetMap, err := stub.GetState(args[0])
+	if err != nil{
+		return shim.Error("{\"error\": \"Failed to get existing user assets: " + err.Error() + "\"}")
+	}else if assetMap != nil{
+		var userAssetMap UserAssetMap
+		json.Unmarshal(assetMap, &userAssetMap)
+		for _, asset := range userAssetMap.Assets{
+			if asset.AssetID == args[1]{
+				return shim.Success([]byte("{\"status\": \"true\"}"))
+			}
+		}
+	}
+	return shim.Success([]byte("{\"status\": \"false\"}"))
 }

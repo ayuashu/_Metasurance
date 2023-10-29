@@ -108,6 +108,17 @@ router.get("/readprofile", fetchuser, async (req, res) => {
     }
 });
 
+router.get("/logout", fetchuser, async (req, res) => {
+    try {
+        db.remove(req.cookies.auth);
+        res.clearCookie("auth");
+        res.status(200).send({ message: "Company Successfully Logged Out." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "Company NOT Logged Out!", error });
+    }
+});
+
 // policy functionalities
 /**
  * Creates a new policy using the PolicyContract.CreatePolicy method.

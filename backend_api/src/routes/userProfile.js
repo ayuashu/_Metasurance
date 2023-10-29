@@ -2,6 +2,8 @@ const express = require("express");
 const fetchuser = require("../middleware/fetchuser");
 const UserContract = require("../../fabric/contracts/user")
 const AssetContract = require("../../fabric/contracts/asset")
+const PolicyContract = require("../../fabric/contracts/policy")
+const PolicyMapping = require("../../fabric/contracts/policyusermapping")
 const db = require('../utils/db');
 const getSessionToken = require('../utils/getSessionToken');
 
@@ -107,6 +109,16 @@ router.get("/readprofile", fetchuser, async (req, res) => {
     }
 });
 
+router.get("/logout", fetchuser, async (req, res) => {
+    try {
+        db.remove(req.cookies.auth);
+        res.clearCookie("auth");
+        res.status(200).send({ message: "User Successfully Logged Out." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "User NOT Logged Out!", error });
+    }
+})
 
 /**
  * Creates a new asset using the AssetContract.CreateAsset method.
@@ -194,6 +206,144 @@ router.get("/asset/get", fetchuser, async (req, res) => {
         console.log(error)
         res.status(500).send({ message: "Unable to query asset!", error });
     }
+})
+
+// policy mapping endpoints
+router.post("/policy/request", fetchuser, async (req, res) => {
+    if (req.body.username === undefined || req.body.policyid === undefined || req.body.assetid === undefined) {
+        res.status(400).send({ error: "Invalid Request! Request must contain username and policyid" });
+        return;
+    }
+    try {
+        // check if asset belongs to user
+        let result = await AssetContract.CheckUserOwnAsset(
+            { username: req.body.username, organization: "user" },
+            [req.body.username, req.body.assetid]
+        )
+        if (result.error) {
+            res.status(500).send({ error: res.error });
+            return;
+        }
+        if (result.status==="false") {
+            res.status(500).send({ error: "Asset does not belong to user!" });
+            return;
+        }
+        let reply = await PolicyMapping.RequestPolicy(
+            { username: req.body.username, organization: "user" },
+            [req.body.username, req.body.policyid, req.body.assetid]
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policy Requested Successfully." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "Unable to request policy!", error });
+    }
+})
+
+router.get("/policy/view", fetchuser, async (req, res) => {
+    if (req.body.username === undefined || req.body.companyname === undefined) {
+        res.status(400).send({ error: "Invalid Request! Request must contain username" });
+        return;
+    }
+    try {
+        let reply = await PolicyMapping.ViewRequestedPolicies(
+            { username: req.body.username, organization: "user" },
+            [req.body.companyname]
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Policy Viewed Successfully." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "Unable to view policy!", error });
+    }
+})
+
+router.post("/policy/paypremium", fetchuser, async (req, res) => {
+    if (req.body.username === undefined || req.body.mappingid === undefined) {
+        res.status(400).send({ error: "Invalid Request! Request must contain username and mappingid" });
+        return;
+    }
+    try {
+        let reply = await PolicyMapping.PayPremium(
+            { username: req.body.username, organization: "user" },
+            [req.body.username, req.body.mappingid]
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Premium Paid Successfully." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "Unable to pay premium!", error });
+    }
+})
+
+router.post("/policy/claim", fetchuser, async (req, res) => {
+    if (req.body.username === undefined || req.body.mappingid === undefined) {
+        res.status(400).send({ error: "Invalid Request! Request must contain username and mappingid" });
+        return;
+    }
+    try {
+        // check if user paid all premiums
+        // for that, get mapping details
+        let mapping = await PolicyMapping.ViewMappingById(
+            { username: req.body.username, organization: "user" },
+            [req.body.username, req.body.mappingid]
+        )
+        if (mapping.error) {
+            res.status(500).send({ error: mapping.error });
+            return;
+        }
+        // NOTE: the policy details in PolicyContract are stored against the username of insurance company, but we try to access as a user. So 
+        // we are unable to find the policydetails. 
+        let result = await PolicyContract.CheckAllPremiumsPaid(
+            { username: req.body.username, organization: "user" },
+            [mapping.policyid, mapping.premiumspaid.toString()]
+        )
+        if (result.error) {
+            res.status(500).send({ error: result.error });
+            return;
+        }
+        if (result.status==="false") {
+            res.status(500).send({ error: "All premiums not paid!" });
+            return;
+        }
+        let reply = await PolicyMapping.ClaimPolicy(
+            { username: req.body.username, organization: "user" },
+            [req.body.username, req.body.mappingid]
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error });
+            return;
+        }
+        res.status(200).send({ reply, message: "Claim Successful." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "Unable to claim!", error });
+    }
+})
+
+router.get("/policy/viewall", fetchuser, async (req, res) => {
+    if(req.body.username === undefined){
+        res.status(400).send({ error: "Invalid Request! Request must contain username" });
+        return;
+    }
+    let reply = await PolicyContract.GetAllPolicies(
+        { username: req.body.username, organization: "user" },
+        []
+    )
+    if(reply.error){
+        res.status(500).send({ error: reply.error });
+        return;
+    }
+    res.status(200).send({ reply, message: "All Policies Viewed Successfully." });
 })
 
 module.exports = router;
