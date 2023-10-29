@@ -3,6 +3,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -45,6 +46,8 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return ac.deletePolicy(stub, args)
 	}  else if fn == "checkAllPremiumsPaid" {
 		return ac.checkAllPremiumsPaid(stub, args)
+	} else if fn == "getAllPolicies" {
+		return ac.getAllPolicies(stub)
 	}
 	return shim.Error("{\"error\":\"Invalid function name. Expecting 'createAsset', 'queryAsset', or 'queryAllAssets'\"}")
 }
@@ -61,9 +64,16 @@ func (ac *Chaincode) postPolicy(stub shim.ChaincodeStubInterface, args []string)
 	} else if policyList != nil {
 		var policyContract PCList
 		json.Unmarshal(policyList, &policyContract)
-		for _, policyCompany := range policyContract.PolicyCompanies {
+		// print policycontract struct
+		fmt.Println("Before insertion: ")
+		fmt.Println(policyContract)
+		for i, policyCompany := range policyContract.PolicyCompanies {
 			if policyCompany.CompanyName == args[4] {
-				policyCompany.Policies = append(policyCompany.Policies, policy)
+				fmt.Println("Company match found")
+				fmt.Println(policyCompany)
+				policyContract.PolicyCompanies[i].Policies = append(policyCompany.Policies, policy)
+				fmt.Println("After insertion: ")
+				fmt.Println(policyContract)
 				policyList, _ = json.Marshal(policyContract)
 				stub.PutState("policies", policyList)
 				return shim.Success([]byte("{\"uniqueID\":\"" + policy.PolicyID + "\"}"))
@@ -160,6 +170,15 @@ func (ac *Chaincode) checkAllPremiumsPaid(stub shim.ChaincodeStubInterface, args
 		}
 	}
 	return shim.Success([]byte("{\"error\": \"No policies found for policyid " + args[0] + "\"}"))
+}
+
+// get all policies
+func (ac *Chaincode) getAllPolicies(stub shim.ChaincodeStubInterface) peer.Response {
+	policyList, err := stub.GetState("policies")
+	if err != nil {
+		return shim.Success([]byte("{\"error\": \"Failed to get existing policies: " + err.Error() + "\"}"))
+	}
+	return shim.Success(policyList)
 }
 
 // TODO: complete fucntion definition

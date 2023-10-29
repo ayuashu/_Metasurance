@@ -109,6 +109,16 @@ router.get("/readprofile", fetchuser, async (req, res) => {
     }
 });
 
+router.get("/logout", fetchuser, async (req, res) => {
+    try {
+        db.remove(req.cookies.auth);
+        res.clearCookie("auth");
+        res.status(200).send({ message: "User Successfully Logged Out." });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: "User NOT Logged Out!", error });
+    }
+})
 
 /**
  * Creates a new asset using the AssetContract.CreateAsset method.
@@ -234,14 +244,14 @@ router.post("/policy/request", fetchuser, async (req, res) => {
 })
 
 router.get("/policy/view", fetchuser, async (req, res) => {
-    if (req.body.username === undefined) {
+    if (req.body.username === undefined || req.body.companyname === undefined) {
         res.status(400).send({ error: "Invalid Request! Request must contain username" });
         return;
     }
     try {
         let reply = await PolicyMapping.ViewRequestedPolicies(
             { username: req.body.username, organization: "user" },
-            [req.body.username]
+            [req.body.companyname]
         )
         if (reply.error) {
             res.status(500).send({ error: reply.error });
@@ -318,6 +328,22 @@ router.post("/policy/claim", fetchuser, async (req, res) => {
         console.log(error)
         res.status(500).send({ message: "Unable to claim!", error });
     }
+})
+
+router.get("/policy/viewall", fetchuser, async (req, res) => {
+    if(req.body.username === undefined){
+        res.status(400).send({ error: "Invalid Request! Request must contain username" });
+        return;
+    }
+    let reply = await PolicyContract.GetAllPolicies(
+        { username: req.body.username, organization: "user" },
+        []
+    )
+    if(reply.error){
+        res.status(500).send({ error: reply.error });
+        return;
+    }
+    res.status(200).send({ reply, message: "All Policies Viewed Successfully." });
 })
 
 module.exports = router;

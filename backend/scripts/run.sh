@@ -22,11 +22,11 @@ docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh asset_cc peer
 echo "Instantiating asset_cc"
 docker exec -it cli bash ./scripts/install-cc/instantiate.sh asset_cc peer0 user UserMSP 8051 1.8
 echo "Installing policy_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 insurer InsurerMSP 7051 2.0 # install in common channel now
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 user UserMSP 8051 2.0
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 insurer InsurerMSP 7051 2.3 # install in common channel now
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policy_cc peer0 user UserMSP 8051 2.3
 echo "Instantiating policy_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 insurer InsurerMSP 7051 2.0
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 user UserMSP 8051 2.0
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 insurer InsurerMSP 7051 2.3
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 user UserMSP 8051 2.3
 echo "Installing policyusermapping_cc"
 docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policyusermapping_cc peer0 user UserMSP 8051 1.8
 echo "Instantiating policyusermapping_cc"
