@@ -13,13 +13,8 @@ const whitelist = ['http://localhost:3001'];
 app.options('*', cors());
 const corsOptions = {
     credentials: true,
-    origin: (origin, callback) => {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: "http://localhost:3001",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };
 app.use(cors(corsOptions));
 app.use(cookieParser())
