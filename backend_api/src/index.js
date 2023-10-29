@@ -10,7 +10,6 @@ app.use(express.json());
 
 // CORS Middleware
 const whitelist = ['http://localhost:3001'];
-app.options('*', cors());
 const corsOptions = {
     credentials: true,
     origin: "http://localhost:3001",
@@ -18,12 +17,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(cookieParser())
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    next();
-});
 
 // Load API Routes
 app.use('/api/user', require('./routes/userProfile'));
