@@ -13,25 +13,37 @@ const HOST = "http://localhost:3000"
 const UserRegistration = ({ }) => {
     const router = useRouter()
     const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const navigate = (location) => {
         router.push(location)
     }
     useEffect(() => {
-        const user = localStorage.getItem('user')
-        if (user) {
-            navigate('/components/Account/userProfile/')
+        const checkUser = async () => {
+            const response = await fetch(`${HOST}/api/user/readprofile`,
+                {
+                    method: "GET",
+                })
+            if (response.status === 200) { // user is logged in
+                navigate("/components/Account/userProfile/")
+            }
         }
-        const company = localStorage.getItem('company')
-        if (company) {
-            navigate('/components/Account/companyProfile/')
+        const checkCompany = async () => {
+            const response = await fetch(`${HOST}/api/company/readprofile`,
+                {
+                    method: "GET",
+                })
+            if (response.status === 200) { // company is logged in
+                navigate("/components/Account/companyProfile/")
+            }
         }
+        checkUser()
+        checkCompany()
     }, [])
+
     const handleLogin = async (e) => {
         e.preventDefault()
-        if(username==="" || email==="" || password===""){
+        if(username==="" || password===""){
             alert("Please fill all the fields")
             return
         }
@@ -40,15 +52,15 @@ const UserRegistration = ({ }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password })
+            credentials: 'include',
+            body: JSON.stringify({ username, password })
         })
         const response = await result.json()
-        if(response.reply.error){
-            alert(response.reply.error)
+        if(response.error){
+            alert(response.error)
             return
         }
         if (result.status === 200) {
-            localStorage.setItem('user', JSON.stringify({username, name: response.reply.name, phone: response.reply.phone, email: response.reply.email}))
             navigate('/components/Account/userProfile/')
         } else {
             alert(response.error)
@@ -101,14 +113,6 @@ const UserRegistration = ({ }) => {
                                                 placeholder="Enter Your UserName" />
                                         </div>
                                         <div>
-                                            <label className="block mt-2 text-sm">Email</label>
-                                            <input type="email"
-                                                className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                placeholder="abc@email.com" />
-                                        </div>
-                                        <div>
                                             <label className="block mt-2 text-sm">Password</label>
                                             <input
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
@@ -128,11 +132,11 @@ const UserRegistration = ({ }) => {
 
                                         <div className="flex items-center justify-center gap-4">
                                             <button onClick={() => navigate('/components/Account/userRegistration/userRegister')}
-                                                className="flex items-center justify-center w-full px-4 py-2 text-sm text-black text-gray-700 border border-gray-300 rounded-lg hover:border-gray-500 focus:border-gray-500">
+                                                className="flex items-center justify-center w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg hover:border-gray-500 focus:border-gray-500">
                                                 Register
                                             </button>
                                             <button onClick={() => navigate('/components/Account')}
-                                                className="flex items-center justify-center w-full px-4 py-2 text-sm text-black text-gray-700 border border-gray-300 rounded-lg hover:border-gray-500 focus:border-gray-500">
+                                                className="flex items-center justify-center w-full px-4 py-2 text-sm text-black border border-gray-300 rounded-lg hover:border-gray-500 focus:border-gray-500">
                                                 Back to Account
                                             </button>
                                         </div>

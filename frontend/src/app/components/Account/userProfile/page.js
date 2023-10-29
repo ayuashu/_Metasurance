@@ -5,6 +5,8 @@ import Footer from '../../Footer/footer'
 import Navigation from '../../Navigation/page'
 import AssetCard from './assetCard'
 
+const HOST = "http://localhost:3000"
+
 const UserProfile = () => {
   const router = useRouter()
   const [username, setUsername] = useState("")
@@ -15,20 +17,31 @@ const UserProfile = () => {
     router.push(location)
   }
   useEffect(() => {
-    const user = localStorage.getItem('user')
-    if (user) {
-      const { username, name, phone, email } = JSON.parse(user)
-      setUsername(username)
-      setName(name)
-      setPhone(phone)
-      setEmail(email)
-    } else {
-      navigate('/')
+    const checkUser = async () => {
+      const response = await fetch(`${HOST}/api/user/readprofile`,
+        {
+          method: "GET",
+        })
+      if (response.status === 200) { // user is logged in
+        let user = response.json()
+        setName(user.name)
+        setPhone(user.phone)
+        setEmail(user.email)
+        setUsername(user.username)
+      }else{
+        let error = await response.json()
+        alert(error.error)
+        navigate('/components/Account/userRegistration')
+      }
     }
+    checkUser()
   }, [])
+
   const handleLogout = async (e) => {
     e.preventDefault()
-    localStorage.removeItem('user')
+    const result = await fetch(`${HOST}/api/user/logout`, {
+      method: 'GET'
+    })
     navigate('/')
   }
 

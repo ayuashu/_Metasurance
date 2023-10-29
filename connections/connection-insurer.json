@@ -1,0 +1,49 @@
+{
+    "name": "meta-detection",
+    "version": "1.0.0",
+    "client": {
+        "organization": "insurer",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                }
+            }
+        }
+    },
+    "organizations": {
+        "insurer": {
+            "mspid": "InsurerMSP",
+            "peers": [
+                "peer0.insurer.metasurance.com"
+            ],
+            "certificateAuthorities": [
+                "ca.insurer.metasurance.com"
+            ]
+        }
+    },
+    "peers": {
+        "peer0.insurer.metasurance.com": {
+            "url": "grpcs://localhost:7051",
+            "tlsCACerts": {
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICdjCCAhygAwIBAgIRAPMZ7mvtuM9lW2YYfhDnrIYwCgYIKoZIzj0EAwIwgYQx\nCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g\nRnJhbmNpc2NvMSAwHgYDVQQKExdpbnN1cmVyLm1ldGFzdXJhbmNlLmNvbTEmMCQG\nA1UEAxMddGxzY2EuaW5zdXJlci5tZXRhc3VyYW5jZS5jb20wHhcNMjMxMDI5MTMz\nNjAwWhcNMzMxMDI2MTMzNjAwWjCBhDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNh\nbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBGcmFuY2lzY28xIDAeBgNVBAoTF2luc3Vy\nZXIubWV0YXN1cmFuY2UuY29tMSYwJAYDVQQDEx10bHNjYS5pbnN1cmVyLm1ldGFz\ndXJhbmNlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABEYH3A4xfI+f3kzx\nOT1EZAYNb25NFpWewpN9rXtpRLkhCKoNXjSVUwwfUIMgOLgsBTBeJkE8uiA2DgSs\n+cKbZtqjbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggrBgEFBQcDAgYI\nKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgZwWE6rIIdmiP9dI0\n55XuUYakPGJ28cFLbGOJ5+dHAm8wCgYIKoZIzj0EAwIDSAAwRQIhAOf4H+SBNrxe\nlyZUhrCUZhcjP3S6v0ZHcrbMTJg8n7WjAiAFOmB1Anl+Fm2PH4RN7SLeyVWH9uKX\noMJCKIyxluuoPw==\n-----END CERTIFICATE-----\n"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.insurer.metasurance.com",
+                "hostnameOverride": "peer0.insurer.metasurance.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.insurer.metasurance.com": {
+            "url": "https://localhost:7054",
+            "caName": "ca-insurer",
+            "tlsCACerts": {
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICbjCCAhWgAwIBAgIQGeewqymKZSS9kA8E1zCUTjAKBggqhkjOPQQDAjCBgTEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xIDAeBgNVBAoTF2luc3VyZXIubWV0YXN1cmFuY2UuY29tMSMwIQYD\nVQQDExpjYS5pbnN1cmVyLm1ldGFzdXJhbmNlLmNvbTAeFw0yMzEwMjkxMzM2MDBa\nFw0zMzEwMjYxMzM2MDBaMIGBMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZv\ncm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEgMB4GA1UEChMXaW5zdXJlci5t\nZXRhc3VyYW5jZS5jb20xIzAhBgNVBAMTGmNhLmluc3VyZXIubWV0YXN1cmFuY2Uu\nY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYAdtwIoAefNtn7dHim70tAq9\n/X2HEQWxBhuh8S5be4Sl9NMJ1TiF3rftSXuIPBtV5+IiGBzqKk5HvTXE9b6zNaNt\nMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcD\nATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCDObMu1dHIwUkX+mQ1H8Ahnz/JW\nJp9Y212sqGJ2nATMkjAKBggqhkjOPQQDAgNHADBEAiBXaT9hgs/kRhSSf2k7C79G\nSmzqZaWPY56JzN99oBfLKAIgGawhSksIoLXSG7x/g3i7VTY5u8A2VNAqyZtVT9Nl\nGX4=\n-----END CERTIFICATE-----\n"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}
