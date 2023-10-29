@@ -81,8 +81,8 @@ const UserRegister = () => {
                 </div>
             </div>
             <div className="col-span-2 ..." style={{height: '80vh'}}>
-                <div className="h-10"></div>
-                <div className="flex-1 pt-10 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
+            
+                <div className="flex-1 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
                     <div className="flex flex-col md:flex-row">
                         <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">
                             <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110" 
