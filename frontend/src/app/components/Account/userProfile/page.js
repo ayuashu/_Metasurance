@@ -28,7 +28,7 @@ const UserProfile = () => {
         setPhone(user.phone)
         setEmail(user.email)
         setUsername(user.username)
-      }else{
+      } else {
         let error = await response.json()
         alert(error.error)
         navigate('/components/Account/userRegistration')
@@ -47,7 +47,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen" >
+      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
         <Navigation />
         <div className="flex items-center justify-end">
           <button
@@ -57,7 +57,7 @@ const UserProfile = () => {
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
-          <div className="..." style={{ height: '80vh' }}>
+          <div className="..." style={{ height: '70vh' }}>
             <div className="w-full max-w-sm min-h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
               <div className="flex flex-col items-center pb-10 pt-20">
                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
@@ -91,8 +91,8 @@ const UserProfile = () => {
             </div>
 
           </div>
-          <div className="col-span-2 ..." style={{ border: "2px solid white" }} >
-            <AssetCard userName = {username}/>
+          <div className="col-span-2 ... bar" style={{ border: "2px solid white", height: '70vh', overflow: 'auto' }} >
+            <AssetCard userName={username} />
           </div>
         </div>
         <Footer />

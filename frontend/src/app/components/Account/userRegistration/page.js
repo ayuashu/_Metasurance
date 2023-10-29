@@ -1,9 +1,6 @@
 "use client";
 
-
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Footer from "../../Footer/footer";
 import Navigation from "../../Navigation/page";

@@ -72,7 +72,6 @@ const AssetCard = ({ username }) => {
                         <div className="card-container" key={id}>
                             <div className="card">
                                 <div className="card-body">
-                                    <span className="card-number card-circle subtle">{id}</span>
                                     <span className="card-author subtle"> {name}</span>
                                     <h2 className="card-title"> {assetName} </h2>
                                     <ul>
@@ -87,7 +86,7 @@ const AssetCard = ({ username }) => {
                                             {isClaimed ? 'Claimed' : 'Policy Issued'}
                                         </button>
                                     ) : (
-                                        <button className="card-tag" onClick={() => handlePolicyIssued(assetId)}>Policy Issued</button>
+                                        <button className="card-tag" onClick={() => handlePolicyIssued(assetId)}>Policy Issued<p>(Click to Claim)</p></button>
                                     )}
                                     {isPolicyIssued && !isClaimed && (
                                         <button className="card-tag" onClick={() => handleClaim(assetId)}>Claim</button>

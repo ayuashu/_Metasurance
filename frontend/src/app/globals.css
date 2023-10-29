@@ -102,7 +102,7 @@
 .card-description {
   /* display: inline-block; */
   font-weight: 300;
-  line-height: 22px;
+  line-height: 1.5;
   margin: 10px 0;
 }
 
@@ -152,6 +152,20 @@
   margin: -1px auto 0;
   width: 80%;
   z-index: -1;
+}
+
+.bar::-webkit-scrollbar {
+  background-color: #121212;
+  width: 10px;
+}
+
+.bar::-webkit-scrollbar-thumb {
+  background: rgb(88, 86, 86);
+  cursor: pointer;
+}
+
+.bar::-webkit-scrollbar-thumb:hover {
+  background: #e6dbdb;
 }
 
 @media (max-width: 998px) {

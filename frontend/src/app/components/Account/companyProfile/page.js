@@ -1,10 +1,11 @@
 "use client"
-import Link from 'next/link'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Footer from '../../Footer/footer'
 import Navigation from '../../Navigation/page'
 import PolicyCard from './policyCard'
+
+const HOST = "http://localhost:3000"
 
 const CompanyProfile = () => {
   const router = useRouter()
@@ -16,19 +17,31 @@ const CompanyProfile = () => {
     router.push(location)
   }
   useEffect(() => {
-    const company = localStorage.getItem('company')
-    if (company) {
-      const { username, name, phone, email } = JSON.parse(company)
-      setUsername(username)
-      setName(name)
-      setPhone(phone)
-      setEmail(email)
-    } else {
-      navigate('/')
+    const checkCompany = async () => {
+      const response = await fetch(`${HOST}/api/company/readprofile`,
+        {
+          method: "GET",
+        })
+      if (response.status === 200) { // company is logged in
+        let user = response.json()
+        setName(user.name)
+        setPhone(user.phone)
+        setEmail(user.email)
+        setUsername(user.username)
+      } else {
+        let error = await response.json()
+        alert(error.error)
+        navigate('/components/Account/companyRegistration')
+      }
     }
+    checkCompany()
   }, [])
-  const handleLogout = () => {
-    localStorage.removeItem('company')
+
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    const result = await fetch(`${HOST}/api/company/logout`, {
+      method: 'GET'
+    })
     navigate('/')
   }
 
@@ -44,7 +57,7 @@ const CompanyProfile = () => {
           </button>
         </div>
         <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
-          <div className="..." style={{ height: '80vh' }}>
+          <div className="..." style={{ height: '70vh' }}>
             <div className="w-full max-w-sm min-h-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
               <div className="flex flex-col items-center pb-10 pt-20">
                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
@@ -68,8 +81,8 @@ const CompanyProfile = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2 ..." style={{ border: "2px solid white" }}>
-            <PolicyCard userName={username}/>
+          <div className="col-span-2 ... bar" style={{ border: "2px solid white", height: '70vh', overflow: 'auto' }}>
+            <PolicyCard userName={username} />
           </div>
         </div>
         <Footer />

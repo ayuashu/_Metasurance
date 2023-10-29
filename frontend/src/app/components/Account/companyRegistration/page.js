@@ -12,46 +12,57 @@ const HOST = "http://localhost:3000"
 const CompanyRegistration = ({ }) => {
     const router = useRouter()
     const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const navigate = (location) => {
         router.push(location)
     }
-    useEffect(() => {
-        const user = localStorage.getItem('user')
-        if (user) {
-            navigate('/components/Account/userProfile/')
+    uuseEffect(() => {
+        const checkUser = async () => {
+            const response = await fetch(`${HOST}/api/user/readprofile`,
+                {
+                    method: "GET",
+                })
+            if (response.status === 200) { // user is logged in
+                navigate("/components/Account/userProfile/")
+            }
         }
-        const company = localStorage.getItem('company')
-        if (company) {
-            navigate('/components/Account/companyProfile/')
+        const checkCompany = async () => {
+            const response = await fetch(`${HOST}/api/company/readprofile`,
+                {
+                    method: "GET",
+                })
+            if (response.status === 200) { // company is logged in
+                navigate("/components/Account/companyProfile/")
+            }
         }
+        checkCompany()
+        checkUser()
     }, [])
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        if (username === "" || email === "" || password === "") {
+        if(username==="" || password===""){
             alert("Please fill all the fields")
             return
         }
-        const response = await fetch(`${HOST}/api/company/login`, {
+        const result = await fetch(`${HOST}/api/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password })
+            credentials: 'include',
+            body: JSON.stringify({ username, password })
         })
-        const data = await response.json()
-        if (data.reply.error) {
-            alert(data.reply.error)
+        const response = await result.json()
+        if(response.error){
+            alert(response.error)
             return
         }
-        if(response.status === 200){
-            localStorage.setItem('company', JSON.stringify({ username, name: data.reply.name, phone: data.reply.phone, email: data.reply.email }))
-            navigate('/components/Account/companyProfile')
-        }else{
-            alert(data.error)
+        if (result.status === 200) {
+            navigate('/components/Account/companyProfile/')
+        } else {
+            alert(response.error)
         }
     }
 
