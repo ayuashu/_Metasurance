@@ -21,6 +21,7 @@ const UserProfile = () => {
       const response = await fetch(`${HOST}/api/user/readprofile`,
         {
           method: "GET",
+          credentials: "include"
         })
       if (response.status === 200) { // user is logged in
         let user = response.json()

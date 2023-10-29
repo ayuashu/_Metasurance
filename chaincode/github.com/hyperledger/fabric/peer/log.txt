@@ -1,3 +1,3 @@
-[34m2023-10-29 13:42:02.693 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 001[0m Using default escc
-[34m2023-10-29 13:42:02.693 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 002[0m Using default vscc
-[34m2023-10-29 13:42:03.988 UTC [chaincodeCmd] install -> INFO 003[0m Installed remotely response:<status:200 payload:"OK" > 
+[34m2023-10-29 17:47:34.102 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 001[0m Using default escc
+[34m2023-10-29 17:47:34.102 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 002[0m Using default vscc
+[34m2023-10-29 17:47:35.783 UTC [chaincodeCmd] install -> INFO 003[0m Installed remotely response:<status:200 payload:"OK" > 
