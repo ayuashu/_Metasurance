@@ -38,6 +38,7 @@ const UserRegister = () => {
         const response = await fetch(url, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify(body)
         })
         const json = await response.json();
@@ -46,8 +47,7 @@ const UserRegister = () => {
             alert(response.error)
         }
         if(response.status===200){
-            alert(`Login successful. User id: ${json.reply.uniqueId}`)
-            localStorage.setItem("user", JSON.stringify({ username, name, phone, email }));
+            alert(`Login successful`)
             navigate("/components/Account/userProfile/")
         }else{
             alert(json.error);
@@ -60,10 +60,16 @@ const UserRegister = () => {
     }
 
     useEffect(() => {
-        const user = localStorage.getItem('user')
-        if (user) {
-            navigate('/components/Account/userProfile/')
+        const checkUser = async () => {
+            const response = await fetch(`${HOST}/api/user/readprofile`,
+            {
+                method: "GET",
+            })
+            if(response.status===200){ // user is logged in
+                navigate("/components/Account/userProfile/")
+            }
         }
+        checkUser()
     }, [])
   return (
     <>

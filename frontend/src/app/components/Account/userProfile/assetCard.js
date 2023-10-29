@@ -18,18 +18,41 @@ const AssetCard = ({ username }) => {
         // Simulate fetching assets data from an API or other data source
         // Replace this with your actual data fetching logic
         const fetchData = async () => {
-            try {
-                // Simulate fetching assets data
-                const response = await fetch('/api/assets'); // Replace with your API endpoint
-                if (response.ok) {
-                    const data = await response.json();
-                    setAssets(data);
-                } else {
-                    console.error('Failed to fetch assets data');
+            // try {
+            //     // Simulate fetching assets data
+            //     const response = await fetch('/api/assets'); // Replace with your API endpoint
+            //     if (response.ok) {
+            //         const data = await response.json();
+            //         setAssets(data);
+            //     } else {
+            //         console.error('Failed to fetch assets data');
+            //     }
+            // } catch (error) {
+            //     console.error('Error fetching assets data', error);
+            // }
+            setAssets([
+                {
+                    id: 1,
+                    assetName: 'Car',
+                    assetType: 'Automobile',
+                    value: '$100,000',
+                    age: '5 years'
+                },
+                {
+                    id: 2,
+                    assetName: 'House',
+                    assetType: 'Real Estate',
+                    value: '$500,000',
+                    age: '10 years'
+                },
+                {
+                    id: 3,
+                    assetName: 'Boat',
+                    assetType: 'Watercraft',
+                    value: '$50,000',
+                    age: '2 years'
                 }
-            } catch (error) {
-                console.error('Error fetching assets data', error);
-            }
+            ])
         };
 
         fetchData(); // Call the fetchData function when the component mounts

@@ -9,7 +9,19 @@ const app = express();
 app.use(express.json());
 
 // CORS Middleware
-app.use(cors());
+const whitelist = ['http://localhost:3001'];
+app.options('*', cors());
+const corsOptions = {
+    credentials: true,
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+};
+app.use(cors(corsOptions));
 app.use(cookieParser())
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
