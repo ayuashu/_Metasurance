@@ -5,7 +5,11 @@ const SubmitTransaction = async (contract, user, params) => {
     try {
         // Load user Wallet
         const ccp = require(`../ccp/connection-${user.organization}.json`);
-        const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.organization}`);
+        const walletPath = path.join(
+            process.cwd(),
+            "wallets",
+            `wallet_${user.organization}`,
+        );
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
@@ -24,14 +28,20 @@ const SubmitTransaction = async (contract, user, params) => {
         const Contract = network.getContract(contract.name);
 
         // Submit the specified transaction.
-        let payload = await Contract.submitTransaction(contract.function, ...params);
+        let payload = await Contract.submitTransaction(
+            contract.function,
+            ...params,
+        );
 
         // Return payload (if any)
-        if (payload){
-            console.log("Payload: " + payload.toString())
+        if (payload) {
+            console.log("Payload: " + payload.toString());
+            let stringiFiedOutput = payload.toString();
+            if (stringiFiedOutput.length == 0) {
+                return [];
+            }
             return JSON.parse(payload.toString());
-        }
-        else return null;
+        } else return null;
     } catch (error) {
         console.error("Failed to Submit Transaction.", error.message);
     }
