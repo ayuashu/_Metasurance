@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navigation from "@/app/components/Navigation/page";
@@ -8,14 +7,12 @@ import Footer from "@/app/components/Footer/footer";
 
 const HOST = "http://localhost:3000"
 
-const addPolicy = () => {
-    const [username, setUsername] = useState("")
-    const [name, setName] = useState("")
-    const [policyName, setPolicyName] = useState("")
-    const [insuranceType, setInsuranceType] = useState("")
-    const [premiumValue, setPremiumValue] = useState("")
-    const [insuranceCover, setInsuranceCover] = useState("")
-    const [description, setDescription] = useState("")
+const addPolicy = ({name}) => {
+    const [policyname, setPolicyName] = useState("")
+    const [insurancetype, setInsuranceType] = useState("")
+    const [premiumamount, setPremiumAmount] = useState("")
+    const [insurancecover, setInsuranceCover] = useState("")
+    // const [description, setDescription] = useState("")
 
     const router = useRouter()
     const navigate = (location) => {
@@ -32,22 +29,23 @@ const addPolicy = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
 
-        if (username === "" || name === "" || policyName === "" || insuranceType === "" || premiumValue === "" || insuranceCover === "") {
+        if ( policyname === "" || insurancetype === "" || premiumamount === "" || insurancecover === "") {
             return alert("Complete all fields for registration")
         }
-        const result = await fetch(`${HOST}/api/policy/register`, {
+        const result = await fetch(`${HOST}/api/company/createPolicy`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, name, policyName, insuranceType, premiumValue, insuranceCover, description })
+            body: JSON.stringify({ policyname, premiumamount, insurancecover, insurancetype})
         })
         const response = await result.json()
         if (response.error) {
             alert(response.error)
         }
         if (result.status === 200) {
-            localStorage.setItem('asset', JSON.stringify({ username, name, policyName, insuranceType, premiumValue, insuranceCover, description }))
+            localStorage.setItem('asset', JSON.stringify({ policyname, premiumamount, insurancecover, insurancetype}))
             navigate('/components/Account/companyProfile/')
         } else {
             alert(response.error)
@@ -64,7 +62,7 @@ const addPolicy = () => {
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
                                 <h5 className="mb-1 text-xl font-medium text-white dark:text-white">!!!Hurray!!!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Journey Begins!!!</h3>
-                                <span className="text-l text-gray-500 dark:text-gray-400"><b>COMPANY</b></span>
+                                <span className="text-l text-gray-500 dark:text-gray-400"><b>COMPANY{name}</b></span>
                             </div>
                         </div>
                     </div>
@@ -85,18 +83,10 @@ const addPolicy = () => {
                                         <h1 className="mb-1 text-2xl font-bold text-center text-gray-700">Register New Policy</h1>
 
                                         <div>
-                                            <label className="block mt-2 text-sm">User Name</label>
-                                            <input type="text"
-                                                className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)}
-                                                placeholder="Enter Your User Name" />
-                                        </div>
-                                        <div>
                                             <label className="block mt-2 text-sm">Policy Name</label>
                                             <input type="text"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={policyName}
+                                                value={policyname}
                                                 onChange={(e) => setPolicyName(e.target.value)}
                                                 placeholder="car insurance, house insurance, ...." />
                                         </div>
@@ -104,7 +94,7 @@ const addPolicy = () => {
                                             <label className="block mt-2 text-sm">Insurance Type</label>
                                             <input type="text"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={insuranceType}
+                                                value={insurancetype}
                                                 onChange={(e) => setInsuranceType(e.target.value)}
                                                 placeholder="car, house, ...." />
                                         </div>
@@ -112,19 +102,19 @@ const addPolicy = () => {
                                             <label className="block mt-2 text-sm">Premium Amount</label>
                                             <input type="number"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={premiumValue}
-                                                onChange={(e) => setPremiumValue(e.target.value)}
+                                                value={premiumamount}
+                                                onChange={(e) => setPremiumAmount(e.target.value)}
                                                 placeholder="Enter the Premium Value" />
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">Insurance Cover</label>
                                             <input type="number"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={insuranceCover}
+                                                value={insurancecover}
                                                 onChange={(e) => setInsuranceCover(e.target.value)}
                                                 placeholder="Enter the duration of Policy" />
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <label className="block mt-2 text-sm">Description</label>
                                             <textarea
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
@@ -132,7 +122,7 @@ const addPolicy = () => {
                                                 onChange={(e) => setDescription(e.target.value)}
                                                 placeholder="Enter a description for your policy"
                                             ></textarea>
-                                        </div>
+                                        </div> */}
                                         <button onClick={(e) => handleLogin(e)}
                                             className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                             Register

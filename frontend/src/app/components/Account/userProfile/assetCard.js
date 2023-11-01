@@ -1,79 +1,77 @@
 import React, { useState, useEffect } from 'react';
+import AllRequestPolicyCard from './allRequestpolicies';
 
-const AssetCard = ({ username }) => {
+const HOST = "http://localhost:3000";
+
+
+const AssetCard = ({username}) => {
     const [assets, setAssets] = useState([]);
-    const [policies, setPolicies] = useState({});
-    const [claimStatus, setClaimStatus] = useState({}); 
+    const [showAllPolicies, setShowAllPolicies] = useState(false);
+    const [selectedAssetID, setSelectedAssetID] = useState(null);
 
-    const handlePolicyIssued = (assetId) => {
-        setPolicies({ ...policies, [assetId]: 'Policy issued for this asset.' });
-        setClaimStatus({ ...claimStatus, [assetId]: 'active' });
+    const handleDelete = async (assetID) => {
+        try {
+            const response = await fetch(`${HOST}/api/user/asset/delete`, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ assetID }), // Send assetID in the request body
+            });
+    
+            if (response.ok) {
+                // If the delete request is successful, update the list of assets
+                setAssets((prevAssets) => prevAssets.filter((asset) => asset.assetID !== assetID));
+            } else {
+                console.error('Failed to delete the asset');
+            }
+        } catch (error) {
+            console.error('Error deleting the asset', error);
+        }
     };
-
-    const handleClaim = (assetId) => {
-        setClaimStatus({ ...claimStatus, [assetId]: 'claimed' });
-    };
+    
 
     useEffect(() => {
-        // Simulate fetching assets data from an API or other data source
-        // Replace this with your actual data fetching logic
         const fetchData = async () => {
-            // try {
-            //     // Simulate fetching assets data
-            //     const response = await fetch('/api/assets'); // Replace with your API endpoint
-            //     if (response.ok) {
-            //         const data = await response.json();
-            //         setAssets(data);
-            //     } else {
-            //         console.error('Failed to fetch assets data');
-            //     }
-            // } catch (error) {
-            //     console.error('Error fetching assets data', error);
-            // }
-            setAssets([
-                {
-                    id: 1,
-                    assetName: 'Car',
-                    assetType: 'Automobile',
-                    value: '$100,000',
-                    age: '5 years'
-                },
-                {
-                    id: 2,
-                    assetName: 'House',
-                    assetType: 'Real Estate',
-                    value: '$500,000',
-                    age: '10 years'
-                },
-                {
-                    id: 3,
-                    assetName: 'Boat',
-                    assetType: 'Watercraft',
-                    value: '$50,000',
-                    age: '2 years'
+            try {
+                const response = await fetch(`${HOST}/api/user/asset/get`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setAssets(data.reply.assets);
+                    console.log(data)
+                } else {
+                    console.error('Failed to fetch assets data');
                 }
-            ])
+            } catch (error) {
+                console.error('Error fetching assets data', error);
+            }
         };
 
-        fetchData(); // Call the fetchData function when the component mounts
+        fetchData();
     }, []);
+
+    const handleRequestPolicy = (assetID) => {
+        setSelectedAssetID(assetID);
+        setShowAllPolicies(true);
+    };
 
     return (
         <>
             <div className="main-card--container">
-                {assets.map((curElem) => {
-                    const { id, name, assetName, assetType, value, age } = curElem;
-
-                    const assetId = `asset-${id}`;
-                    const isPolicyIssued = policies[assetId] !== undefined;
-                    const isClaimed = claimStatus[assetId] === 'claimed';
-
+                {assets.map((asset) => {
+                    const { assetID, assetName, assetType, value, age } = asset;
+                    
                     return (
-                        <div className="card-container" key={id}>
+    
+                        <div className="card-container" key={assetID}>
                             <div className="card">
                                 <div className="card-body">
-                                    <span className="card-author subtle"> {name}</span>
-                                    <h2 className="card-title"> {assetName} </h2>
+                                    <h2 className="card-title">{assetName}</h2>
                                     <ul>
                                         <li>Asset Type: {assetType}</li>
                                         <li>Value: {value}</li>
@@ -81,24 +79,21 @@ const AssetCard = ({ username }) => {
                                     </ul>
                                 </div>
                                 <div>
-                                    {isPolicyIssued ? (
-                                        <button className={`card-tag ${isClaimed ? 'subtle' : ''}`}>
-                                            {isClaimed ? 'Claimed' : 'Policy Issued'}
-                                        </button>
-                                    ) : (
-                                        <button className="card-tag" onClick={() => handlePolicyIssued(assetId)}>Policy Issued<p>(Click to Claim)</p></button>
-                                    )}
-                                    {isPolicyIssued && !isClaimed && (
-                                        <button className="card-tag" onClick={() => handleClaim(assetId)}>Claim</button>
-                                    )}
+                                    <button className='card-tag' onClick={() => handleRequestPolicy(assetID)}>Get Policies</button>
+                                    <button className='card-tag' onClick={() => handleDelete(assetID)}>Delete</button>
                                 </div>
                             </div>
                         </div>
                     );
                 })}
             </div>
+
+            {/* Render the AllPolicies component conditionally */}
+            {showAllPolicies && <AllRequestPolicyCard assetID={selectedAssetID} rendered={true} />}
         </>
     );
 };
 
 export default AssetCard;
+
+

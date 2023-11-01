@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navigation from "@/app/components/Navigation/page";
@@ -16,44 +15,58 @@ const CompanyRegister = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
-    const router = useRouter()
-    const navigate = (location) => {
-        router.push(location)
-    }
+    const handleCompanyRegistration = async (e) => {
+        e.preventDefault();
 
-    useEffect(() => {
-        const company = localStorage.getItem('company')
-        if (company) {
-            navigate('/components/Account/companyProfile/')
+        if (password !== confirmPassword) {
+            return alert("Passwords don't match");
         }
-    }, [])
-
-    const handleLogin = async (e) => {
-        e.preventDefault()
-        if (password != confirmPassword) {
-            return alert("Passwords don't match")
-        }
+    
         if (username === "" || name === "" || phone === "" || email === "" || password === "") {
-            return alert("Complete all fields for registration")
+            return alert("Complete all fields for registration");
+        } 
+        
+        let url = `${HOST}/api/company/register`
+        let body = {
+            username, name, email, phone, password
         }
-        const result = await fetch(`${HOST}/api/company/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, name, phone, email, password, confirmPassword })
-        })
-        const response = await result.json()
-        if (response.error) {
-            alert(response.error)
+        console.log(body)
+        const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body)
+            });
+            const json = await response.json();
+            console.log(json)
+            if (response.error) {
+                alert(response.error);
+            } else if (response.status === 200) {
+                alert('Login successful')
+                navigate('/components/Account/companyProfile/');
+            } else {
+                alert(json.error);
+            }
         }
-        if (result.status === 200) {
-            localStorage.setItem('company', JSON.stringify({ username, name, phone, email }))
-            navigate('/components/Account/companyProfile/')
-        } else {
-            alert(response.error)
+
+        const router = useRouter()
+        const navigate = (location) => {
+            router.push(location)
         }
-    }
+
+        useEffect(() => {
+            const checkCompany = async () => {
+                const response = await fetch(`${HOST}/api/company/readprofile`,
+                {
+                    method: "GET",
+                })
+                if (response.status === 200) {
+                    navigate('/components/Account/companyProfile/')
+                }
+            }
+            checkCompany()
+        },[])
+
     return (
         <>
             <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
@@ -133,7 +146,7 @@ const CompanyRegister = () => {
                                                 placeholder="abcdefg" type="password" />
                                         </div>
 
-                                        <button onClick={(e) => handleLogin(e)}
+                                        <button onClick={(e) => handleCompanyRegistration(e)}
                                             className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                             Register
                                         </button>
@@ -142,7 +155,7 @@ const CompanyRegister = () => {
                                         <hr className="my-2" />
 
                                         <div className="flex items-center justify-center gap-4">
-                                            <button onClick={(e) => handleLogin(e)}
+                                            <button onClick={(e) => navigate('/components/Account/companyRegistration')}
                                                 className="flex items-center justify-center w-full px-4 py-2 text-sm text-black text-gray-700 border border-gray-300 rounded-lg hover:border-gray-500 focus:border-gray-500">
                                                 Login
                                             </button>
@@ -164,3 +177,5 @@ const CompanyRegister = () => {
 }
 
 export default CompanyRegister
+
+

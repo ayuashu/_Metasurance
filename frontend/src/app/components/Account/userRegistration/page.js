@@ -25,17 +25,7 @@ const UserRegistration = ({ }) => {
                 navigate("/components/Account/userProfile/")
             }
         }
-        const checkCompany = async () => {
-            const response = await fetch(`${HOST}/api/company/readprofile`,
-                {
-                    method: "GET",
-                })
-            if (response.status === 200) { // company is logged in
-                navigate("/components/Account/companyProfile/")
-            }
-        }
         checkUser()
-        checkCompany()
     }, [])
 
     const handleLogin = async (e) => {

@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Footer from "../../Footer/footer";
 import Navigation from "../../Navigation/page";
@@ -17,16 +15,7 @@ const CompanyRegistration = ({ }) => {
     const navigate = (location) => {
         router.push(location)
     }
-    uuseEffect(() => {
-        const checkUser = async () => {
-            const response = await fetch(`${HOST}/api/user/readprofile`,
-                {
-                    method: "GET",
-                })
-            if (response.status === 200) { // user is logged in
-                navigate("/components/Account/userProfile/")
-            }
-        }
+    useEffect(() => {
         const checkCompany = async () => {
             const response = await fetch(`${HOST}/api/company/readprofile`,
                 {
@@ -37,7 +26,6 @@ const CompanyRegistration = ({ }) => {
             }
         }
         checkCompany()
-        checkUser()
     }, [])
 
     const handleLogin = async (e) => {
@@ -46,7 +34,7 @@ const CompanyRegistration = ({ }) => {
             alert("Please fill all the fields")
             return
         }
-        const result = await fetch(`${HOST}/api/user/login`, {
+        const result = await fetch(`${HOST}/api/company/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -111,14 +99,6 @@ const CompanyRegistration = ({ }) => {
                                                 onChange={(e) => setUsername(e.target.value)}
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                                 placeholder="Enter Your UserName" />
-                                        </div>
-                                        <div>
-                                            <label className="block mt-2 text-sm">Email</label>
-                                            <input type="email"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                placeholder="abc@email.com" />
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">Password</label>
