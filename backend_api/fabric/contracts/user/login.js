@@ -1,20 +1,19 @@
-const FabricAPI = require("../../api");
+const FabricAPI = require('../../api')
 
 module.exports = async (user, params) => {
     try {
-        await FabricAPI.Account.RegisterUser({ orgName: user.organization, username: user.username })
         let reply = await FabricAPI.Contract.SubmitTransaction(
             {
-                name: "user_cc",
-                channel: "commonchannel",
-                function: "login",
+                name: 'user_cc',
+                channel: 'commonchannel',
+                function: 'login',
             },
             user,
-            params /* params are array of email, password */
-        );
+            params /* params are array of email, password */,
+        )
 
-        return reply;
+        return reply
     } catch (error) {
-        console.error("Failed to log in: ", error.message);
+        console.error('Failed to log in: ', error.message)
     }
-};
+}
