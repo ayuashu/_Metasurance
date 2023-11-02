@@ -6,7 +6,7 @@ const HOST = 'http://localhost:3000'
 const AssetCard = ({ username }) => {
     const [assets, setAssets] = useState([])
     const [showAllPolicies, setShowAllPolicies] = useState(false)
-    const [selectedAssetID, setSelectedAssetID] = useState(null)
+    const [selectedAssetID, setSelectedAssetID] = useState('')
 
     const handleDelete = async (assetID) => {
         try {
@@ -56,9 +56,17 @@ const AssetCard = ({ username }) => {
     }, [])
 
     const handleRequestPolicy = (assetID) => {
-        setSelectedAssetID(assetID)
-        setShowAllPolicies((prev) => !prev)
+        setSelectedAssetID((prev) => {
+            if (prev == assetID) {
+                return ''
+            }
+            return assetID
+        })
     }
+
+    useEffect(() => {
+        setShowAllPolicies((prev) => !prev)
+    }, [selectedAssetID])
 
     return (
         <>
@@ -67,7 +75,6 @@ const AssetCard = ({ username }) => {
                     assets.map((asset) => {
                         const { assetID, assetName, assetType, value, age } =
                             asset
-
                         return (
                             <div className="card-container" key={assetID}>
                                 <div className="card">
@@ -84,9 +91,9 @@ const AssetCard = ({ username }) => {
                                     <div>
                                         <button
                                             className="card-tag"
-                                            onClick={() =>
+                                            onClick={() => {
                                                 handleRequestPolicy(assetID)
-                                            }
+                                            }}
                                         >
                                             Get Policies
                                         </button>
@@ -111,7 +118,7 @@ const AssetCard = ({ username }) => {
             </div>
 
             {/* Render the AllPolicies component conditionally */}
-            {showAllPolicies && (
+            {showAllPolicies && selectedAssetID.length > 0 && (
                 <AllRequestPolicyCard
                     assetID={selectedAssetID}
                     rendered={true}

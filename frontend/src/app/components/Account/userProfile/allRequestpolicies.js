@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 
 const HOST = 'http://localhost:3000'
 
-const AllRequestPolicyCard = ({ assetid, rendered }) => {
+const AllRequestPolicyCard = ({ assetID }) => {
     const [policyCompanies, setPolicyCompanies] = useState([])
     const cardRef = useRef(null)
 
@@ -10,6 +10,7 @@ const AllRequestPolicyCard = ({ assetid, rendered }) => {
         try {
             const response = await fetch(`${HOST}/api/user/policy/request`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -32,30 +33,27 @@ const AllRequestPolicyCard = ({ assetid, rendered }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (rendered) {
-                    // Fetch data only if the component has been rendered
-                    const response = await fetch(
-                        `${HOST}/api/user/policy/viewall`,
-                        {
-                            method: 'GET',
-                            credentials: 'include',
-                        },
-                    )
-                    if (response.ok) {
-                        const data = await response.json()
-                        setPolicyCompanies(data.reply.policyCompanies)
-                        console.log(data) // Log the data
-                    } else {
-                        console.error('Failed to fetch policy data')
-                    }
+                // Fetch data only if the component has been rendered
+                const response = await fetch(
+                    `${HOST}/api/user/policy/viewall`,
+                    {
+                        method: 'GET',
+                        credentials: 'include',
+                    },
+                )
+                if (response.ok) {
+                    const data = await response.json()
+                    setPolicyCompanies(data.reply.policyCompanies)
+                    console.log(data) // Log the data
+                } else {
+                    console.error('Failed to fetch policy data')
                 }
             } catch (error) {
                 console.error('Error fetching policy data', error)
             }
         }
-
         fetchData() // Call the fetchData function when the component mounts
-    }, [rendered])
+    }, [])
 
     return (
         <div className="main-card-container">
@@ -133,7 +131,7 @@ const AllRequestPolicyCard = ({ assetid, rendered }) => {
                                                         className="card-tag"
                                                         onClick={() =>
                                                             handleRequestPolicy(
-                                                                assetid,
+                                                                assetID,
                                                                 policyid,
                                                             )
                                                         }
