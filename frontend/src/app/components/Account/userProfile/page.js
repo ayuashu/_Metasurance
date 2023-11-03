@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Footer from '../../Footer/footer'
 import Navigation from '../../Navigation/page'
 import AssetCard from './assetCard'
-import PolicyCard from './policyCard' // Import the PolicyCard component
+import PolicyIssued from './policyIssued'
 
 const HOST = 'http://localhost:3000'
 
@@ -116,7 +116,6 @@ const UserProfile = () => {
                                     <b>Add assets</b>
                                 </button>
                             </div>
-
                             <div className="flex items-center justify-center pt-5">
                                 <button
                                     onClick={handleViewPolicies}
@@ -125,7 +124,7 @@ const UserProfile = () => {
                                     <b>
                                         {viewPolicies
                                             ? 'View Assets'
-                                            : 'View Policies'}
+                                            : 'Issued Policies'}
                                     </b>
                                 </button>
                             </div>
@@ -150,10 +149,11 @@ const UserProfile = () => {
                         }}
                     >
                         {viewPolicies ? (
-                            <PolicyCard />
+                            <PolicyIssued />
                         ) : (
-                            <AssetCard userName={username} />
+                            <AssetCard />
                         )}
+                        {/* <AssetCard /> */}
                     </div>
                 </div>
                 <Footer />

@@ -1,12 +1,19 @@
+'use client'
 import React, { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 const HOST = 'http://localhost:3000'
 
-const AllRequestPolicyCard = ({ assetID }) => {
+
+const AllRequestPolicyCard = ({ assetid }) => {
     const [policyCompanies, setPolicyCompanies] = useState([])
     const cardRef = useRef(null)
+    const router = useRouter()
+    const navigate = (location) => {
+        router.push(location)
+    }
 
-    const handleRequestPolicy = async (assetid, policyid) => {
+    const handleRequestPolicy = async (policyid, assetid) => {
         try {
             const response = await fetch(`${HOST}/api/user/policy/request`, {
                 method: 'POST',
@@ -15,20 +22,21 @@ const AllRequestPolicyCard = ({ assetID }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    policyid,
-                    assetid,
+                    policyid: policyid, // Include policyid
+                    assetid: assetid,   // Include assetid
                 }),
-            })
+            });
             if (response.ok) {
-                // Successfully purchased the policy, you can handle the response or perform any necessary action.
-                console.log('Policy purchase was successful')
+                alert('Policy purchase was successful');
+                console.log('Policy purchase was successful');
+                navigate('/components/Account/userProfile')
             } else {
-                console.error('Failed to purchase policy')
+                console.error('Failed to purchase policy');
             }
         } catch (error) {
-            console.error('Error purchasing policy', error)
+            console.error('Error purchasing policy', error);
         }
-    }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -131,8 +139,7 @@ const AllRequestPolicyCard = ({ assetID }) => {
                                                         className="card-tag"
                                                         onClick={() =>
                                                             handleRequestPolicy(
-                                                                assetID,
-                                                                policyid,
+                                                                policyid, assetid
                                                             )
                                                         }
                                                     >

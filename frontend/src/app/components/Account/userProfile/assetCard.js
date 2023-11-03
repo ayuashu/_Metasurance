@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import AllRequestPolicyCard from './allRequestpolicies'
+import PolicyIssued from './policyIssued'
 
 const HOST = 'http://localhost:3000'
 
-const AssetCard = ({ username }) => {
+const AssetCard = () => {
     const [assets, setAssets] = useState([])
     const [showAllPolicies, setShowAllPolicies] = useState(false)
     const [selectedAssetID, setSelectedAssetID] = useState('')
+    const [showIssuedPolicy, setShowIssuedPolicy] = useState(false);
 
     const handleDelete = async (assetID) => {
         try {
@@ -64,6 +66,11 @@ const AssetCard = ({ username }) => {
         })
     }
 
+    const handleIssuedPolicy = (assetID) => {
+        setShowIssuedPolicy(true);
+        setSelectedAssetID(assetID);
+      };
+
     useEffect(() => {
         setShowAllPolicies((prev) => !prev)
     }, [selectedAssetID])
@@ -97,6 +104,14 @@ const AssetCard = ({ username }) => {
                                         >
                                             Get Policies
                                         </button>
+                                        {/* <button
+                                            className="card-tag"
+                                            onClick={() => {
+                                                handleIssuedPolicy(assetID)
+                                            }}
+                                        >
+                                            Policies Issued
+                                        </button> */}
                                         <button
                                             className="card-tag"
                                             onClick={() =>
@@ -120,10 +135,15 @@ const AssetCard = ({ username }) => {
             {/* Render the AllPolicies component conditionally */}
             {showAllPolicies && selectedAssetID.length > 0 && (
                 <AllRequestPolicyCard
-                    assetID={selectedAssetID}
+                    assetid={selectedAssetID}
                     rendered={true}
                 />
             )}
+            {/* {showIssuedPolicy && selectedAssetID !== null && (
+                <PolicyIssued 
+                    assetid={selectedAssetID}
+                />
+            )} */}
         </>
     )
 }
