@@ -1,7 +1,5 @@
 // mocks a database containing a mapping of cookies to usernames
-const database = {
-
-};
+const database = {}
 
 // create functions for interacting with the database
 /**
@@ -17,7 +15,7 @@ const db = {
      * @returns {Object} The value of the cookie.
      */
     get: (cookie) => {
-        return database[cookie];
+        return database[cookie]
     },
     /**
      * Set the value of a cookie in the database.
@@ -28,7 +26,7 @@ const db = {
      * @param {number} expiry - The expiration time of the cookie in seconds.
      */
     set: (cookie, username, expiry) => {
-        database[cookie] = { username, expiresin: expiry };
+        database[cookie] = { username, expiresin: expiry }
     },
     /**
      * Remove a cookie from the database.
@@ -37,9 +35,14 @@ const db = {
      * @param {string} cookie - The name of the cookie to remove.
      */
     remove: (cookie) => {
-        delete database[cookie];
-    }
-};
+        delete database[cookie]
+    },
+
+    show: () => {
+        console.log('database is:')
+        console.log(JSON.stringify(database))
+    },
+}
 
 // export the database functions
-module.exports = db;
+module.exports = db
