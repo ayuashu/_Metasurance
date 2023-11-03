@@ -134,10 +134,10 @@ const PolicyIssued = () => {
                                         <li>
                                             <b>Premiums Paid:</b> {premiumspaid}
                                         </li>
-                                        <li>
+                                        {/*<li>
                                             <b>Premiums needed:</b>{' '}
                                             {() => premiumsNeeded()}
-                                        </li>
+                                        </li>*/}
                                     </ul>
                                     <div>
                                         <button
@@ -154,7 +154,7 @@ const PolicyIssued = () => {
                                             onClick={() =>
                                                 handleClaim(mappingid)
                                             }
-                                            disabled={claimed == 'Yes'}
+                                            disabled={claimed}
                                         >
                                             Claim
                                         </button>
