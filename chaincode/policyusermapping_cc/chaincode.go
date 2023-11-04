@@ -146,7 +146,7 @@ func (ac *Chaincode) claimPolicy(stub shim.ChaincodeStubInterface, args []string
 // args: [username]
 func (ac *Chaincode) viewRequestedPolicies(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 1 {
-		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 1: userid\"}"))
+		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 1: username\"}"))
 	}
 	policyList, err := stub.GetState(args[0])
 	if err != nil {
@@ -154,7 +154,7 @@ func (ac *Chaincode) viewRequestedPolicies(stub shim.ChaincodeStubInterface, arg
 	} else if policyList != nil {
 		return shim.Success(policyList)
 	} else {
-		return shim.Success([]byte("{\"error\": \"No policies found for user " + args[0] + "\"}"))
+		return shim.Success([]byte("{\"message\": \"No policies found for user " + args[0] + "\"}"))
 	}
 }
 

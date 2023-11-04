@@ -51,8 +51,11 @@ router.post('/register', async (req, res) => {
             return
         }
         const token = getSessionToken(username)
-        db.set(token, username, expiresAt)
-        res.cookie('auth', token, { httpOnly: true, maxAge: expiresAt })
+        db.set(token.passwordHash, username, expiresAt)
+        res.cookie('auth', token.passwordHash, {
+            httpOnly: true,
+            maxAge: expiresAt,
+        })
         res.status(200).send({
             reply,
             message: 'User Successfully Registered.',
@@ -93,8 +96,11 @@ router.post('/login', async (req, res) => {
         const expiresAt = Date.now() + 24 * 60 * 60 * 1000
         const token = getSessionToken(username)
         db.remove(req.cookies.auth)
-        db.set(token, username, expiresAt)
-        res.cookie('auth', token, { httpOnly: true, maxAge: expiresAt })
+        db.set(token.passwordHash, username, expiresAt)
+        res.cookie('auth', token.passwordHash, {
+            httpOnly: true,
+            maxAge: expiresAt,
+        })
         res.status(200).send({ reply, message: 'User Successfully Logged In.' })
     } catch (error) {
         console.log(error)
@@ -294,8 +300,9 @@ router.post('/policy/request', fetchuser, async (req, res) => {
     }
 })
 
+// view requested policies
 router.get('/policy/view', fetchuser, async (req, res) => {
-    if (req.body.username === undefined || req.body.companyname === undefined) {
+    if (req.body.username === undefined) {
         res.status(400).send({
             error: 'Invalid Request! Request must contain username',
         })
@@ -304,7 +311,7 @@ router.get('/policy/view', fetchuser, async (req, res) => {
     try {
         let reply = await PolicyMapping.ViewRequestedPolicies(
             { username: req.body.username, organization: 'user' },
-            [req.body.companyname],
+            [req.body.username],
         )
         if (reply.error) {
             res.status(500).send({ error: reply.error })
@@ -365,7 +372,7 @@ router.post('/policy/claim', fetchuser, async (req, res) => {
             [mapping.policyid, mapping.premiumspaid.toString()],
         )
         if (result.error) {
-            res.status(500).send({ error: result.error })
+            res.status(400).send({ error: result.error })
             return
         }
         if (result.status === 'false') {
@@ -406,6 +413,19 @@ router.get('/policy/viewall', fetchuser, async (req, res) => {
         reply,
         message: 'All Policies Viewed Successfully.',
     })
+})
+
+router.post('/policy/getDetails', fetchuser, async (req, res) => {
+    if (req.body.username === undefined || req.body.policyid === undefined) {
+        res.status(401).send({
+            error: 'Invalid request! Request must contain username, policyid',
+        })
+        return
+    }
+    let reply = await PolicyContract.GetPolicyById(
+        { username: req.body.username, organization: 'user' },
+        [req.body.policyid],
+    )
 })
 
 module.exports = router

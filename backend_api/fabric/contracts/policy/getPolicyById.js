@@ -3,18 +3,15 @@ module.exports = async (user, params) => {
     try {
         let reply = await api.Contract.SubmitTransaction(
             {
-                name: 'policyusermapping_cc',
+                name: 'policy_cc',
                 channel: 'commonchannel',
-                function: 'viewRequestedPolicies',
+                function: 'getPolicyByID',
             },
             user,
             params,
         )
-        if (!reply) {
-            return { error: 'internal server error. Check console' }
-        }
         return reply
     } catch (error) {
-        console.error('Failed to claim Policy.', error.message)
+        console.error('Failed to get Policies.', error.message)
     }
 }
