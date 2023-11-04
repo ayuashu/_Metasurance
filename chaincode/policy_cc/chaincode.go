@@ -123,7 +123,7 @@ func (ac *Chaincode) deletePolicy(stub shim.ChaincodeStubInterface, args []strin
 	if len(args) != 2 {
 		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 2: companyname, policyid\"}"))
 	}
-	policyMap, err := stub.GetState(args[0])
+	policyMap, err := stub.GetState("policies")
 	if err != nil {
 		return shim.Success([]byte("{\"error\": \"Failed to get existing company policies: " + err.Error() + "\"}"))
 	} else if policyMap != nil {
@@ -135,16 +135,16 @@ func (ac *Chaincode) deletePolicy(stub shim.ChaincodeStubInterface, args []strin
 					if policy.PolicyID == args[1] {
 						policyContract.PolicyCompanies[i].Policies = append(policyContract.PolicyCompanies[i].Policies[:j], policyContract.PolicyCompanies[i].Policies[j+1:]...)
 						policyMap, _ = json.Marshal(policyContract)
-						stub.PutState(args[0], policyMap)
+						stub.PutState("policies", policyMap)
 						return shim.Success([]byte("{\"success\": \"Policy deleted successfully for company " + args[0] + "\"}"))
 					}
 				}
-				return shim.Success([]byte("{\"error\": \"No policies found for company " + args[0] + "\"}"))
+				return shim.Success([]byte("{\"error\": \"Given policyid does not match for company " + args[0] + "\"}"))
 			}
 		}
 		return shim.Success([]byte("{\"error\": \"No policies found for company " + args[0] + "\"}"))
 	} else {
-		return shim.Success([]byte("{\"error\": \"No policies found for company " + args[0] + "\"}"))
+		return shim.Success([]byte("{\"error\": \"There are no registered policies " + args[0] + "\"}"))
 	}
 }
 
