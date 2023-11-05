@@ -46,6 +46,7 @@ const addPolicy = ({name}) => {
         }
         if (result.status === 200) {
             localStorage.setItem('asset', JSON.stringify({ policyname, premiumamount, insurancecover, insurancetype}))
+            alert('Policy Registered Successfully')
             navigate('/components/Account/companyProfile/')
         } else {
             alert(response.error)
@@ -63,6 +64,9 @@ const addPolicy = ({name}) => {
                                 <h5 className="mb-1 text-xl font-medium text-white dark:text-white">!!!Hurray!!!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Journey Begins!!!</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>COMPANY{name}</b></span>
+                            </div>
+                            <div className="flex justify-end mt-10">
+                                <img className="w-24 h-24 rounded-full shadow-lg" src="/Images/userlogin.gif" alt="" />
                             </div>
                         </div>
                     </div>

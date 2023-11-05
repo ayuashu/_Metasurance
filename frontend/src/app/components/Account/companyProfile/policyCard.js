@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/page'
 
 const HOST = 'http://localhost:3000'
 
-const PolicyCard = ({ username }) => {
+const PolicyCard = () => {
     const [policies, setPolicies] = useState([])
 
     const handleDelete = async (policyid) => {
@@ -57,43 +58,61 @@ const PolicyCard = ({ username }) => {
 
     return (
         <div className="main-card-container">
-            {policies.map((policy) => {
-                const {
-                    policyid,
-                    policyname,
-                    companyname,
-                    premiumamount,
-                    insurancecover,
-                    insurancetype,
-                } = policy
+            {policies && policies.length > 0 ? (
+                <>
+                    {policies.map((policy) => {
+                        const {
+                            policyid,
+                            policyname,
+                            companyname,
+                            premiumamount,
+                            insurancecover,
+                            insurancetype,
+                        } = policy
 
-                return (
-                    <div className="card-container" key={policyid}>
-                        <div className="card">
-                            <div className="card-body">
-                                <span className="card-title">{policyname}</span>
-                                <span className="card-author">
-                                    {companyname}
-                                </span>
-                                <ul>
-                                    <li>
-                                        <b>Insurance Type:</b> {insurancetype}
-                                    </li>
-                                    <li>
-                                        <b>Insurance Cover:</b> {insurancecover}
-                                    </li>
-                                    <li>
-                                        <b>Premium Amount:</b> {premiumamount}
-                                    </li>
-                                </ul>
+                        return (
+                            <div className="card-container" key={policyid}>
+                                <div className="card">
+                                    <div className="card-body">
+                                        <span className="card-title">{policyname}</span>
+                                        <span className="card-author">
+                                            {companyname}
+                                        </span>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td><b>Insurance Type:</b></td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancetype}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Insurance Cover:</b></td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancecover}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Premium Amount:</b></td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{premiumamount}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <button className="card-tag" onClick={() => handleDelete(policyid)}>Delete</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                {/* <button className="card-tag" onClick={() => handleDelete(policyid)}>Delete</button> */}
-                            </div>
-                        </div>
+                        )
+                    })}
+                </>
+            ) : (
+                <div className='grid grid-row-2 gap-20' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="text-white text-4xl p-5 pt-20" style={{ flex: '1 0 33%' }}>
+                        Add some policies to show up here
                     </div>
-                )
-            })}
+                    <div style={{ flex: '1' }}>
+                        <UserAddAssetAnimation />
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

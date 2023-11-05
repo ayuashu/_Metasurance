@@ -101,7 +101,7 @@ const CompanyProfile = () => {
             </div>
           </div>
           <div className="col-span-2 ... bar" style={{ border: "2px solid white", height: '70vh', overflow: 'auto' }}>
-            <PolicyCard userName={username} />
+            <PolicyCard />
           </div>
         </div>
         <Footer />

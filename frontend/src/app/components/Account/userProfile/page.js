@@ -153,7 +153,6 @@ const UserProfile = () => {
                         ) : (
                             <AssetCard />
                         )}
-                        {/* <AssetCard /> */}
                     </div>
                 </div>
                 <Footer />

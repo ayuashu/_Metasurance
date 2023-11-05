@@ -129,10 +129,11 @@
 
 .card-tag {
   float: right;
-  margin: 5px 0 0;
-  border: 1px solid #aaa;
+  margin: 5px 10px 0 0; /* Add right margin for the gap between buttons */
+  border: 3px solid #333232;
   padding: 5px 10px;
   cursor: pointer;
+  border-radius: 20px; /* Add border-radius for rounded corners */
 }
 
 .card-tag:hover {
@@ -176,3 +177,19 @@
     justify-content: space-around;
   }
 }
+
+.profile-box {
+  height: 45vh;
+  border: 3px dotted whitesmoke;
+  background-color: #121212;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  transition: border-color 0.5s ease-in-out;
+}
+
+.profile-box:hover {
+  border-color: transparent;
+  background-color: #000000;
+}
+

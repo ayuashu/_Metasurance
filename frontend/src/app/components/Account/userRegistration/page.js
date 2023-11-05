@@ -30,7 +30,7 @@ const UserRegistration = ({ }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        if(username==="" || password===""){
+        if (username === "" || password === "") {
             alert("Please fill all the fields")
             return
         }
@@ -43,7 +43,7 @@ const UserRegistration = ({ }) => {
             body: JSON.stringify({ username, password })
         })
         const response = await result.json()
-        if(response.error){
+        if (response.error) {
             alert(response.error)
             return
         }
@@ -67,6 +67,11 @@ const UserRegistration = ({ }) => {
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>USER</b></span>
                             </div>
+
+                            <div className="flex justify-end mt-10">
+                                <img className="w-24 h-24 rounded-full shadow-lg" src="/Images/userlogin.gif" alt="" />
+                            </div>
+
                         </div>
                     </div>
                     <div className="col-span-2 ..." style={{ height: '80vh' }}>

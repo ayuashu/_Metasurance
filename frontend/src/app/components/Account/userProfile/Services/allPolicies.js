@@ -1,100 +1,100 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react';
 
-const HOST = 'http://localhost:3000'
+const HOST = 'http://localhost:3000';
 
-const AllPolicyCard = ({ rendered }) => {
-    const [policyCompanies, setPolicyCompanies] = useState([])
-    const cardRef = useRef(null)
+const AllPolicyCard = ({ selectedInsuranceType, selectedCompanyName }) => {
+  const [policyCompanies, setPolicyCompanies] = useState([]);
+  const [filteredPolicyCompanies, setFilteredPolicyCompanies] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (rendered) {
-                    // Fetch data only if the component has been rendered
-                    const response = await fetch(
-                        `${HOST}/api/user/policy/viewall`,
-                        {
-                            method: 'GET',
-                            credentials: 'include',
-                        },
-                    )
-                    if (response.ok) {
-                        const data = await response.json()
-                        setPolicyCompanies(data.reply.policyCompanies)
-                        console.log('Fetched data:', data) // Log the data
-                    } else {
-                        console.error('Failed to fetch policy data')
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching policy data', error)
-            }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${HOST}/api/user/policy/viewall`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPolicyCompanies(data.reply.policyCompanies);
+          console.log('Fetched data:', data);
+        } else {
+          console.error('Failed to fetch policy data');
         }
+      } catch (error) {
+        console.error('Error fetching policy data', error);
+      }
+    }
 
-        fetchData() // Call the fetchData function when the component mounts
-    }, [rendered])
+    fetchData();
+  }, []);
 
-    return (
-        <div className="main-card-container">
-            {policyCompanies && policyCompanies.length > 0 ? (
-                policyCompanies.map((company) => {
-                    const { companyName, policies } = company
+  useEffect(() => {
+    // Filter policy companies based on selectedInsuranceType and selectedCompanyName
+    if (selectedInsuranceType || selectedCompanyName) {
+      const filteredCompanies = policyCompanies.filter((company) => {
+        const policies = company.policies;
+        return policies.some(
+          (policy) =>
+            (!selectedInsuranceType || policy.insurancetype === selectedInsuranceType) &&
+            (!selectedCompanyName || company.companyName === selectedCompanyName)
+        );
+      });
+      setFilteredPolicyCompanies(filteredCompanies);
+    } else {
+      // If no filters are selected, show all policy companies
+      setFilteredPolicyCompanies(policyCompanies);
+    }
+  }, [selectedInsuranceType, selectedCompanyName, policyCompanies]);
 
-                    return (
-                        <div key={companyName}>
-                            {policies.map((policy) => {
-                                const {
-                                    policyid,
-                                    policyname,
-                                    insurancetype,
-                                    premiumamount,
-                                    insurancecover,
-                                } = policy
+  return (
+    <div className="main-card-container">
+      {filteredPolicyCompanies.map((company) => {
+        const { companyName, policies } = company;
+        return (
+          <div key={companyName}>
+            {policies.map((policy) => {
+              const {
+                policyid,
+                policyname,
+                insurancetype,
+                premiumamount,
+                insurancecover,
+              } = policy;
 
-                                const policyId = `policy-${policyid}`
+              const policyId = `policy-${policyid}`;
 
-                                return (
-                                    <div
-                                        className="card-container"
-                                        key={policyId}
-                                    >
-                                        <div className="card" ref={cardRef}>
-                                            <div className="card-body">
-                                                <span className="card-title">
-                                                    {policyname}
-                                                </span>
-                                                <span className="card-author">
-                                                    {companyName}
-                                                </span>
-                                                <ul>
-                                                    <li>
-                                                        <b>Insurance Type:</b>{' '}
-                                                        {insurancetype}
-                                                    </li>
-                                                    <li>
-                                                        <b>Insurance Cover:</b>{' '}
-                                                        {insurancecover}
-                                                    </li>
-                                                    <li>
-                                                        <b>Premium Amount:</b>{' '}
-                                                        {premiumamount}
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                })
-            ) : (
-                <div className="text-white text-2xl p-5">
-                    The policies that companies adds will show up here
+              return (
+                <div className="card-container" key={policyId}>
+                  <div className="card">
+                    <div className="card-body">
+                      <span className="card-title">{policyname}</span>
+                      <span className="card-author">{companyName}</span>
+                      <table>
+                        <tbody> 
+                          <tr>
+                            <td><b>Insurance Type:</b></td>
+                            <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancetype}</td>
+                          </tr>
+                          <tr>
+                            <td><b>Insurance Cover:</b></td>
+                            <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancecover}</td>
+                          </tr>
+                          <tr>
+                            <td><b>Premium Amount:</b></td>
+                            <td colSpan="3" style={{ paddingLeft: '20px' }}>{premiumamount}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-            )}
-        </div>
-    )
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
-export default AllPolicyCard
+export default AllPolicyCard;

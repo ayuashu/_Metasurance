@@ -67,6 +67,9 @@ const CompanyRegistration = ({ }) => {
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>COMPANY</b></span>
                             </div>
+                            <div className="flex justify-end mt-10">
+                                <img className="w-24 h-24 rounded-full shadow-lg" src="/Images/userlogin.gif" alt="" />
+                            </div>
                         </div>
                     </div>
                     <div className="col-span-2 ..." style={{ height: '80vh' }}>

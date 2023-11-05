@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 const HOST = 'http://localhost:3000'
 
 
-const AllRequestPolicyCard = ({ assetid }) => {
+const AllRequestPolicyCard = ({ assetid, assetName }) => {
     const [policyCompanies, setPolicyCompanies] = useState([])
     const cardRef = useRef(null)
     const router = useRouter()
@@ -13,7 +13,7 @@ const AllRequestPolicyCard = ({ assetid }) => {
         router.push(location)
     }
 
-    const handleRequestPolicy = async (policyid, assetid) => {
+    const handleRequestPolicy = async (policyid, assetid ) => {
         try {
             const response = await fetch(`${HOST}/api/user/policy/request`, {
                 method: 'POST',
@@ -94,55 +94,35 @@ const AllRequestPolicyCard = ({ assetid }) => {
                                             key={policyId}
                                         >
                                             <div
-                                                className="card"
-                                                style={{
-                                                    backgroundColor: 'black',
-                                                    color: 'wheat',
-                                                }}
-                                                ref={cardRef}
-                                            >
+                                                className="card" style={{backgroundColor: 'black',color: 'wheat'}} ref={cardRef}>
                                                 <div className="card-body">
-                                                    <span
-                                                        className="card-title"
-                                                        style={{
-                                                            fontSize: '40px',
-                                                        }}
-                                                    >
+                                                    <span className="card-title" style={{ fontSize: '40px' }}>
                                                         {policyname}
                                                     </span>
                                                     <span className="card-author">
                                                         {companyName}
                                                     </span>
-                                                    <ul>
-                                                        <li>
-                                                            <b>
-                                                                Insurance Type:
-                                                            </b>{' '}
-                                                            {insurancetype}
-                                                        </li>
-                                                        <li>
-                                                            <b>
-                                                                Insurance Cover:
-                                                            </b>{' '}
-                                                            {insurancecover}
-                                                        </li>
-                                                        <li>
-                                                            <b>
-                                                                Premium Amount:
-                                                            </b>{' '}
-                                                            {premiumamount}
-                                                        </li>
-                                                    </ul>
+                                                    <table>
+                                                        <tbody>
+                                                            <tr>    
+                                                                <td><b>Insurance Type</b></td>
+                                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancetype}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Insurance Cover</b></td> 
+                                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>{insurancecover}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Premium Amount</b></td>
+                                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>{premiumamount}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                                 <div>
                                                     <button
                                                         className="card-tag"
-                                                        onClick={() =>
-                                                            handleRequestPolicy(
-                                                                policyid, assetid
-                                                            )
-                                                        }
-                                                    >
+                                                        onClick={() => handleRequestPolicy(policyid, assetid)}>
                                                         Purchase
                                                     </button>
                                                 </div>
@@ -152,8 +132,7 @@ const AllRequestPolicyCard = ({ assetid }) => {
                                 })
                             ) : (
                                 <div className="text-white text-2xl p-5">
-                                    Polcies registed for this asset will show
-                                    here
+                                    Polcies registed for this asset will show here
                                 </div>
                             )}
                         </div>
