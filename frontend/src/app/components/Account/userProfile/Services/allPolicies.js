@@ -57,91 +57,99 @@ const AllPolicyCard = ({ selectedInsuranceType, selectedCompanyName }) => {
 
     return (
         <div className="main-card-container">
-            {filteredPolicyCompanies.map((company) => {
-                const { companyName, policies } = company
-                return (
-                    <div key={companyName}>
-                        {policies.map((policy) => {
-                            const {
-                                policyid,
-                                policyname,
-                                insurancetype,
-                                premiumamount,
-                                insurancecover,
-                            } = policy
+            {filteredPolicyCompanies &&
+                filteredPolicyCompanies.length > 0 &&
+                filteredPolicyCompanies.map((company) => {
+                    const { companyName, policies } = company
+                    return (
+                        <div key={companyName}>
+                            {policies.map((policy) => {
+                                const {
+                                    policyid,
+                                    policyname,
+                                    insurancetype,
+                                    premiumamount,
+                                    insurancecover,
+                                } = policy
 
-                            const policyId = `policy-${policyid}`
+                                const policyId = `policy-${policyid}`
 
-                            return (
-                                <div className="card-container" key={policyId}>
-                                    <div className="card">
-                                        <div className="card-body">
-                                            <span className="card-title">
-                                                {policyname}
-                                            </span>
-                                            <span className="card-author">
-                                                {companyName}
-                                            </span>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <b>
-                                                                Insurance Type:
-                                                            </b>
-                                                        </td>
-                                                        <td
-                                                            colSpan="3"
-                                                            style={{
-                                                                paddingLeft:
-                                                                    '20px',
-                                                            }}
-                                                        >
-                                                            {insurancetype}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <b>
-                                                                Insurance Cover:
-                                                            </b>
-                                                        </td>
-                                                        <td
-                                                            colSpan="3"
-                                                            style={{
-                                                                paddingLeft:
-                                                                    '20px',
-                                                            }}
-                                                        >
-                                                            {insurancecover}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <b>
-                                                                Premium Amount:
-                                                            </b>
-                                                        </td>
-                                                        <td
-                                                            colSpan="3"
-                                                            style={{
-                                                                paddingLeft:
-                                                                    '20px',
-                                                            }}
-                                                        >
-                                                            {premiumamount}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                return (
+                                    <div
+                                        className="card-container"
+                                        key={policyId}
+                                    >
+                                        <div className="card">
+                                            <div className="card-body">
+                                                <span className="card-title">
+                                                    {policyname}
+                                                </span>
+                                                <span className="card-author">
+                                                    {companyName}
+                                                </span>
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <b>
+                                                                    Insurance
+                                                                    Type:
+                                                                </b>
+                                                            </td>
+                                                            <td
+                                                                colSpan="3"
+                                                                style={{
+                                                                    paddingLeft:
+                                                                        '20px',
+                                                                }}
+                                                            >
+                                                                {insurancetype}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>
+                                                                    Insurance
+                                                                    Cover:
+                                                                </b>
+                                                            </td>
+                                                            <td
+                                                                colSpan="3"
+                                                                style={{
+                                                                    paddingLeft:
+                                                                        '20px',
+                                                                }}
+                                                            >
+                                                                {insurancecover}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>
+                                                                    Premium
+                                                                    Amount:
+                                                                </b>
+                                                            </td>
+                                                            <td
+                                                                colSpan="3"
+                                                                style={{
+                                                                    paddingLeft:
+                                                                        '20px',
+                                                                }}
+                                                            >
+                                                                {premiumamount}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                )
-            })}
+                                )
+                            })}
+                        </div>
+                    )
+                })}
         </div>
     )
 }
