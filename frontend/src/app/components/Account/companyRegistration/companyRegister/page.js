@@ -42,7 +42,7 @@ const CompanyRegister = () => {
             if (response.error) {
                 alert(response.error);
             } else if (response.status === 200) {
-                alert('Login successful')
+                alert('Registration successful')
                 navigate('/components/Account/companyProfile/');
             } else {
                 alert(json.error);

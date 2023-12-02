@@ -4,11 +4,11 @@ volumes:
     orderer0.metasurance.com:
     peer0.insurer.metasurance.com:
     peer0.user.metasurance.com:
-    peer0.assets.metasurance.com:
+    peer0.verifier.metasurance.com:
     peer0.exampleadmin.metasurance.com:
     ca.insurer.metasurance.com:
     ca.user.metasurance.com:
-    ca.assets.metasurance.com:
+    ca.verifier.metasurance.com:
     ca.exampleadmin.metasurance.com:
 
 networks:
@@ -25,7 +25,7 @@ services:
         depends_on:
             - ca.insurer.metasurance.com
             - ca.user.metasurance.com
-            - ca.assets.metasurance.com
+            - ca.verifier.metasurance.com
             - ca.exampleadmin.metasurance.com
 
     peer0.insurer.metasurance.com:
@@ -50,16 +50,16 @@ services:
             - orderer0.metasurance.com
             - couchdb.peer0.user.metasurance.com
 
-    peer0.assets.metasurance.com:
-        container_name: peer0.assets.metasurance.com
+    peer0.verifier.metasurance.com:
+        container_name: peer0.verifier.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.assets.metasurance.com
+            service: peer0.verifier.metasurance.com
         networks:
             - byfn
         depends_on:
             - orderer0.metasurance.com
-            - couchdb.peer0.assets.metasurance.com
+            - couchdb.peer0.verifier.metasurance.com
 
     peer0.exampleadmin.metasurance.com:
         container_name: peer0.exampleadmin.metasurance.com
@@ -88,11 +88,11 @@ services:
         networks:
             - byfn
 
-    ca.assets.metasurance.com:
-        container_name: ca.assets.metasurance.com
+    ca.verifier.metasurance.com:
+        container_name: ca.verifier.metasurance.com
         extends:
             file: base/docker-compose-base.yaml
-            service: ca.assets.metasurance.com
+            service: ca.verifier.metasurance.com
         networks:
             - byfn
 
@@ -126,8 +126,8 @@ services:
         networks:
             - byfn
 
-    couchdb.peer0.assets.metasurance.com:
-        container_name: couchdb.peer0.assets.metasurance.com
+    couchdb.peer0.verifier.metasurance.com:
+        container_name: couchdb.peer0.verifier.metasurance.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -178,11 +178,11 @@ services:
             - orderer0.metasurance.com
             - peer0.insurer.metasurance.com
             - peer0.user.metasurance.com
-            - peer0.assets.metasurance.com
+            - peer0.verifier.metasurance.com
             - peer0.exampleadmin.metasurance.com
             - ca.insurer.metasurance.com
             - ca.user.metasurance.com
-            - ca.assets.metasurance.com
+            - ca.verifier.metasurance.com
             - ca.exampleadmin.metasurance.com
         networks:
             - byfn

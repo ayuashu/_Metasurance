@@ -29,7 +29,7 @@ const AllRequestPolicyCard = ({ assetid, assetName }) => {
             if (response.ok) {
                 alert('Policy purchase was successful');
                 console.log('Policy purchase was successful');
-                navigate('/components/Account/userProfile')
+                window.location.reload();
             } else {
                 console.error('Failed to purchase policy');
             }

@@ -1,6 +1,7 @@
 const adminInfo = [
     { name: "user", ca: "ca.user.metasurance.com", msp: "UserMSP" },
-    { name: "insurer", ca: "ca.insurer.metasurance.com", msp: "InsurerMSP" }
+    { name: "insurer", ca: "ca.insurer.metasurance.com", msp: "InsurerMSP" },
+    { name: "verifier", ca: "ca.verifier.metasurance.com", msp: "VerifierMSP"}
 ];
 
 const FabricAPI = require("../fabric/api");

@@ -11,7 +11,7 @@ import (
 	"github.com/hyperledger/fabric/protos/peer"
 )
 
-type PCList struct{
+type PCList struct {
 	PolicyCompanies []PolicyCompany `json:"policyCompanies"`
 }
 
@@ -44,7 +44,7 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return ac.viewAllPolicies(stub, args)
 	} else if fn == "deletePolicy" {
 		return ac.deletePolicy(stub, args)
-	}  else if fn == "checkAllPremiumsPaid" {
+	} else if fn == "checkAllPremiumsPaid" {
 		return ac.checkAllPremiumsPaid(stub, args)
 	} else if fn == "getAllPolicies" {
 		return ac.getAllPolicies(stub)

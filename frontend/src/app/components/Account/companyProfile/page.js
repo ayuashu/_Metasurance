@@ -5,18 +5,23 @@ import { useRouter } from 'next/navigation'
 import Footer from '../../Footer/footer'
 import Navigation from '../../Navigation/page'
 import PolicyCard from './policyCard'
+import ClaimRequests from './claimRequests'
+import ClaimsApproved from './claimApproved'
 
 const HOST = 'http://localhost:3000'
 
 const CompanyProfile = () => {
-    const router = useRouter()
-    const [username, setUsername] = useState('')
-    const [name, setName] = useState('')
-    const [phone, setPhone] = useState('')
-    const [email, setEmail] = useState('')
-    const [userDataLoaded, setUserDataLoaded] = useState(false) // Add a state to track data loading
+    const router = useRouter();
+    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [userDataLoaded, setUserDataLoaded] = useState(false);
+    const [isPoliciesVisible, setPoliciesVisible] = useState(true);
+    const [isClaimRequestsVisible, setClaimRequestsVisible] = useState(false);
+    const [isClaimsApprovedVisible, setClaimsApprovedVisible] = useState(false);
     const navigate = (location) => {
-        router.push(location)
+        router.push(location);
     }
 
     useEffect(() => {
@@ -48,13 +53,32 @@ const CompanyProfile = () => {
         checkCompany()
     }, [])
 
+    const handlePoliciesClick = () => {
+        setPoliciesVisible(true);
+        setClaimRequestsVisible(false);
+        setClaimsApprovedVisible(false);
+        navigate('/components/Account/addPolicy')
+    };
+
+    const handleClaimRequestsClick = () => {
+        setPoliciesVisible(false);
+        setClaimRequestsVisible(true);
+        setClaimsApprovedVisible(false);
+    };
+
+    const handleClaimsApprovedClick = () => {
+        setPoliciesVisible(false);
+        setClaimRequestsVisible(false);
+        setClaimsApprovedVisible(true);
+    };
+
     const handleLogout = async (e) => {
         e.preventDefault()
         const result = await fetch(`${HOST}/api/company/logout`, {
             method: 'GET',
             credentials: 'include',
         })
-        navigate('/')
+        navigate('/components/Account')
     }
 
     return (
@@ -96,14 +120,26 @@ const CompanyProfile = () => {
                             </div>
                             <div className="flex items-center justify-center pt-5">
                                 <button
-                                    onClick={() =>
-                                        navigate(
-                                            '/components/Account/addPolicy',
-                                        )
-                                    }
+                                    onClick={handlePoliciesClick}
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
                                 >
                                     <b>Add Policy</b>
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-center pt-5">
+                                <button
+                                    onClick={handleClaimRequestsClick}
+                                    className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
+                                >
+                                    <b>Claim Requests</b>
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-center pt-5">
+                                <button
+                                    onClick={handleClaimsApprovedClick}
+                                    className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
+                                >
+                                    <b>Claim Approved</b>
                                 </button>
                             </div>
                             <div className="flex items-center justify-center pt-5">
@@ -124,7 +160,9 @@ const CompanyProfile = () => {
                             overflow: 'auto',
                         }}
                     >
-                        <PolicyCard />
+                        {isPoliciesVisible && <PolicyCard />}
+                        {isClaimRequestsVisible && <ClaimRequests />}
+                        {isClaimsApprovedVisible && <ClaimsApproved />}
                     </div>
                 </div>
                 <Footer />
@@ -133,4 +171,4 @@ const CompanyProfile = () => {
     )
 }
 
-export default CompanyProfile
+export default CompanyProfile;

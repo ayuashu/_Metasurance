@@ -12,7 +12,8 @@ cryptogen generate --config=./crypto-config.yaml
 echo "Generating channel artifacts and genesis block..."
 configtxgen -profile METAOrderGenesis -outputBlock ./channel-artifacts/genesis.block
 configtxgen -profile CommonChannel -outputCreateChannelTx ./channel-artifacts/commonChannel.tx -channelID commonchannel
-configtxgen -profile UserChannel -outputCreateChannelTx ./channel-artifacts/userChannel.tx -channelID userchannel
+#configtxgen -profile UserChannel -outputCreateChannelTx ./channel-artifacts/userChannel.tx -channelID userchannel
+
 
 CURRENT_DIR=$PWD
 cd ./base
@@ -33,7 +34,7 @@ cd ./base
 sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-base.yaml
 
 cd $CURRENT_DIR
-cd ./crypto-config/peerOrganizations/assets.metasurance.com/ca/
+cd ./crypto-config/peerOrganizations/verifier.metasurance.com/ca/
 PRIV_KEY=$(ls *_sk)
 cd $CURRENT_DIR
 cd ./base

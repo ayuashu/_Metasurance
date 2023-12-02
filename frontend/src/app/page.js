@@ -6,7 +6,6 @@ import Video from './components/Video/page'
 import Navigation from './components/Navigation/page'
 import Footer from './components/Footer/footer'
 
-
 const Page = () => {
   const router = useRouter()
   const navigate = (location) => {

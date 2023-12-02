@@ -46,7 +46,7 @@ const UserRegister = () => {
             alert(response.error)
         }
         if(response.status===200){
-            alert(`Login successful`)
+            alert(`Registration successful`)
             navigate("/components/Account/userProfile/")
         }else{
             alert(json.error);

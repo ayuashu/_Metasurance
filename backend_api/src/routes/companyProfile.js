@@ -4,6 +4,7 @@ const db = require('../utils/db')
 const getSessionToken = require('../utils/getSessionToken')
 const InsurerContract = require('../../fabric/contracts/insurer')
 const PolicyContract = require('../../fabric/contracts/policy')
+const ClaimContract = require('../../fabric/contracts/claim')
 
 const router = new express.Router()
 
@@ -231,6 +232,9 @@ router.get('/getPolicies', fetchuser, async (req, res) => {
     }
 })
 
+
+
+
 /**
  * Deletes a policy from the blockchain.
  * @async
@@ -265,6 +269,120 @@ router.delete('/deletePolicy', fetchuser, async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).send({ error: 'Policy NOT Deleted!', error })
+    }
+})
+
+/**
+ * Approve a claim request.
+ * @async
+ * @function
+ * @param {Object} req - The request object.
+ * @param {string} req.body.username - The username of the company approving the claim.
+ * @param {string} req.body.mappingid - The ID of the claim to be approved.
+ * @returns {Promise} A Promise that resolves with the result of the claim approval.
+ */
+router.post('/claim/accept', fetchuser, async (req, res) => {
+    try {
+        if (
+            req.body.username === undefined ||
+            req.body.mappingid === undefined
+        ) {
+            res.status(400).send({
+                error: 'Invalid Request! Request must contain mappingid',
+            })
+            return
+        }
+        let reply = await ClaimContract.approveClaim(
+            {username: req.body.username, organization: 'insurer'},
+            [req.body.username, req.body.mappingid],
+        )
+        // check if error key exists in reply
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({ reply, message: 'Claim Successfully Approved.' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Claim NOT Approved!', error })
+    }
+})
+ 
+/**
+ * Reject a claim request.
+ * @async
+ * @function
+ * @param {Object} req - The request object.
+ * @param {string} req.body.username - The username of the company rejecting the claim.
+ * @param {string} req.body.mappingid - The ID of the claim to be rejected.
+ * @returns {Promise} A Promise that resolves with the result of the claim rejection.
+ */
+router.post('/claim/reject', fetchuser, async (req, res) => {
+    try {
+        if (
+            req.body.username === undefined ||
+            req.body.mappingid === undefined
+        ) {
+            res.status(400).send({
+                error: 'Invalid Request! Request must contain mappingid',
+            })
+            return
+        }
+        let reply = await ClaimContract.rejectClaim(
+            {username: req.body.username, organization: 'insurer'},
+            [req.body.username, req.body.mappingid],
+        )
+        // check if error key exists in reply
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({ reply, message: 'Claim Successfully Rejected.' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Claim NOT Rejected!', error })
+    }   
+})
+
+router.get('/claim/get', fetchuser, async (req, res) => {
+    if (req.body.username === undefined) {
+        res.status(400).send({
+            error: 'Invalid Request! Request must contain username',
+        })
+        return
+    }
+    let reply = await ClaimContract.viewAllClaimRequests(
+        { username: req.body.username, organization: 'insurer' },
+        [],
+    )
+    if (reply.error) {
+        res.status(500).send({ error: reply.error })
+        return
+    }
+    res.status(200).send({ reply, message: 'All Claim Requests Viewed Successfully.' })
+})
+
+router.get('/claim/approved', fetchuser, async (req, res) => {
+    try {
+        if (req.body.username === undefined) {
+            res.status(400).send({
+                error: 'Invalid Request! Request must contain username',
+            })
+            return
+        }
+        let reply = await ClaimContract.viewClaimedPolicies(
+            {username: req.body.username, organization: 'insurer'},
+            [req.body.username],
+        )
+        // check if error key exists in reply
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({ reply, message: 'Claims Successfully Fetched.' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Claims NOT Fetched!', error })
     }
 })
 

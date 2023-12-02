@@ -15,6 +15,6 @@ module.exports = async (user, params) => {
         }
         return reply
     } catch (error) {
-        console.error('Failed to claim Policy.', error.message)
+        console.error('Failed to access Policy.', error.message)
     }
 }

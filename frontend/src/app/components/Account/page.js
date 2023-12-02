@@ -63,7 +63,7 @@ const Account = () => {
                                     Time to Explore
                                 </h3>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                                    User/Company
+                                    User/Company/Verifier
                                 </span>
                             </div>
                         </div>
@@ -92,6 +92,18 @@ const Account = () => {
                             >
                                 <b>
                                     Give Service<p>(COMPANY)</p>
+                                </b>
+                            </button>
+                            <button
+                                onClick={() =>
+                                    navigate(
+                                        '/components/Account/verifierRegistration',
+                                    )
+                                }
+                                className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900"
+                            >
+                                <b>
+                                    Verify Claims<p>(VERIFIER)</p>
                                 </b>
                             </button>
                         </div>

@@ -21,6 +21,7 @@ app.use(cookieParser())
 // Load API Routes
 app.use('/api/user', require('./routes/userProfile'));
 app.use('/api/company', require('./routes/companyProfile'));
+app.use('/api/verifier', require('./routes/verifierProfile'));
 
 // Start Listening
 app.listen(3000, () => console.log("Listening on port 3000."));

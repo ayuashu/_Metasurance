@@ -22,8 +22,8 @@ PeerOrgs:
       Users:
           Count: 1
 
-    - Name: Assets
-      Domain: assets.metasurance.com
+    - Name: Verifier
+      Domain: verifier.metasurance.com
       EnableNodeOUs: true
       Template:
           Count: 1

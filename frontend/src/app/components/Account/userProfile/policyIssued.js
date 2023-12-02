@@ -1,15 +1,27 @@
 'use client'
 import React, { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/navigation' 
 import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/page'
+import ClaimForm from './claimForm'
+
+
 
 const HOST = 'http://localhost:3000'
 
-const PolicyIssued = () => {
+const PolicyIssued = ({username}) => {
+    const router = useRouter()
     const [policies, setPolicies] = useState([])
-    const [disabledClaims, setDisabledClaims] = useState({})
     const cardRef = useRef(null)
     const [insuranceCoverData, setInsuranceCoverData] = useState(new Map())
     const [assetNameData, setAssetNameData] = useState({})
+    const [selectedMappingId, setSelectedMappingId] = useState(null);
+    const [showClaimForm, setShowClaimForm] = useState(false);
+    const [assetid, setAssetId] = useState({})
+    const [policyid, setPolicyId] = useState({})
+    const [premiumspaid, setPremiumsPaid] = useState({})
+    const navigate = (location) => {
+        router.push(location)
+    }
 
     const handlePayPremium = async (mappingid) => {
         try {
@@ -40,34 +52,6 @@ const PolicyIssued = () => {
             }
         } catch (error) {
             console.error('Error in transaction', error)
-        }
-    }
-
-    const handleClaim = async (policyID) => {
-        try {
-            const response = await fetch(`${HOST}/api/user/policy/claim`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ mappingid: policyID }),
-                credentials: 'include',
-            })
-            if (response.ok) {
-                alert('Claim request was successful')
-                console.log('Claim request was successful')
-                // Disable the claim button for the policy
-                setDisabledClaims((prevDisabledClaims) => ({
-                    ...prevDisabledClaims,
-                    [policyID]: true,
-                }))
-                fetchData()
-            } else {
-                alert('Premiums need to be paid before making a claim')
-                console.error('Failed to make a claim')
-            }
-        } catch (error) {
-            console.error('Error in claim transaction', error)
         }
     }
 
@@ -117,9 +101,6 @@ const PolicyIssued = () => {
                                 insuranceCoversMap.set(
                                     policy.policyid,
                                     policy.insurancecover,
-                                )
-                                console.log(
-                                    insuranceCoversMap.get(policy.policyid),
                                 )
                             }
                         }
@@ -194,6 +175,58 @@ const PolicyIssued = () => {
         fetchData()
     }, [])
 
+    const handleClaim = (mappingid,policyid,assetid,premiumspaid) => {
+        setSelectedMappingId(mappingid);
+        setPolicyId(policyid);
+        setAssetId(assetid);
+        setPremiumsPaid(premiumspaid);
+        setShowClaimForm(true);
+    };
+
+    const handleUpload = async (mappingid, policyid, assetid, premiumspaid, claimCause, docslinked) => {
+        console.log('Submitting claim data');
+        try {
+            console.log("attempting to submit claim data")
+            // Perform the API call with the necessary data
+            const response = await fetch(`${HOST}/api/user/claim/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    mappingid,
+                    policyid,
+                    assetid,
+                    premiumspaid,
+                    claimcause: claimCause,
+                    docslinked: JSON.stringify(docslinked),
+                }),
+                credentials: 'include',
+            });
+    
+            if (response.ok) {
+                alert('Claim submitted successfully');
+                console.log('Claim data:', {
+                    username,
+                    mappingid,
+                    policyid,
+                    assetid,
+                    premiumspaid,
+                    claimcause: claimCause,
+                    docslinked,
+                });
+                setShowClaimForm(false);
+                // Optionally, you can refetch data or perform other actions after successful submission
+            } else {
+                const errorData = await response.json(); // Try to parse error response
+                console.error('Failed to submit claim', errorData);
+            }
+        } catch (error) {
+            console.error('Error in claim submission', error);
+        }
+    };
+
     return (
         <div className="main-card-container">
             {policies && policies.length > 0 ? (
@@ -207,15 +240,11 @@ const PolicyIssued = () => {
                     } = policy
 
                     return (
-                        <div className="card-container" key={policyid}>
+                        <div className="card-container" key={mappingid}>
                             <div className="card" ref={cardRef}>
                                 <span
                                     className="card-title"
-                                    style={{
-                                        fontSize: '25px',
-                                        fontWeight: 'bold',
-                                    }}
-                                >
+                                    style={{fontSize: '25px',fontWeight: 'bold'}}>
                                     Policy ID: {policyid}
                                 </span>
                                 <hr style={{ border: '1px solid black' }} />
@@ -224,89 +253,37 @@ const PolicyIssued = () => {
                                     <table>
                                         <tbody>
                                             <tr>
-                                                <td>
-                                                    <b>Asset Name</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
-                                                    {assetNameData[assetid]}
-                                                </td>
+                                                <td><b>Asset Name</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px'}}>{assetNameData[assetid]}</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Asset ID</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
-                                                    {assetid}
-                                                </td>
+                                                <td><b>Asset ID</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px'}}>{assetid}</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Mapping ID</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
-                                                    {mappingid}
-                                                </td>
+                                                <td><b>Mapping ID</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px'}}>{mappingid}</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Claimed</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
-                                                    {claimed ? 'Yes' : 'No'}
-                                                </td>
+                                                <td><b>Claimed</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimed ? 'Yes' : 'No'}</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Premiums Paid</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
-                                                    {premiumspaid}
-                                                </td>
+                                                <td><b>Premiums Paid</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>{premiumspaid}</td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <b>Premiums Left</b>
-                                                </td>
-                                                <td
-                                                    colSpan="3"
-                                                    style={{
-                                                        paddingLeft: '20px',
-                                                    }}
-                                                >
+                                                <td><b>Premiums Left</b></td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>
                                                     {isNaN(
                                                         insuranceCoverData[
-                                                            policy.policyid
+                                                        policy.policyid
                                                         ],
                                                     )
                                                         ? 'Not available'
                                                         : insuranceCoverData[
-                                                              policy.policyid
-                                                          ] - premiumspaid}
+                                                        policy.policyid
+                                                        ] - premiumspaid}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -316,23 +293,33 @@ const PolicyIssued = () => {
                                     {!claimed && (
                                         <button
                                             className="card-tag"
-                                            onClick={() =>
-                                                handlePayPremium(mappingid)
-                                            }
-                                            disabled={claimed}
-                                        >
+                                            onClick={() => handlePayPremium(mappingid)}
+                                            disabled={claimed}>
                                             Pay Premium
                                         </button>
                                     )}
                                     <button
                                         className="card-tag"
-                                        onClick={() => handleClaim(mappingid)}
+                                        onClick={() => handleClaim(mappingid,policyid,assetid,premiumspaid)}
                                         disabled={claimed}
                                     >
                                         {claimed ? 'Claimed' : 'Claim'}
                                     </button>
                                 </div>
                             </div>
+                            {/* Conditionally render ClaimForm based on the selectedMappingId */}
+                            {showClaimForm && selectedMappingId=== policy.mappingid && (
+                                <ClaimForm
+                                    username={username}
+                                    mappingid={selectedMappingId}
+                                    policyid={policyid}
+                                    assetid={assetid}
+                                    premiumspaid={premiumspaid}
+                                    docslinked={[]}
+                                    onClose={() => setShowClaimForm(false)}
+                                    onUpload={handleUpload}
+                                />
+                            )}
                         </div>
                     )
                 })

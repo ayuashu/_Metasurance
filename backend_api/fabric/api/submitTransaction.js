@@ -35,7 +35,7 @@ const SubmitTransaction = async (contract, user, params) => {
 
         // Return payload (if any)
         if (payload) {
-            console.log('Payload: ' + payload.toString())
+            console.log('Payload is: ' + payload.toString())
             let payLoadString = payload.toString()
             if (payLoadString.length <= 0) {
                 return []

@@ -3,6 +3,7 @@ const fetchuser = require('../middleware/fetchuser')
 const UserContract = require('../../fabric/contracts/user')
 const AssetContract = require('../../fabric/contracts/asset')
 const PolicyContract = require('../../fabric/contracts/policy')
+const ClaimContract = require('../../fabric/contracts/claim')
 const PolicyMapping = require('../../fabric/contracts/policyusermapping')
 const db = require('../utils/db')
 const getSessionToken = require('../utils/getSessionToken')
@@ -347,52 +348,63 @@ router.post('/policy/paypremium', fetchuser, async (req, res) => {
     }
 })
 
-router.post('/policy/claim', fetchuser, async (req, res) => {
-    if (req.body.username === undefined || req.body.mappingid === undefined) {
-        res.status(400).send({
-            error: 'Invalid Request! Request must contain username and mappingid',
-        })
-        return
+router.post('/claim/register', fetchuser, async (req, res) => {
+    if (
+        req.body.username === undefined ||
+        req.body.mappingid === undefined ||
+        req.body.policyid === undefined ||
+        req.body.assetid === undefined ||
+        req.body.premiumspaid === undefined ||
+        req.body.claimcause === undefined ||
+        req.body.docslinked === undefined
+    ) {
+        res.status(400).json({
+            error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, and docslinked',
+        });
+        return;
     }
+
+    console.log('Claim registration request received');
+    // Log the entry point to the ClaimPolicy function
+    console.log('Calling ClaimPolicy function...');
+
+    // Ensure premiumspaid is a string
+    let premiumspaidString = req.body.premiumspaid.toString();
+
+    // Declare reply outside the try block
+    let reply;
+
+    // Call ClaimPolicy function
     try {
-        // check if user paid all premiums
-        // for that, get mapping details
-        let mapping = await PolicyMapping.ViewMappingById(
-            { username: req.body.username, organization: 'user' },
-            [req.body.username, req.body.mappingid],
-        )
-        if (mapping.error) {
-            res.status(500).send({ error: mapping.error })
-            return
-        }
-        // NOTE: the policy details in PolicyContract are stored against the username of insurance company, but we try to access as a user. So
-        // we are unable to find the policydetails.
-        let result = await PolicyContract.CheckAllPremiumsPaid(
-            { username: req.body.username, organization: 'user' },
-            [mapping.policyid, mapping.premiumspaid.toString()],
-        )
-        if (result.error) {
-            res.status(400).send({ error: result.error })
-            return
-        }
-        if (result.status === 'false') {
-            res.status(500).send({ error: 'All premiums not paid!' })
-            return
-        }
-        let reply = await PolicyMapping.ClaimPolicy(
-            { username: req.body.username, organization: 'user' },
-            [req.body.username, req.body.mappingid],
-        )
+        reply = await ClaimContract.ClaimPolicy(
+            {
+                username: req.body.username,
+                organization: 'user',
+            },
+            [
+                req.body.username,
+                req.body.mappingid,
+                req.body.policyid,
+                req.body.assetid,
+                premiumspaidString,
+                req.body.claimcause,
+                req.body.docslinked, // Add docslinked to the array of arguments
+            ]
+        );
+
         if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+            res.status(500).json({ error: reply.error });
+            return;
         }
-        res.status(200).send({ reply, message: 'Claim Successful.' })
     } catch (error) {
-        console.log(error)
-        res.status(500).send({ message: 'Unable to claim!', error })
+        console.log(error);
+        res.status(500).json({ message: 'Unable to claim!', error });
     }
-})
+
+    // Log the exit point of the ClaimPolicy function
+    console.log('ClaimPolicy function executed.');
+});
+
 
 router.get('/policy/viewall', fetchuser, async (req, res) => {
     if (req.body.username === undefined) {

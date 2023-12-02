@@ -33,14 +33,14 @@ PEERPEM=../crypto-config/peerOrganizations/user.metasurance.com/tlsca/tlsca.user
 CAPEM=../crypto-config/peerOrganizations/user.metasurance.com/ca/ca.user.metasurance.com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-user.json
-ORG=assets
-ORGMSP=Assets
+ORG=verifier
+ORGMSP=Verifier
 P0PORT=9051
 CAPORT=9054
-PEERPEM=../crypto-config/peerOrganizations/assets.metasurance.com/tlsca/tlsca.assets.metasurance.com-cert.pem
-CAPEM=../crypto-config/peerOrganizations/assets.metasurance.com/ca/ca.assets.metasurance.com-cert.pem
+PEERPEM=../crypto-config/peerOrganizations/verifier.metasurance.com/tlsca/tlsca.verifier.metasurance.com-cert.pem
+CAPEM=../crypto-config/peerOrganizations/verifier.metasurance.com/ca/ca.verifier.metasurance.com-cert.pem
 
-echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-assets.json
+echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connections/connection-verifier.json
 
 ORG=exampleadmin
 ORGMSP=MetaAdmin

@@ -66,29 +66,29 @@ services:
         ports:
             - 8051:8051
 
-    peer0.assets.metasurance.com:
-        container_name: peer0.assets.metasurance.com
+    peer0.verifier.metasurance.com:
+        container_name: peer0.verifier.metasurance.com
         extends:
             file: peer-base.yaml
             service: peer-base
         environment:
-            - CORE_PEER_ID=peer0.assets.metasurance.com
-            - CORE_PEER_ADDRESS=peer0.assets.metasurance.com:9051
+            - CORE_PEER_ID=peer0.verifier.metasurance.com
+            - CORE_PEER_ADDRESS=peer0.verifier.metasurance.com:9051
             - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.assets.metasurance.com:9052
+            - CORE_PEER_CHAINCODEADDRESS=peer0.verifier.metasurance.com:9052
             - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.assets.metasurance.com:9051
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.verifier.metasurance.com:9051
             #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.insurer.metasurance.com:7051
-            - CORE_PEER_LOCALMSPID=AssetsMSP
+            - CORE_PEER_LOCALMSPID=VerifierMSP
             - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.assets.metasurance.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.verifier.metasurance.com:5984
             - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
             - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
         volumes:
             - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/assets.metasurance.com/peers/peer0.assets.metasurance.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/assets.metasurance.com/peers/peer0.assets.metasurance.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.assets.metasurance.com:/var/hyperledger/production
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/peers/peer0.verifier.metasurance.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/peers/peer0.verifier.metasurance.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.verifier.metasurance.com:/var/hyperledger/production
         ports:
             - 9051:9051
 
@@ -148,20 +148,20 @@ services:
         volumes:
             - ../crypto-config/peerOrganizations/user.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
-    ca.assets.metasurance.com:
+    ca.verifier.metasurance.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-assets
+            - FABRIC_CA_SERVER_CA_NAME=ca-verifier
             - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.assets.metasurance.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.verifier.metasurance.com-cert.pem
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
             - FABRIC_CA_SERVER_PORT=9054
         ports:
             - "9054:9054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.assets.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.verifier.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
         volumes:
-            - ../crypto-config/peerOrganizations/assets.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
     ca.exampleadmin.metasurance.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG

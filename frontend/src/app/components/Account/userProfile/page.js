@@ -57,7 +57,7 @@ const UserProfile = () => {
             method: 'GET',
             credentials: 'include',
         })
-        navigate('/')
+        navigate('/components/Account')
     }
 
     const handleViewPolicies = () => {
@@ -149,7 +149,7 @@ const UserProfile = () => {
                         }}
                     >
                         {viewPolicies ? (
-                            <PolicyIssued />
+                            <PolicyIssued username={username}/>
                         ) : (
                             <AssetCard />
                         )}

@@ -66,6 +66,7 @@ const AllAssetCard = () => {
                                             onClick={() => {
                                                 // Handle the purchase logic here
                                                 console.log('Purchase button clicked for assetID:', assetID);
+                                                window.location.reload();
                                             }}
                                         >
                                             Purchase

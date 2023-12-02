@@ -89,7 +89,7 @@ const addAsset = () => {
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                                 value={assetName}
                                                 onChange={(e) => setAssetName(e.target.value)}
-                                                placeholder="car, house, ...." />
+                                                placeholder="NFTs, avatars, ...." />
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">Asset Type</label>

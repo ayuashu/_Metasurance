@@ -45,20 +45,20 @@ Organizations:
               Type: Signature
               Rule: "OR('UserMSP.admin')"
 
-    - &Assets
-      Name: AssetsMSP
-      ID: AssetsMSP
-      MSPDir: crypto-config/peerOrganizations/assets.metasurance.com/msp
+    - &Verifier
+      Name: VerifierMSP
+      ID: VerifierMSP
+      MSPDir: crypto-config/peerOrganizations/verifier.metasurance.com/msp
       Policies:
           Readers:
               Type: Signature
-              Rule: "OR('AssetsMSP.admin', 'AssetsMSP.peer', 'AssetsMSP.client')"
+              Rule: "OR('VerifierMSP.admin', 'VerifierMSP.peer', 'VerifierMSP.client')"
           Writers:
               Type: Signature
-              Rule: "OR('AssetsMSP.admin', 'AssetsMSP.client')"
+              Rule: "OR('VerifierMSP.admin', 'VerifierMSP.client')"
           Admins:
               Type: Signature
-              Rule: "OR('AssetsMSP.admin')"
+              Rule: "OR('VerifierMSP.admin')"
 
     - &MetaAdmin
       Name: MetaAdminMSP
@@ -168,7 +168,7 @@ Profiles:
                 Organizations:
                     - *Insurer
                     - *User
-                    - *Assets
+                    - *Verifier
                     - *MetaAdmin
 
     CommonChannel:  # profile of channel
@@ -179,6 +179,7 @@ Profiles:
             Organizations:
                 - *Insurer
                 - *User
+                - *Verifier
 
             Capabilities:
                 <<: *ApplicationCapabilities
