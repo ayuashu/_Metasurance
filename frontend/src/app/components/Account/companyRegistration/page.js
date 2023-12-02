@@ -30,7 +30,7 @@ const CompanyRegistration = ({ }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        if(username==="" || password===""){
+        if (username === "" || password === "") {
             alert("Please fill all the fields")
             return
         }
@@ -43,7 +43,7 @@ const CompanyRegistration = ({ }) => {
             body: JSON.stringify({ username, password })
         })
         const response = await result.json()
-        if(response.error){
+        if (response.error) {
             alert(response.error)
             return
         }
@@ -56,7 +56,9 @@ const CompanyRegistration = ({ }) => {
 
     return (
         <>
-            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
+            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+                style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+                <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
                 <Navigation />
                 <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
                     <div className="..." >
@@ -107,7 +109,7 @@ const CompanyRegistration = ({ }) => {
                                             <label className="block mt-2 text-sm">Password</label>
                                             <input
                                                 value={password}
-                                                onChange={(e)=>setPassword(e.target.value)}
+                                                onChange={(e) => setPassword(e.target.value)}
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                                 placeholder="abcdefg" type="password" />
                                         </div>

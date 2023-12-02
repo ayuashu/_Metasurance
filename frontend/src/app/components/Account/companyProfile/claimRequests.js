@@ -3,7 +3,7 @@ import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/p
 
 const HOST = 'http://localhost:3000';
 
-const ClaimRequests = () => {
+const ClaimRequests = ( { company }) => {
   const [claims, setClaims] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,13 @@ const ClaimRequests = () => {
         if (response.ok) {
           const data = await response.json();
           console.log(data);
-          setClaims(data.reply.claims);
+
+          // Filter claims based on companyname
+          const filteredClaims = data.reply.claims.filter(
+            (claim) => claim.companyname === company
+          );
+
+          setClaims(filteredClaims);
         } else {
           console.error('Failed to fetch claims data');
         }
@@ -27,7 +33,8 @@ const ClaimRequests = () => {
     };
 
     fetchData();
-  }, []);
+  }, [company]);
+
 
   const handleAccept = async (username, mappingid) => {
     try {
@@ -88,6 +95,7 @@ const ClaimRequests = () => {
               premiumspaid,
               claimed,
               claimcause,
+              companyname,
               docslinked,
               verifiedby,
             } = claim;
@@ -103,7 +111,7 @@ const ClaimRequests = () => {
                 <div className="card">
                   <div className="card-body">
                     <span className="card-title mt-4" style={{ fontSize: '30px', fontWeight: 'bold' }}>Policy Id : {policyid}</span>
-                    <hr style={{ border: '1px solid black' }} />
+                    <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                     <table>
                       <tbody>
                         <tr>

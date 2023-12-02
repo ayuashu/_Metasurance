@@ -103,7 +103,9 @@ const Services = () => {
 
   return (
     <>
-      <div className="bg-slate-700 bg-blend-lighten hover-bg-slate-900 min-h-screen">
+      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+        style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+        <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
         <Navigation />
         <div className="flex items-center justify-end space-x-4 p-4">
           <div className="relative">
@@ -132,7 +134,7 @@ const Services = () => {
 
           <div className="relative">
             <label htmlFor="companyName" className="text-white p-2">
-              <b>Company Name</b> 
+              <b>Company Name</b>
             </label>
             <select
               id="companyName"
@@ -154,10 +156,10 @@ const Services = () => {
             </select>
           </div>
         </div>
-        
+
         <hr
-    className="w-60 ml-auto border-t border-white"
-  />
+          className="w-60 ml-auto border-t border-white"
+        />
         <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
           <div className="..." style={{ height: '70vh' }}>
             <div className="w-full max-w-sm min-h-full bg-slate-900 border border-gray-200 rounded-lg shadow ">

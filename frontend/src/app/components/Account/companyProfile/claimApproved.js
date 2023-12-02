@@ -50,7 +50,7 @@ const ClaimsApproved = () => {
                 <div className="card">
                   <div className="card-body">
                     <span className="card-title mt-4" style={{ fontSize: '30px', fontWeight: 'bold' }}>Policy Id : {policyid}</span>
-                    <hr style={{ border: '1px solid black' }} />
+                    <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                     <table>
                       <tbody>
                         <tr>

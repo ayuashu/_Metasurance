@@ -21,55 +21,57 @@ const CompanyRegister = () => {
         if (password !== confirmPassword) {
             return alert("Passwords don't match");
         }
-    
+
         if (username === "" || name === "" || phone === "" || email === "" || password === "") {
             return alert("Complete all fields for registration");
-        } 
-        
+        }
+
         let url = `${HOST}/api/company/register`
         let body = {
             username, name, email, phone, password
         }
         console.log(body)
         const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(body)
-            });
-            const json = await response.json();
-            console.log(json)
-            if (response.error) {
-                alert(response.error);
-            } else if (response.status === 200) {
-                alert('Registration successful')
-                navigate('/components/Account/companyProfile/');
-            } else {
-                alert(json.error);
-            }
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(body)
+        });
+        const json = await response.json();
+        console.log(json)
+        if (response.error) {
+            alert(response.error);
+        } else if (response.status === 200) {
+            alert('Registration successful')
+            navigate('/components/Account/companyProfile/');
+        } else {
+            alert(json.error);
         }
+    }
 
-        const router = useRouter()
-        const navigate = (location) => {
-            router.push(location)
-        }
+    const router = useRouter()
+    const navigate = (location) => {
+        router.push(location)
+    }
 
-        useEffect(() => {
-            const checkCompany = async () => {
-                const response = await fetch(`${HOST}/api/company/readprofile`,
+    useEffect(() => {
+        const checkCompany = async () => {
+            const response = await fetch(`${HOST}/api/company/readprofile`,
                 {
                     method: "GET",
                 })
-                if (response.status === 200) {
-                    navigate('/components/Account/companyProfile/')
-                }
+            if (response.status === 200) {
+                navigate('/components/Account/companyProfile/')
             }
-            checkCompany()
-        },[])
+        }
+        checkCompany()
+    }, [])
 
     return (
         <>
-            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
+            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+                style={{ overflowY: 'auto', height: '100%', margin: '0', padding: '0' }}>
+                <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
                 <Navigation />
                 <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
                     <div className="..." >
@@ -83,7 +85,7 @@ const CompanyRegister = () => {
                         </div>
                     </div>
                     <div className="col-span-2 ..." style={{ height: '80vh' }}>
-    
+
                         <div className="flex-1 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
                             <div className="flex flex-col md:flex-row">
                                 <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">

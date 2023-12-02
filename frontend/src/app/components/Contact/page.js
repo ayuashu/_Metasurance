@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Navigation from '../Navigation/page';
 import Footer from '../Footer/footer';
@@ -6,7 +7,9 @@ const Contact = () => {
   return (
     <>
       <Navigation />
-      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
+      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+        style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+        <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
         <div className="contact-container">
           <div className='contact-item'>
             <svg xmlns="http://www.w3.org/2000/svg" height="30px" width="30px" viewBox="0 0 384 512">

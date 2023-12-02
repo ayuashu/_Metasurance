@@ -15,7 +15,7 @@ const VerifierProfile = () => {
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
-    const [userDataLoaded, setUserDataLoaded] = useState(false) 
+    const [userDataLoaded, setUserDataLoaded] = useState(false)
     const [isClaimRequestsVisible, setClaimRequestsVisible] = useState(false)
     const navigate = (location) => {
         router.push(location)
@@ -65,7 +65,9 @@ const VerifierProfile = () => {
 
     return (
         <>
-            <div className="bg-slate-700 bg-blend-lighten hover-bg-blend-darken min-h-screen">
+            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+                style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+                <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
                 <Navigation />
                 <div className="flex items-center justify-end pt-5">
                     <button
@@ -102,14 +104,14 @@ const VerifierProfile = () => {
                             </div>
                             <div className="flex items-center justify-center pt-5">
                                 <button
-                                    onClick={handleClaimRequestsClick}  
+                                    onClick={handleClaimRequestsClick}
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
                                 >
                                     <b>
                                         {isClaimRequestsVisible
                                             ? 'Claims Requests'
                                             : 'Claim Approved'}
-                                        </b>
+                                    </b>
                                 </button>
                             </div>
                             <div className="flex items-center justify-center pt-5">
@@ -130,12 +132,12 @@ const VerifierProfile = () => {
                             overflow: 'auto',
                         }}
                     >
-                        {isClaimRequestsVisible ?   ( 
+                        {isClaimRequestsVisible ? (
                             <ClaimsApproved />
                         ) : (
                             <ClaimRequests />
                         )}
-                            
+
                     </div>
                 </div>
                 <Footer />

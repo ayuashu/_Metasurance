@@ -356,10 +356,11 @@ router.post('/claim/register', fetchuser, async (req, res) => {
         req.body.assetid === undefined ||
         req.body.premiumspaid === undefined ||
         req.body.claimcause === undefined ||
+        req.body.companyName === undefined ||
         req.body.docslinked === undefined
     ) {
         res.status(400).json({
-            error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, and docslinked',
+            error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName and docslinked',
         });
         return;
     }
@@ -388,6 +389,7 @@ router.post('/claim/register', fetchuser, async (req, res) => {
                 req.body.assetid,
                 premiumspaidString,
                 req.body.claimcause,
+                req.body.companyName,
                 req.body.docslinked, // Add docslinked to the array of arguments
             ]
         );

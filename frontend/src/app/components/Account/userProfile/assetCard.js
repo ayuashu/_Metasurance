@@ -80,7 +80,8 @@ const AssetCard = () => {
                             <div className="card-container" key={assetID}>
                                 <div className="card">
                                     <div className="card-body">
-                                        <h2 className="card-title mt-4">{assetName}</h2>
+                                        <span className="card-title mt-4">{assetName}</span>
+                                        <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -117,7 +118,7 @@ const AssetCard = () => {
                                 {isPolicyVisible && (
                                     <AllRequestPolicyCard
                                         assetid={assetID}
-                                        assetName={assetName}
+                                        assetType={assetType}
                                         rendered={true}
                                     />
                                 )}

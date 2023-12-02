@@ -71,6 +71,7 @@ const AllPolicyCard = ({ selectedInsuranceType, selectedCompanyName }) => {
                   <div className="card">
                     <div className="card-body">
                       <span className="card-title">{policyname}</span>
+                      <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                       <span className="card-author">{companyName}</span>
                       <table>
                         <tbody> 

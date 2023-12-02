@@ -75,9 +75,8 @@ const PolicyCard = () => {
                                 <div className="card">
                                     <div className="card-body">
                                         <span className="card-title">{policyname}</span>
-                                        <span className="card-author">
-                                            {companyname}
-                                        </span>
+                                        <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
+                                        <span className="card-author">{companyname}</span>
                                         <table>
                                             <tbody>
                                                 <tr>

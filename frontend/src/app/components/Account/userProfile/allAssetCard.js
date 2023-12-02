@@ -42,7 +42,8 @@ const AllAssetCard = () => {
                             <div className="card-container" style={{marginLeft: '100px', marginRight:'100px', border: '2px solid wheat'}} key={assetID}>
                                 <div className="card"  style={{backgroundColor: 'black', color: 'wheat'}}>
                                     <div className="card-body">
-                                        <h2 className="card-title" style={{fontSize:'40px'}}>{assetName}</h2>
+                                        <h2 className="card-title" style={{fontSize:'35px'}}>{assetName}</h2>
+                                        <hr style={{ border: '1px solid black', width: '70%' }} />
                                         <table>
                                             <tbody>
                                                 <tr>

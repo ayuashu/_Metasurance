@@ -72,7 +72,9 @@ const addPolicy = ({ name }) => {
     }
     return (
         <>
-            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen">
+            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+                style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+                <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
                 <Navigation />
                 <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
                     <div className="...">
@@ -128,7 +130,7 @@ const addPolicy = ({ name }) => {
                                                             d="M28.5 16.3H7c-1.7 0-3 1.3-3 3v4c0-1.7 1.3-3 3-3h21.5c1.7 0 3 1.3 3 3v-4c0-1.7-1.4-3-3-3z"
                                                         ></path>
                                                         <path
-                                                            fill="none" stroke="#45413c" strokeLinecap="round"  strokeLinejoin="round" strokeMiterlimit="10"
+                                                            fill="none" stroke="#45413c" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10"
                                                             d="M28.5 38.3H7c-1.7 0-3-1.3-3-3v-16c0-1.7 1.3-3 3-3h21.5c1.7 0 3 1.3 3 3v16c0 1.6-1.4 3-3 3z"
                                                         ></path>
                                                         <path
@@ -148,7 +150,7 @@ const addPolicy = ({ name }) => {
                                                             d="M41.8 23.9c-2.9-2.9-7.7-2.9-10.6 0-2.3 2.3-2.8 5.7-1.5 8.5L20.2 42c-.2.2-.3.5-.3.8l.2 1.9c.1.5.4.8.9.9l1.9.2c.3 0 .6-.1.8-.3l1.1-1.1c.2-.2.3-.4.3-.7v-1h1c.3 0 .5-.1.7-.3l.9-.9c.2-.2.3-.4.3-.7v-.6c0-.3.1-.5.3-.7l1.2-1.2c.2-.2.4-.3.7-.3h.6c.3 0 .5-.1.7-.3l1.7-1.7c2.8 1.3 6.2.8 8.5-1.5 3-2.9 3-7.7.1-10.6zm-3.5 3.5c-.6-.6-.6-1.5 0-2.1.6-.6 1.5-.6 2.1 0 .6.6.6 1.5 0 2.1-.6.6-1.5.6-2.1 0z"
                                                         ></path>
                                                         <g>
-                                                            <path 
+                                                            <path
                                                                 fill="#fc9"
                                                                 d="M31.2 27.1c2-2 4.8-2.6 7.3-1.9.6-.4 1.4-.4 1.9.2.3.3.4.6.4.9.4.2.7.5 1 .8 1.1 1.1 1.7 2.4 2 3.7.5-2.4-.2-5-2-6.9-2.9-2.9-7.7-2.9-10.6 0-1.9 1.9-2.5 4.5-2 6.9.3-1.4 1-2.7 2-3.7zM20.3 45.1l9.5-9.5c-.4-.8-.6-1.6-.7-2.5L20.2 42c-.2.2-.3.5-.3.8l.2 1.9c.1.1.1.2.2.4z"
                                                             ></path>

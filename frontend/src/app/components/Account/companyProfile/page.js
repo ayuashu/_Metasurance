@@ -83,7 +83,9 @@ const CompanyProfile = () => {
 
     return (
         <>
-            <div className="bg-slate-700 bg-blend-lighten hover-bg-blend-darken min-h-screen">
+            <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
+                style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
+                <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
                 <Navigation />
                 <div className="flex items-center justify-end pt-5">
                     <button
@@ -161,7 +163,7 @@ const CompanyProfile = () => {
                         }}
                     >
                         {isPoliciesVisible && <PolicyCard />}
-                        {isClaimRequestsVisible && <ClaimRequests />}
+                        {isClaimRequestsVisible && <ClaimRequests company={username} />}
                         {isClaimsApprovedVisible && <ClaimsApproved />}
                     </div>
                 </div>

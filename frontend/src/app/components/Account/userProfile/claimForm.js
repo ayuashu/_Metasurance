@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const ClaimForm = ({ username, mappingid, policyid, assetid, premiumspaid, ipfsHashes, onClose, onUpload }) => {
+const ClaimForm = ({ username, mappingid, policyid, assetid, premiumspaid, companyName, ipfsHashes, onClose, onUpload }) => {
     const [claimCause, setClaimcause] = useState('');
     const [ipfsHash, setIpfsHash] = useState(''); // Variable to store IPFS hash
     const [files, setFiles] = useState('');
@@ -52,7 +52,7 @@ const ClaimForm = ({ username, mappingid, policyid, assetid, premiumspaid, ipfsH
         try {
             // Continue with the rest of your logic
             const ipfsHashes = await handleUpload();
-            const result = await onUpload(mappingid, policyid, assetid, premiumspaid, claimCause, ipfsHashes);
+            const result = await onUpload(mappingid, policyid, assetid, premiumspaid, claimCause, companyName ,ipfsHashes);
             console.log('IPFS Upload Result:', result);
             alert('Claim submitted successfully');
             window.location.reload();

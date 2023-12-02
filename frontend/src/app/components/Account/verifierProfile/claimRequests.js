@@ -87,6 +87,7 @@ const ClaimRequests = () => {
               premiumspaid,
               claimed,
               claimcause,
+              docslinked,
               verifiedby,
             } = claim;
 
@@ -101,7 +102,7 @@ const ClaimRequests = () => {
                 <div className="card">
                   <div className="card-body">
                     <span className="card-title mt-4" style={{ fontSize: '30px', fontWeight: 'bold' }}>Policy Id : {policyid}</span>
-                    <hr style={{ border: '1px solid black' }} />
+                    <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                     <table>
                       <tbody>
                         <tr>
@@ -128,6 +129,21 @@ const ClaimRequests = () => {
                           <td><b>Claim Cause : </b></td>
                           <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimcause}</td>
                         </tr>
+                        {claim.docslinked && claim.docslinked.length > 0 && (
+                          <tr>
+                            <td><b>Documents Linked : </b></td>
+                            <td colSpan="3" style={{ paddingLeft: '20px' }}>
+                              {claim.docslinked.map((docLink, index) => (
+                                <span key={index}>
+                                  <a href={docLink} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'cursive', color: 'rosybrown', fontWeight: 'bold'}}>
+                                    Doc {index + 1}
+                                  </a>
+                                  {index < claim.docslinked.length - 1 && ', '}
+                                </span>
+                              ))}
+                            </td>
+                          </tr>
+                        )}
                         <tr>
                           <td><b>Verified By : </b></td>
                           <td colSpan="3" style={{ paddingLeft: '20px' }}>{verifiedby}</td>
