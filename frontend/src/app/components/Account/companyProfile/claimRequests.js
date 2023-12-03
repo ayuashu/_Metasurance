@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/page';
 
@@ -13,16 +14,16 @@ const ClaimRequests = ( { company }) => {
           method: 'GET',
           credentials: 'include',
         });
-
+    
         if (response.ok) {
           const data = await response.json();
           console.log(data);
-
-          // Filter claims based on companyname
-          const filteredClaims = data.reply.claims.filter(
-            (claim) => claim.companyname === company
-          );
-
+    
+          // Check if data.reply exists before accessing its properties
+          const filteredClaims = data.reply && data.reply.claims
+            ? data.reply.claims.filter((claim) => claim.companyname === company)
+            : [];
+    
           setClaims(filteredClaims);
         } else {
           console.error('Failed to fetch claims data');
@@ -31,8 +32,7 @@ const ClaimRequests = ( { company }) => {
         console.error('Error fetching claims data', error);
       }
     };
-
-    fetchData();
+     fetchData();
   }, [company]);
 
 
@@ -206,8 +206,3 @@ const ClaimRequests = ( { company }) => {
 };
 
 export default ClaimRequests;
-
-
-
-
-

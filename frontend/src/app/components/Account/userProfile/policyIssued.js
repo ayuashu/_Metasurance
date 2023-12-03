@@ -186,42 +186,33 @@ const PolicyIssued = ({ username }) => {
         setShowClaimForm((prevShowClaimForm) => !prevShowClaimForm); // Toggle showClaimForm
     };
 
-    const handleUpload = async (
-        mappingid,
-        policyid,
-        assetid,
-        premiumspaid,
-        claimCause,
-        companyName,
-        docslinked
-    ) => {
+    const handleUpload = async (mappingid, policyid, assetid, premiumspaid, claimCause, companyName, docslinked) => {
         console.log('Submitting claim data');
         try {
-            console.log('attempting to submit claim data');
-            // Perform the API call with the necessary data
-            const response = await fetch(
-                `${HOST}/api/user/claim/register`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username,
-                        mappingid,
-                        policyid,
-                        assetid,
-                        premiumspaid,
-                        claimcause: claimCause,
-                        companyName,
-                        docslinked: JSON.stringify(docslinked),
-                    }),
-                    credentials: 'include',
-                }
-            );
+            alert('Attempting to submit claim data');
+            const response = await fetch(`${HOST}/api/user/claim/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    mappingid,
+                    policyid,
+                    assetid,
+                    premiumspaid,
+                    claimcause: claimCause,
+                    companyName,
+                    docslinked: JSON.stringify(docslinked),
+                }),
+                credentials: 'include',
+            });
+
+            console.log('Response Status:', response.status);
+            const responseData = await response.json();
+            console.log('Response Data:', responseData);
 
             if (response.ok) {
-                alert('Claim submitted successfully');
                 console.log('Claim data:', {
                     username,
                     mappingid,
@@ -232,16 +223,22 @@ const PolicyIssued = ({ username }) => {
                     companyName,
                     docslinked,
                 });
+
+                alert('Claim submitted successfully');
                 setShowClaimForm(false);
                 // Optionally, you can refetch data or perform other actions after successful submission
+
+                // Add a console log to indicate successful submission
+                console.log('Claim submission process complete');
             } else {
-                const errorData = await response.json(); // Try to parse error response
-                console.error('Failed to submit claim', errorData);
+                console.error('Failed to submit claim', responseData);
             }
         } catch (error) {
             console.error('Error in claim submission', error);
         }
     };
+
+
 
     return (
         <div className="main-card-container">
@@ -327,9 +324,9 @@ const PolicyIssued = ({ username }) => {
                                                     <b>Premiums Left</b>
                                                 </td>
                                                 <td colSpan="3" style={{ paddingLeft: '20px' }}>
-                                                    {isNaN(insuranceCoverData[policyid])
+                                                    {isNaN(insuranceCoverData[policyid]?.insurancecover)
                                                         ? 'Not available'
-                                                        : insuranceCoverData[policyid] - premiumspaid}
+                                                        : insuranceCoverData[policyid].insurancecover - premiumspaid}
                                                 </td>
                                             </tr>
                                         </tbody>

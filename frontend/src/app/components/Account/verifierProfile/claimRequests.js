@@ -198,8 +198,3 @@ const ClaimRequests = () => {
 
 
 export default ClaimRequests;
-
-
-
-
-

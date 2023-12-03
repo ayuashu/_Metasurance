@@ -47,15 +47,12 @@ const ClaimForm = ({ username, mappingid, policyid, assetid, premiumspaid, compa
             // Handle the error appropriately, e.g., show an error message
         }
     };
-
+    
     const handleSubmit = async () => {
         try {
             // Continue with the rest of your logic
             const ipfsHashes = await handleUpload();
             const result = await onUpload(mappingid, policyid, assetid, premiumspaid, claimCause, companyName ,ipfsHashes);
-            console.log('IPFS Upload Result:', result);
-            alert('Claim submitted successfully');
-            window.location.reload();
         } catch (error) {
             console.error('Error submitting claim:', error);
             // Handle the error appropriately, e.g., show an error message

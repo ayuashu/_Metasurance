@@ -349,39 +349,29 @@ router.post('/policy/paypremium', fetchuser, async (req, res) => {
 })
 
 router.post('/claim/register', fetchuser, async (req, res) => {
-    if (
-        req.body.username === undefined ||
-        req.body.mappingid === undefined ||
-        req.body.policyid === undefined ||
-        req.body.assetid === undefined ||
-        req.body.premiumspaid === undefined ||
-        req.body.claimcause === undefined ||
-        req.body.companyName === undefined ||
-        req.body.docslinked === undefined
-    ) {
-        res.status(400).json({
-            error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName and docslinked',
-        });
-        return;
-    }
-
-    console.log('Claim registration request received');
-    // Log the entry point to the ClaimPolicy function
-    console.log('Calling ClaimPolicy function...');
-
-    // Ensure premiumspaid is a string
-    let premiumspaidString = req.body.premiumspaid.toString();
-
-    // Declare reply outside the try block
-    let reply;
-
-    // Call ClaimPolicy function
     try {
-        reply = await ClaimContract.ClaimPolicy(
-            {
-                username: req.body.username,
-                organization: 'user',
-            },
+        if (
+            req.body.username === undefined ||
+            req.body.mappingid === undefined ||
+            req.body.policyid === undefined ||
+            req.body.assetid === undefined ||
+            req.body.premiumspaid === undefined ||
+            req.body.claimcause === undefined ||
+            req.body.companyName === undefined ||
+            req.body.docslinked === undefined
+        ) {
+            res.status(400).json({
+                error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName and docslinked',
+            });
+            return;
+        }
+        console.log('Claim registration request received');
+        console.log('Calling ClaimPolicy function...');
+
+        // Ensure premiumspaid is a string
+        let premiumspaidString = req.body.premiumspaid.toString();
+        let reply = await ClaimContract.ClaimPolicy(
+            { username: req.body.username, organization: 'user' },
             [
                 req.body.username,
                 req.body.mappingid,
@@ -398,12 +388,11 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             res.status(500).json({ error: reply.error });
             return;
         }
+        res.status(200).json({ reply, message: 'Claim Requested Successfully.' });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Unable to claim!', error });
     }
-
-    // Log the exit point of the ClaimPolicy function
     console.log('ClaimPolicy function executed.');
 });
 
