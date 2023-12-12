@@ -90,11 +90,11 @@ const AssetCard = () => {
                                                 </tr>
                                                 <tr>
                                                     <td><b>Value</b></td>
-                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{value}</td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{value} INR</td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Age</b></td>
-                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{age}</td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{age} Years</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -104,7 +104,7 @@ const AssetCard = () => {
                                             className="card-tag"
                                             onClick={() => togglePolicyDisplay(assetID)}
                                         >
-                                            {isPolicyVisible ? 'Hide Policies' : 'Show Policies'}
+                                            {isPolicyVisible ? 'Hide Policies' : 'Get a Policy'}
                                         </button>
 
                                         <button

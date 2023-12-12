@@ -27,8 +27,8 @@ const Page = () => {
           <div className='w-full' style={{paddingTop: '150px'}}>
               <h1 className="text-5xl text-center text-indigo-100" >Welcome to</h1> 
               <h1 className="text-[80px] text-center text-indigo-100"><b>METASURANCE</b></h1>
-              <div className="md:w-96 lg:w-fit mt-16 mx-auto text-2xl text-indigo-300">ALONG META, ALONG YOU</div>
-              <div className="md:w-96 lg:w-fit mt-2 mx-auto text-2xl text-indigo-300">BEYOND META, BEYOND YOU</div>
+              <div className="md:w-96 lg:w-fit mt-16 mx-auto text-2xl text-indigo-300">Insure Your Virtual Ventures</div>
+              <div className="md:w-96 lg:w-fit mt-2 mx-auto text-2xl text-indigo-300">Safeguarding Success in the Metaverse!</div>
             </div>
           </div>
           

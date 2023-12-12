@@ -65,13 +65,9 @@ const UserRegistration = ({ }) => {
                         <div className="w-full max-w-sm bg-slate-900 border border-black-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style={{ height: '80vh' }}>
                             <div className="flex flex-col items-center pb-10 pt-20">
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
-                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">!!!Hurray!!!</h5>
+                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>USER</b></span>
-                            </div>
-
-                            <div className="flex justify-end mt-10">
-                                <img className="w-24 h-24 rounded-full shadow-lg" src="/Images/userlogin.gif" alt="" />
                             </div>
 
                         </div>
@@ -81,8 +77,8 @@ const UserRegistration = ({ }) => {
                         <div className="flex-1 pt-10 h-auto max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
                             <div className="flex flex-col md:flex-row">
                                 <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">
-                                    <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110"
-                                        src="/Images/userLogin.jpg" alt="img" />
+                                    <img className="h-[260px]"
+                                        src="https://cdn-icons-png.flaticon.com/512/921/921562.png" alt="img" />
                                 </div>
                                 <div className="flex items-center justify-center p-2 sm:p-12 md:w-1/2">
                                     <div className="w-full">
