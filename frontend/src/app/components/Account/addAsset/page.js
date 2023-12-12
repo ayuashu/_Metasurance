@@ -9,7 +9,7 @@ const HOST = "http://localhost:3000"
 
 const addAsset = () => {
     const [assetName, setAssetName] = useState("");
-    const [assetType, setAssetType] = useState("");
+    const [assetType, setAssetType] = useState("NFT");
     const [assetValue, setAssetValue] = useState("");
     const [age, setAge] = useState("");
 
@@ -60,12 +60,9 @@ const addAsset = () => {
                         <div className="w-full max-w-sm bg-slate-900 border border-black-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style={{ height: '80vh' }}>
                             <div className="flex flex-col items-center pb-10 pt-20">
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
-                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">!!!Hurray!!!</h5>
-                                <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Journey Begins!!!</h3>
+                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
+                                <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Journey Begins!</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>USER</b></span>
-                            </div>
-                            <div className="flex justify-end mt-10">
-                                <img className="w-24 h-24 rounded-full shadow-lg" src="/Images/userlogin.gif" alt="" />
                             </div>
                         </div>
                     </div>
@@ -95,14 +92,18 @@ const addAsset = () => {
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">Asset Type</label>
-                                            <input type="text"
-                                                className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={assetType}
-                                                onChange={(e) => setAssetType(e.target.value)}
-                                                placeholder="Enter the category" />
+                                            <select value={assetType} onChange={(e) => setAssetType(e.target.value)}>
+                                                <option value="NFT">NFT</option>
+                                                <option value="Virtual Land">Virtual Land</option>
+                                                <option value="Avatar">Avatar</option>
+                                                <option value="Cryptocurrency">Cryptocurrency</option>
+                                                <option value="Digital Files">Digital Files</option>
+                                                <option value="Domain Names">Domain Names</option>
+                                            </select>
+
                                         </div>
                                         <div>
-                                            <label className="block mt-2 text-sm">Asset Value</label>
+                                            <label className="block mt-2 text-sm">Asset Value (in INR)</label>
                                             <input type="number"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                                 value={assetValue}
@@ -110,7 +111,7 @@ const addAsset = () => {
                                                 placeholder="Enter the asset valuation" />
                                         </div>
                                         <div>
-                                            <label className="block mt-2 text-sm">Asset Age</label>
+                                            <label className="block mt-2 text-sm">Asset Age (in years)</label>
                                             <input type="number"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
                                                 value={age}

@@ -190,6 +190,7 @@ const PolicyIssued = ({ username }) => {
         console.log('Submitting claim data');
         try {
             alert('Attempting to submit claim data');
+            console.log({username, mappingid, policyid, assetid, premiumspaid, claimcause: claimCause, companyName, docslinked: JSON.stringify(docslinked)})
             const response = await fetch(`${HOST}/api/user/claim/register`, {
                 method: 'POST',
                 headers: {

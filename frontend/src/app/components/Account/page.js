@@ -81,7 +81,7 @@ const Account = () => {
                                 className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900"
                             >
                                 <b>
-                                    Use Service<p>(USER)</p>
+                                    Log In as<p>Insured</p>
                                 </b>
                             </button>
                             <button
@@ -93,7 +93,7 @@ const Account = () => {
                                 className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900"
                             >
                                 <b>
-                                    Give Service<p>(COMPANY)</p>
+                                    Log In as <p>Insurer</p>
                                 </b>
                             </button>
                             <button
@@ -105,7 +105,7 @@ const Account = () => {
                                 className="h-20 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-600 rounded-full focus:shadow-outline hover:bg-slate-900"
                             >
                                 <b>
-                                    Verify Claims<p>(VERIFIER)</p>
+                                    Log In as <p>Verifier</p>
                                 </b>
                             </button>
                         </div>

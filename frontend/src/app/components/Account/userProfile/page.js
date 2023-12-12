@@ -115,7 +115,7 @@ const UserProfile = () => {
                                     }
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
                                 >
-                                    <b>Add assets</b>
+                                    <b>Add Products</b>
                                 </button>
                             </div>
                             <div className="flex items-center justify-center pt-5">

@@ -79,7 +79,7 @@ const VerifierRegister = () => {
                         <div className="w-full max-w-sm bg-slate-900 border border-black-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" style={{ height: '80vh' }}>
                             <div className="flex flex-col items-center pb-10 pt-20">
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
-                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">!!!Hurray!!!</h5>
+                                <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400"><b>VERIFIER</b></span>
                             </div>

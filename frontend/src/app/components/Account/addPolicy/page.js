@@ -9,7 +9,7 @@ const HOST = 'http://localhost:3000'
 
 const addPolicy = ({ name }) => {
     const [policyname, setPolicyName] = useState('')
-    const [insurancetype, setInsuranceType] = useState('')
+    const [insurancetype, setInsuranceType] = useState('NFT')
     const [premiumamount, setPremiumAmount] = useState('')
     const [insurancecover, setInsuranceCover] = useState('')
     // const [description, setDescription] = useState("")
@@ -97,12 +97,6 @@ const addPolicy = ({ name }) => {
                                     <b>COMPANY{name}</b>
                                 </span>
                             </div>
-                            <div className="flex justify-end mt-10">
-                                <img
-                                    className="w-24 h-24 rounded-full shadow-lg"
-                                    src="/Images/userlogin.gif" alt=""
-                                />
-                            </div>
                         </div>
                     </div>
                     <div className="col-span-2 ...">
@@ -183,17 +177,18 @@ const addPolicy = ({ name }) => {
                                             <label className="block mt-2 text-sm">
                                                 Insurance Type
                                             </label>
-                                            <input
-                                                type="text"
-                                                className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={insurancetype}
-                                                onChange={(e) => setInsuranceType(e.target.value)}
-                                                placeholder="NFTs insurance, avatars insurance, ...."
-                                            />
+                                            <select value={insurancetype} onChange={(e) => setInsuranceType(e.target.value)}>
+                                                <option value="NFT">NFT</option>
+                                                <option value="Virtual Land">Virtual Land</option>
+                                                <option value="Avatar">Avatar</option>
+                                                <option value="Cryptocurrency">Cryptocurrency</option>
+                                                <option value="Digital Files">Digital Files</option>
+                                                <option value="Domain Names">Domain Names</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">
-                                                Premium Amount
+                                                Premium Amount (in INR)
                                             </label>
                                             <input
                                                 type="number"
@@ -205,7 +200,7 @@ const addPolicy = ({ name }) => {
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">
-                                                Insurance Cover
+                                                Insurance Cover Duration (in years)
                                             </label>
                                             <input
                                                 type="number"
