@@ -51,7 +51,7 @@ func (cc *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 }
 
 // args: [username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName, docslinked]
-// Note: getting all info from frontend withouth any verification might pose security risks
+// Note: getting all info from frontend without any verification might pose security risks
 func (cc *Chaincode) claimPolicy(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 8 {
 		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 8\"}")
