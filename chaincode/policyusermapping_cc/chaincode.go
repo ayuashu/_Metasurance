@@ -21,10 +21,6 @@ type PolicyList struct {
 	Policies []PolicyMap `json:"policies"`
 }
 
-type InvokeResponse struct {
-	Status bool `json:"status"`
-}
-
 type Chaincode struct {
 }
 

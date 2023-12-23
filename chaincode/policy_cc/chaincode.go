@@ -3,7 +3,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -27,6 +26,7 @@ type Policy struct {
 	PremiumAmount  string `json:"premiumamount"`
 	InsuranceCover string `json:"insurancecover"`
 	InsuranceType  string `json:"insurancetype"`
+	ClaimsPerYear  string `json:"claimsperyear"`
 }
 
 type Chaincode struct {
@@ -54,28 +54,21 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	return shim.Error("{\"error\":\"Invalid function name. Expecting 'createAsset', 'queryAsset', or 'queryAllAssets'\"}")
 }
 
-// args: [policyname, premiumamount, insurancecover, insurancetype, companyname]
+// args: [policyname, premiumamount, insurancecover, insurancetype, companyname, claimsperyear]
 func (ac *Chaincode) postPolicy(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) != 5 {
-		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 5\"}"))
+	if len(args) != 6 {
+		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 6\"}"))
 	}
-	var policy = Policy{PolicyID: uuid.New().String(), PolicyName: args[0], PremiumAmount: args[1], InsuranceCover: args[2], InsuranceType: args[3], CompanyName: args[4]}
+	var policy = Policy{PolicyID: uuid.New().String(), PolicyName: args[0], PremiumAmount: args[1], InsuranceCover: args[2], InsuranceType: args[3], CompanyName: args[4], ClaimsPerYear: args[5]}
 	policyList, err := stub.GetState("policies")
 	if err != nil {
 		return shim.Success([]byte("{\"error\": \"Failed to get existing policies: " + err.Error() + "\"}"))
 	} else if policyList != nil {
 		var policyContract PCList
 		json.Unmarshal(policyList, &policyContract)
-		// print policycontract struct
-		fmt.Println("Before insertion: ")
-		fmt.Println(policyContract)
 		for i, policyCompany := range policyContract.PolicyCompanies {
 			if policyCompany.CompanyName == args[4] {
-				fmt.Println("Company match found")
-				fmt.Println(policyCompany)
 				policyContract.PolicyCompanies[i].Policies = append(policyCompany.Policies, policy)
-				fmt.Println("After insertion: ")
-				fmt.Println(policyContract)
 				policyList, _ = json.Marshal(policyContract)
 				stub.PutState("policies", policyList)
 				return shim.Success([]byte("{\"uniqueID\":\"" + policy.PolicyID + "\"}"))
