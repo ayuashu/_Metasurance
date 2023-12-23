@@ -12,7 +12,7 @@ const addPolicy = ({ name }) => {
     const [insurancetype, setInsuranceType] = useState('NFT')
     const [premiumamount, setPremiumAmount] = useState('')
     const [insurancecover, setInsuranceCover] = useState('')
-    // const [description, setDescription] = useState("")
+    const [claimsperyear, setClaimsPerYear] = useState("")
 
     const router = useRouter()
     const navigate = (location) => {
@@ -33,7 +33,8 @@ const addPolicy = ({ name }) => {
             policyname === '' ||
             insurancetype === '' ||
             premiumamount === '' ||
-            insurancecover === ''
+            insurancecover === '' ||
+            claimsperyear === ''
         ) {
             return alert('Complete all fields for registration')
         }
@@ -48,6 +49,7 @@ const addPolicy = ({ name }) => {
                 premiumamount,
                 insurancecover,
                 insurancetype,
+                claimsperyear
             }),
         })
         const response = await result.json()
@@ -62,6 +64,7 @@ const addPolicy = ({ name }) => {
                     premiumamount,
                     insurancecover,
                     insurancetype,
+                    claimsperyear
                 }),
             )
             alert('Policy Registered Successfully')
@@ -94,7 +97,7 @@ const addPolicy = ({ name }) => {
                                     A new journey begins!
                                 </h3>
                                 <span className="text-l text-gray-500 dark:text-gray-400">
-                                    <b>COMPANY{name}</b>
+                                    <b>INSURER</b>
                                 </span>
                             </div>
                         </div>
@@ -177,7 +180,8 @@ const addPolicy = ({ name }) => {
                                             <label className="block mt-2 text-sm">
                                                 Insurance Type
                                             </label>
-                                            <select value={insurancetype} onChange={(e) => setInsuranceType(e.target.value)}>
+                                            <select className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                                value={insurancetype} onChange={(e) => setInsuranceType(e.target.value)}>
                                                 <option value="NFT">NFT</option>
                                                 <option value="Virtual Land">Virtual Land</option>
                                                 <option value="Avatar">Avatar</option>
@@ -210,15 +214,18 @@ const addPolicy = ({ name }) => {
                                                 placeholder="Enter the duration of Policy"
                                             />
                                         </div>
-                                        {/* <div>
-                                            <label className="block mt-2 text-sm">Description</label>
-                                            <textarea
+                                        <div>
+                                            <label className="block mt-2 text-sm">
+                                                Claims Allowed
+                                            </label>
+                                            <input
+                                                type="number"
                                                 className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                                                value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
-                                                placeholder="Enter a description for your policy"
-                                            ></textarea>
-                                        </div> */}
+                                                value={claimsperyear}
+                                                onChange={(e) => setClaimsPerYear(e.target.value)}
+                                                placeholder="Enter the number of claims allowed in a year"
+                                            />
+                                        </div>
                                         <button onClick={(e) => handleLogin(e)}
                                             className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
                                             Register

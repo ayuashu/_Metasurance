@@ -62,7 +62,7 @@ const addAsset = () => {
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
                                 <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Journey Begins!</h3>
-                                <span className="text-l text-gray-500 dark:text-gray-400"><b>USER</b></span>
+                                <span className="text-l text-gray-500 dark:text-gray-400"><b>INSURED</b></span>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,8 @@ const addAsset = () => {
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">Asset Type</label>
-                                            <select value={assetType} onChange={(e) => setAssetType(e.target.value)}>
+                                            <select className="w-full px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                                value={assetType} onChange={(e) => setAssetType(e.target.value)}>
                                                 <option value="NFT">NFT</option>
                                                 <option value="Virtual Land">Virtual Land</option>
                                                 <option value="Avatar">Avatar</option>

@@ -83,7 +83,7 @@ const UserRegister = () => {
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
                                 <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
-                                <span className="text-l text-gray-500 dark:text-gray-400"><b>USER</b></span>
+                                <span className="text-l text-gray-500 dark:text-gray-400"><b>INSURED</b></span>
                             </div>
                         </div>
                     </div>

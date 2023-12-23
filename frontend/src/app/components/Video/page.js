@@ -9,6 +9,7 @@ const Video = () => {
     <div className="rounded-full">
       <Image
         src={videoSrc}
+        alt="Image"
         width={450}
         height={250}
       />

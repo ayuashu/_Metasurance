@@ -18,6 +18,7 @@ const PolicyIssued = ({ username }) => {
     const [policyid, setPolicyId] = useState({});
     const [premiumspaid, setPremiumsPaid] = useState({});
     const [companyName, setCompanyName] = useState({});
+    const [claimsperyear, setClaimsPerYear] = useState()
     const navigate = (location) => {
         router.push(location);
     };
@@ -190,7 +191,7 @@ const PolicyIssued = ({ username }) => {
         console.log('Submitting claim data');
         try {
             alert('Attempting to submit claim data');
-            console.log({username, mappingid, policyid, assetid, premiumspaid, claimcause: claimCause, companyName, docslinked: JSON.stringify(docslinked)})
+            console.log({username, mappingid, policyid, assetid, premiumspaid, claimcause: claimCause, companyName, docslinked: JSON.stringify(docslinked), claimsperyear})
             const response = await fetch(`${HOST}/api/user/claim/register`, {
                 method: 'POST',
                 headers: {
@@ -205,6 +206,7 @@ const PolicyIssued = ({ username }) => {
                     claimcause: claimCause,
                     companyName,
                     docslinked: JSON.stringify(docslinked),
+                    claimsperyear
                 }),
                 credentials: 'include',
             });
@@ -223,6 +225,7 @@ const PolicyIssued = ({ username }) => {
                     claimcause: claimCause,
                     companyName,
                     docslinked,
+                    claimsperyear
                 });
 
                 alert('Claim submitted successfully');
@@ -318,6 +321,14 @@ const PolicyIssued = ({ username }) => {
                                                 </td>
                                                 <td colSpan="3" style={{ paddingLeft: '20px' }}>
                                                     {premiumspaid}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Claims per year</b>
+                                                </td>
+                                                <td colSpan="3" style={{ paddingLeft: '20px' }}>
+                                                    {claimsperyear}
                                                 </td>
                                             </tr>
                                             <tr>

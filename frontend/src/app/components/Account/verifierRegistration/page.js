@@ -44,7 +44,7 @@ const VerifierRegistration = ({ }) => {
         })
         const response = await result.json()
         if (response.error) {
-            alert(response.error)
+            alert("Invalid Credentials")
             return
         }
         if (result.status === 200) {

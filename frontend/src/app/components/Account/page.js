@@ -65,7 +65,7 @@ const Account = () => {
                                     Time to Explore
                                 </h3>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                                    User/Company/Verifier
+                                    Insured/Insurer/Verifier
                                 </span>
                             </div>
                         </div>

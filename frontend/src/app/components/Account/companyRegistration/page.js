@@ -44,7 +44,7 @@ const CompanyRegistration = ({ }) => {
         })
         const response = await result.json()
         if (response.error) {
-            alert(response.error)
+            alert("Invalid Credentials")
             return
         }
         if (result.status === 200) {
@@ -67,7 +67,7 @@ const CompanyRegistration = ({ }) => {
                                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
                                 <h5 className="mb-1 text-xl font-medium text-white dark:text-white">Hurray!</h5>
                                 <h3 className="mb-1 text-xl font-medium text-cyan-600 dark:text-white">Time to Explore</h3>
-                                <span className="text-l text-gray-500 dark:text-gray-400"><b>COMPANY</b></span>
+                                <span className="text-l text-gray-500 dark:text-gray-400"><b>INSURER</b></span>
                             </div>
                         </div>
                     </div>

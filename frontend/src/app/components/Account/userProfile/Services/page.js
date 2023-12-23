@@ -85,21 +85,33 @@ const Services = () => {
 
   const getUniqueInsuranceTypes = (policyCompanies) => {
     const uniqueTypes = new Set();
-    policyCompanies.forEach((company) => {
-      company.policies.forEach((policy) => {
-        uniqueTypes.add(policy.insurancetype);
+  
+    if (policyCompanies) {
+      policyCompanies.forEach((company) => {
+        if (company.policies) {
+          company.policies.forEach((policy) => {
+            uniqueTypes.add(policy.insurancetype);
+          });
+        }
       });
-    });
+    }
     return [...uniqueTypes];
   };
-
+  
+  
   const getUniqueCompanyNames = (policyCompanies) => {
     const uniqueNames = new Set();
-    policyCompanies.forEach((company) => {
-      uniqueNames.add(company.companyName);
-    });
+  
+    if (policyCompanies) {
+      policyCompanies.forEach((company) => {
+        if (company.companyName) {
+          uniqueNames.add(company.companyName);
+        }
+      });
+    }
     return [...uniqueNames];
   };
+  
 
   return (
     <>
@@ -116,7 +128,7 @@ const Services = () => {
               id="insuranceType"
               value={selectedInsuranceType}
               onChange={(e) => setSelectedInsuranceType(e.target.value)}
-              className="form-select text-slate-50 text-sm bg-neutral-950 rounded-full focus:shadow-outline hover-bg-slate-200"
+              className="form-select text-slate-50 text-sm bg-neutral-950 rounded-full focus:shadow-outline hover-bg-slate-200 uppercase"
               style={{
                 padding: '0.5rem 2rem 0.5rem 1rem',
                 minWidth: '150px',
@@ -140,11 +152,11 @@ const Services = () => {
               id="companyName"
               value={selectedCompanyName}
               onChange={(e) => setSelectedCompanyName(e.target.value)}
-              className="form-select text-slate-50 text-sm bg-neutral-950 rounded-full focus:shadow-outline hover-bg-slate-200"
+              className="form-select text-slate-50 text-sm bg-neutral-950 rounded-full focus:shadow-outline hover-bg-slate-200 uppercase"
               style={{
                 padding: '0.5rem 2rem 0.5rem 1rem',
                 minWidth: '150px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}
             >
               <option value="">All</option>
