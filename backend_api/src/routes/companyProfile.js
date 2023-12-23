@@ -176,10 +176,11 @@ router.post('/createPolicy', fetchuser, async (req, res) => {
             req.body.policyname === undefined ||
             req.body.premiumamount === undefined ||
             req.body.insurancecover === undefined ||
-            req.body.insurancetype === undefined
+            req.body.insurancetype === undefined ||
+            req.body.claimsperyear === undefined
         ) {
             res.status(400).send({
-                error: 'Invalid Request! Request must contain five fields',
+                error: 'Invalid Request! Request must contain six fields',
             })
             return
         }
@@ -192,6 +193,7 @@ router.post('/createPolicy', fetchuser, async (req, res) => {
                 req.body.insurancecover,
                 req.body.insurancetype,
                 req.body.username,
+                req.body.claimsperyear,
             ], //send username as company name
         )
         // check if error key exists in reply

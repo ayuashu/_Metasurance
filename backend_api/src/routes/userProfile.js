@@ -348,6 +348,7 @@ router.post('/policy/paypremium', fetchuser, async (req, res) => {
     }
 })
 
+// Note: getting all info from frontend without any verification might pose security risks
 router.post('/claim/register', fetchuser, async (req, res) => {
     try {
         if (
@@ -358,15 +359,37 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             req.body.premiumspaid === undefined ||
             req.body.claimcause === undefined ||
             req.body.companyName === undefined ||
-            req.body.docslinked === undefined
+            req.body.docslinked === undefined ||
+            req.body.claimsperyear === undefined 
         ) {
             res.status(400).json({
-                error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName and docslinked',
+                error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName, docslinked and claimsperyear',
             });
             return;
         }
         console.log('Claim registration request received');
         console.log('Calling ClaimPolicy function...');
+
+        // verify that it does not exceed max claims for the year
+        let allClaims = await ClaimContract.viewAllClaimRequests(
+            { username: req.body.username, organization: 'user' },
+            [req.body.username],
+        )
+        let premCount = 0;
+        allClaims.forEach((claim)=>{
+            // get the year in number from claim.claimdate of format YYYY-MM-DD
+            let claimYear = parseInt(claim.claimdate.split('-')[0])
+            let currentYear = new Date().getFullYear()
+            if (claimYear === currentYear){
+                premCount += 1
+            }
+        })
+        if (premCount >= req.body.claimsperyear){
+            res.status(400).json({
+                error: 'Invalid Request! Request exceeds maximum claims per year',
+            });
+            return;
+        }
 
         // Ensure premiumspaid is a string
         let premiumspaidString = req.body.premiumspaid.toString();

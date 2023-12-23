@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"github.com/hyperledger/fabric/protos/peer"
@@ -23,6 +24,7 @@ type Claim struct {
 	CompanyName  string   `json:"companyname"`
 	DocsLinked   []string `json:"docslinked"`
 	VerifiedBy   string   `json:"verifiedby"`
+	ClaimDate	 string   `json:"claimdate"`
 }
 
 type Chaincode struct {
@@ -49,6 +51,7 @@ func (cc *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 }
 
 // args: [username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName, docslinked]
+// Note: getting all info from frontend without any verification might pose security risks
 func (cc *Chaincode) claimPolicy(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) != 8 {
 		return shim.Error("{\"error\": \"Incorrect number of arguments. Expecting 8\"}")
@@ -71,7 +74,8 @@ func (cc *Chaincode) claimPolicy(stub shim.ChaincodeStubInterface, args []string
 		ClaimCause:   args[5],
 		CompanyName:  args[6],
 		DocsLinked:   docslinked,
-		VerifiedBy:   "",
+		VerifiedBy:   "NA",
+		ClaimDate:    time.Now().Format("2006-01-02"),
 	}
 
 	claimList, err := stub.GetState("allClaims")
@@ -229,7 +233,7 @@ func (cc *Chaincode) viewClaimedPolicies(stub shim.ChaincodeStubInterface, args 
 	return shim.Success(filteredClaimsBytes)
 }
 
-// get all claim requests
+// get all claim requests(approved or not)
 func (cc *Chaincode) viewAllClaimRequests(stub shim.ChaincodeStubInterface) peer.Response {
 	claimList, err := stub.GetState("allClaims")
 	if err != nil {
