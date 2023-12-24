@@ -44,11 +44,11 @@ echo "Instantiating policyusermapping_cc"
 docker exec -it cli bash ./scripts/install-cc/instantiate.sh policyusermapping_cc peer0 user UserMSP 8051 1.8
 
 echo "Installing claim_cc"
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 user UserMSP 8051 1.8
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 insurer InsurerMSP 7051 1.8
-docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 verifier VerifierMSP 9051 1.8
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 user UserMSP 8051 1.9
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 insurer InsurerMSP 7051 1.9
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 verifier VerifierMSP 9051 1.9
 echo "Instantiating claim_cc"
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh claim_cc peer0 insurer InsurerMSP 7051 1.8
-docker exec -it cli bash ./scripts/install-cc/instantiate.sh claim_cc peer0 verifier VerifierMSP 9051 1.8
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh claim_cc peer0 insurer InsurerMSP 7051 1.9
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh claim_cc peer0 verifier VerifierMSP 9051 1.9
 
 echo "All Done!"

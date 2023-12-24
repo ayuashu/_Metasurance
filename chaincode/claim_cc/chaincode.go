@@ -79,6 +79,7 @@ func (cc *Chaincode) claimPolicy(stub shim.ChaincodeStubInterface, args []string
 	}
 
 	claimList, err := stub.GetState("allClaims")
+	fmt.Println("new claim ", claim)
 	if err != nil {
 		return shim.Success([]byte("{\"error\": \"Failed to get existing claims: " + err.Error() + "\"}"))
 	} else if claimList != nil {

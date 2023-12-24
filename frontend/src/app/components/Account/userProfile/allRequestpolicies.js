@@ -80,6 +80,7 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                                             insurancetype,
                                             premiumamount,
                                             insurancecover,
+                                            claimsperyear
                                         } = policy
 
                                         const policyId = `policy-${policyid}`
@@ -117,6 +118,10 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                                                                 <tr>
                                                                     <td><b>Premium Amount</b></td>
                                                                     <td colSpan="3" style={{ paddingLeft: '20px' }}>{premiumamount}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><b>Claims per year</b></td>
+                                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimsperyear}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>

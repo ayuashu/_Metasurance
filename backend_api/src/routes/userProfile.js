@@ -360,7 +360,7 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             req.body.claimcause === undefined ||
             req.body.companyName === undefined ||
             req.body.docslinked === undefined ||
-            req.body.claimsperyear === undefined 
+            req.body.claimsperyear === undefined
         ) {
             res.status(400).json({
                 error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName, docslinked and claimsperyear',
@@ -368,6 +368,7 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             return;
         }
         console.log('Claim registration request received');
+        console.log("request body: \n" , req.body)
         console.log('Calling ClaimPolicy function...');
 
         // verify that it does not exceed max claims for the year
@@ -375,16 +376,21 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             { username: req.body.username, organization: 'user' },
             [req.body.username],
         )
+        console.log("Printing all claims")
+        console.log(allClaims)
         let premCount = 0;
-        allClaims.forEach((claim)=>{
-            // get the year in number from claim.claimdate of format YYYY-MM-DD
-            let claimYear = parseInt(claim.claimdate.split('-')[0])
-            let currentYear = new Date().getFullYear()
-            if (claimYear === currentYear){
-                premCount += 1
-            }
-        })
-        if (premCount >= req.body.claimsperyear){
+        if (allClaims && allClaims.claims) {
+            allClaims.claims.forEach((claim) => {
+                // get the year in number from claim.claimdate of format YYYY-MM-DD
+                let claimYear = parseInt(claim.claimdate.split('-')[0])
+                let currentYear = new Date().getFullYear()
+                console.log({ claimYear, currentYear})
+                if (claimYear === currentYear) {
+                    premCount += 1
+                }
+            })
+        }
+        if (premCount >= parseInt(req.body.claimsperyear)) {
             res.status(400).json({
                 error: 'Invalid Request! Request exceeds maximum claims per year',
             });
