@@ -19,6 +19,12 @@ const AssetCard = () => {
                 body: JSON.stringify({ assetid: assetID }),
             });
 
+            let text = await response.json();
+
+            if(text.error){
+                alert(text.error)
+            }
+
             if (response.ok) {
                 // If the delete request is successful, update the list of assets
                 setAssets((prevAssets) =>
