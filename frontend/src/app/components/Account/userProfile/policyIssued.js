@@ -18,7 +18,7 @@ const PolicyIssued = ({ username }) => {
     const [policyid, setPolicyId] = useState({});
     const [premiumspaid, setPremiumsPaid] = useState({});
     const [companyName, setCompanyName] = useState({});
-    const [claimsperyear, setClaimsPerYear] = useState()
+    const [claimsperyear, setClaimsPerYear] = useState(new Map());
     const navigate = (location) => {
         router.push(location);
     };
@@ -118,6 +118,48 @@ const PolicyIssued = ({ username }) => {
         }
     };
 
+    const fetchClaimsPerYear = async () => {
+        try {
+            const response = await fetch(`${HOST}/api/user/policy/viewall`, {
+                method: 'GET',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Fetching claims per year');
+
+                if (
+                    data.reply &&
+                    data.reply.policyCompanies &&
+                    data.reply.policyCompanies.length > 0
+                ) {
+                    const policyCompanies = data.reply.policyCompanies;
+
+                    const claimsPerYrMap = new Map(); // Create a map for quick lookup
+
+                    for (const company of policyCompanies) {
+                        if (company.policies && company.policies.length > 0) {
+                            for (const policy of company.policies) {
+                                // Use an object as the value to store multiple properties
+                                claimsPerYrMap.set(policy.policyid, {
+                                    claimsperyear: policy.claimsperyear,
+                                    companyName: company.companyName, // Include companyName
+                                });
+                            }
+                        }
+                    }
+                    return claimsPerYrMap;
+                }
+            }
+            console.error('Failed to fetch policy data');
+            return null;
+        } catch (error) {
+            console.error('Error fetching policy data', error);
+            return null;
+        }
+    };
+
     const fetchAssetName = async () => {
         try {
             const response = await fetch(`${HOST}/api/user/asset/get`, {
@@ -157,6 +199,7 @@ const PolicyIssued = ({ username }) => {
 
             if (issuedPolicies.length > 0) {
                 const insuranceCoversMap = await fetchInsuranceCovers();
+                const claimsPerYrMap = await fetchClaimsPerYear();
 
                 if (insuranceCoversMap) {
                     // Convert the Map to an object for easy access
@@ -165,6 +208,15 @@ const PolicyIssued = ({ username }) => {
                         insuranceCoverDataObject[key] = value;
                     });
                     setInsuranceCoverData(insuranceCoverDataObject);
+                }
+
+                if (claimsPerYrMap) {
+                    // Convert the Map to an object for easy access
+                    const claimsPerYrDataObject = {};
+                    claimsPerYrMap.forEach((value, key) => {
+                        claimsPerYrDataObject[key] = value;
+                    });
+                    setClaimsPerYear(claimsPerYrDataObject);
                 }
 
                 await fetchAssetName(issuedPolicies[0].assetid);
@@ -191,7 +243,7 @@ const PolicyIssued = ({ username }) => {
         console.log('Submitting claim data');
         try {
             alert('Attempting to submit claim data');
-            console.log({username, mappingid, policyid, assetid, premiumspaid, claimcause: claimCause, companyName, docslinked: JSON.stringify(docslinked), claimsperyear})
+            console.log({ username, mappingid, policyid, assetid, premiumspaid, claimcause: claimCause, companyName, docslinked: JSON.stringify(docslinked), claimsperyear: parseInt(claimsperyear[policyid]?.claimsperyear) })
             const response = await fetch(`${HOST}/api/user/claim/register`, {
                 method: 'POST',
                 headers: {
@@ -206,7 +258,7 @@ const PolicyIssued = ({ username }) => {
                     claimcause: claimCause,
                     companyName,
                     docslinked: JSON.stringify(docslinked),
-                    claimsperyear
+                    claimsperyear: parseInt(claimsperyear[policyid]?.claimsperyear)
                 }),
                 credentials: 'include',
             });
@@ -214,6 +266,10 @@ const PolicyIssued = ({ username }) => {
             console.log('Response Status:', response.status);
             const responseData = await response.json();
             console.log('Response Data:', responseData);
+            if(responseData.error) {
+                alert(responseData.error);
+                return;
+            }
 
             if (response.ok) {
                 console.log('Claim data:', {
@@ -328,7 +384,9 @@ const PolicyIssued = ({ username }) => {
                                                     <b>Claims per year</b>
                                                 </td>
                                                 <td colSpan="3" style={{ paddingLeft: '20px' }}>
-                                                    {claimsperyear}
+                                                    {isNaN(claimsperyear[policyid]?.claimsperyear)
+                                                        ? 'Not available'
+                                                        : claimsperyear[policyid].claimsperyear}
                                                 </td>
                                             </tr>
                                             <tr>

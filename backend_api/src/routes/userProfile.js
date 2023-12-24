@@ -217,15 +217,46 @@ router.delete('/asset/delete', fetchuser, async (req, res) => {
             return
         }
         // TODO: check if asset belongs to user
-        let reply = await AssetContract.DeleteAsset(
+        // check if any insurance is purchased for the asset
+        let flg = 0;
+        let result = await PolicyMapping.ViewRequestedPolicies(
             { username: req.body.username, organization: 'user' },
-            [req.body.username, req.body.assetid],
+            [req.body.username],
         )
-        if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+        if (result.error) {
+            console.log("contract error: ", result.error)
+            return res.status(500).send({ error: result.error })
         }
-        res.status(200).send({ reply, message: 'Asset Successfully Deleted.' })
+        if (result.policies) {
+            result.policies.forEach((policy) => {
+                if (policy.assetid === req.body.assetid) {
+                    if(flg==0){
+                        flg = 1;
+                        console.log("policy found")
+                        return res.status(403).send({
+                            error: 'Asset has insurance purchased for it!',
+                        })
+                    }else {
+                        return;
+                    }
+                }
+            })
+        }
+
+        if (flg == 1) {
+            return;
+        } else {
+            console.log("Did not return", {flg});
+            let reply = await AssetContract.DeleteAsset(
+                { username: req.body.username, organization: 'user' },
+                [req.body.username, req.body.assetid],
+            )
+            if (reply.error) {
+                res.status(500).send({ error: reply.error })
+                return
+            }
+            res.status(200).send({ reply, message: 'Asset Successfully Deleted.' })
+        }
     } catch (error) {
         console.log(error)
         res.status(500).send({ error: 'Asset NOT Deleted!', error })
@@ -360,7 +391,7 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             req.body.claimcause === undefined ||
             req.body.companyName === undefined ||
             req.body.docslinked === undefined ||
-            req.body.claimsperyear === undefined 
+            req.body.claimsperyear === undefined
         ) {
             res.status(400).json({
                 error: 'Invalid Request! Request must contain username, mappingid, policyid, assetid, premiumspaid, claimcause, companyName, docslinked and claimsperyear',
@@ -368,6 +399,7 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             return;
         }
         console.log('Claim registration request received');
+        console.log("request body: \n", req.body)
         console.log('Calling ClaimPolicy function...');
 
         // verify that it does not exceed max claims for the year
@@ -375,16 +407,21 @@ router.post('/claim/register', fetchuser, async (req, res) => {
             { username: req.body.username, organization: 'user' },
             [req.body.username],
         )
+        console.log("Printing all claims")
+        console.log(allClaims)
         let premCount = 0;
-        allClaims.forEach((claim)=>{
-            // get the year in number from claim.claimdate of format YYYY-MM-DD
-            let claimYear = parseInt(claim.claimdate.split('-')[0])
-            let currentYear = new Date().getFullYear()
-            if (claimYear === currentYear){
-                premCount += 1
-            }
-        })
-        if (premCount >= req.body.claimsperyear){
+        if (allClaims && allClaims.claims) {
+            allClaims.claims.forEach((claim) => {
+                // get the year in number from claim.claimdate of format YYYY-MM-DD
+                let claimYear = parseInt(claim.claimdate.split('-')[0])
+                let currentYear = new Date().getFullYear()
+                console.log({ claimYear, currentYear })
+                if (claimYear === currentYear) {
+                    premCount += 1
+                }
+            })
+        }
+        if (premCount >= parseInt(req.body.claimsperyear)) {
             res.status(400).json({
                 error: 'Invalid Request! Request exceeds maximum claims per year',
             });
