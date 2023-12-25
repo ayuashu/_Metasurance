@@ -42,7 +42,8 @@ const ClaimsApproved = () => {
               claimed,
               claimcause,
               username,
-              verifiedby
+              verifiedby,
+              claimdate
             } = claim;
 
             return (
@@ -76,6 +77,10 @@ const ClaimsApproved = () => {
                         <tr>
                           <td><b>Claim Cause : </b></td>
                           <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimcause}</td>
+                        </tr>
+                        <tr>
+                          <td><b>Claim Issued On : </b></td>
+                          <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimdate}</td>
                         </tr>
                         <tr>
                           <td><b>Verified By : </b></td>

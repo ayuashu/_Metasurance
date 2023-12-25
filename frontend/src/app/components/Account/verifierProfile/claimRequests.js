@@ -89,6 +89,7 @@ const ClaimRequests = () => {
               claimcause,
               docslinked,
               verifiedby,
+              claimdate
             } = claim;
 
             const areButtonsDisabled = claimed === 'Approved' || claimed === 'Rejected';
@@ -144,6 +145,10 @@ const ClaimRequests = () => {
                             </td>
                           </tr>
                         )}
+                        <tr>
+                          <td><b>Claim Issued On : </b></td>
+                          <td colSpan="3" style={{ paddingLeft: '20px' }}>{claimdate}</td>
+                        </tr>
                         <tr>
                           <td><b>Verified By : </b></td>
                           <td colSpan="3" style={{ paddingLeft: '20px' }}>{verifiedby}</td>

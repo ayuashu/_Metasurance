@@ -72,6 +72,10 @@ const CompanyProfile = () => {
         setClaimsApprovedVisible(true);
     };
 
+    const handleClick = () => {
+        window.location.reload();
+    };
+
     const handleLogout = async (e) => {
         e.preventDefault()
         const result = await fetch(`${HOST}/api/company/logout`, {
@@ -112,7 +116,7 @@ const CompanyProfile = () => {
                                         <h3 className="mb-1 text-xl font-medium text-gray-800">
                                             Email: {email}
                                         </h3>
-                                        <h3 className="mb-1 text-xl font-medium text-gray-800">
+                                        <h3 className="text-xl font-medium text-gray-800">
                                             Mobile: {phone}
                                         </h3>
                                     </>
@@ -120,7 +124,8 @@ const CompanyProfile = () => {
                                     <p>Loading user data...</p>
                                 )}
                             </div>
-                            <div className="flex items-center justify-center pt-5">
+                            
+                            <div className="flex items-center justify-center">
                                 <button
                                     onClick={handlePoliciesClick}
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
@@ -128,23 +133,31 @@ const CompanyProfile = () => {
                                     <b>Add Policy</b>
                                 </button>
                             </div>
-                            <div className="flex items-center justify-center pt-5">
+                            <div className="flex items-center justify-center pt-3">
                                 <button
                                     onClick={handleClaimRequestsClick}
-                                    className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
+                                    className="h-10 px-6 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
                                 >
                                     <b>Claim Requests</b>
                                 </button>
                             </div>
-                            <div className="flex items-center justify-center pt-5">
+                            <div className="flex items-center justify-center pt-3">
                                 <button
                                     onClick={handleClaimsApprovedClick}
-                                    className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
+                                    className="h-10 px-6 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
                                 >
                                     <b>Claim Approved</b>
                                 </button>
                             </div>
-                            <div className="flex items-center justify-center pt-5">
+                            <div className="flex items-center justify-center pt-3">
+                                <button
+                                    onClick={handleClick}
+                                    className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900"
+                                >
+                                    <b>Profile</b>
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-center pt-3 pb-5">
                                 <button
                                     onClick={(e) => handleLogout(e)}
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus-shadow-outline hover-bg-slate-900"

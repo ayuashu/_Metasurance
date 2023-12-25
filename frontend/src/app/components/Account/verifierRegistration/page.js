@@ -82,7 +82,7 @@ const VerifierRegistration = ({ }) => {
                             <div className="flex flex-col md:flex-row">
                                 <div className="h-32 md:h-auto md:w-1/2 flex items-center justify-center">
                                     <img className="h-auto max-w-full rounded-full shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30  hover:scale-110"
-                                        src="/Images/userLogin.jpg" alt="img" />
+                                        src="/Images/verifierlogin.avif" alt="img" />
                                 </div>
                                 <div className="flex items-center justify-center p-2 sm:p-12 md:w-1/2">
                                     <div className="w-full">
