@@ -40,8 +40,10 @@ docker exec -it cli bash ./scripts/install-cc/instantiate.sh policy_cc peer0 use
 
 echo "Installing policyusermapping_cc"
 docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policyusermapping_cc peer0 user UserMSP 8051 1.8
+docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh policyusermapping_cc peer0 insurer InsurerMSP 7051 1.8
 echo "Instantiating policyusermapping_cc"
 docker exec -it cli bash ./scripts/install-cc/instantiate.sh policyusermapping_cc peer0 user UserMSP 8051 1.8
+docker exec -it cli bash ./scripts/install-cc/instantiate.sh policyusermapping_cc peer0 insurer InsurerMSP 7051 1.8
 
 echo "Installing claim_cc"
 docker exec -it cli bash ./scripts/install-cc/install-onpeer-cc.sh claim_cc peer0 user UserMSP 8051 1.9

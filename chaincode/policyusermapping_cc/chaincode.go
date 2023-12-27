@@ -38,6 +38,8 @@ func (ac *Chaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return ac.viewRequestedPolicies(stub, args)
 	} else if fn == "viewMappingById" {
 		return ac.viewMappingById(stub, args)
+	} else if fn == "viewAllPolicies" {
+		return ac.viewAllPolicies(stub, args)
 	}
 	return shim.Error("{\"error\":\"Invalid function name. Expecting 'requestPolicy', 'payPremium', 'viewRequestedPolicies'}")
 }
@@ -109,6 +111,20 @@ func (ac *Chaincode) viewRequestedPolicies(stub shim.ChaincodeStubInterface, arg
 		return shim.Success(policyList)
 	} else {
 		return shim.Success([]byte("{\"message\": \"No policies found for user " + args[0] + "\"}"))
+	}
+}
+
+func (ac *Chaincode) viewAllPolicies(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	if len(args) != 0 {
+		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 0\"}"))
+	}
+	policyList, err := stub.GetState("all")
+	if err != nil {
+		return shim.Success([]byte("{\"error\": \"Failed to get existing policies: " + err.Error() + "\"}"))
+	} else if policyList != nil {
+		return shim.Success(policyList)
+	} else {
+		return shim.Success([]byte("{\"message\": \"No policies found\"}"))
 	}
 }
 

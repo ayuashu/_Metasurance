@@ -5,6 +5,7 @@ const getSessionToken = require('../utils/getSessionToken')
 const InsurerContract = require('../../fabric/contracts/insurer')
 const PolicyContract = require('../../fabric/contracts/policy')
 const ClaimContract = require('../../fabric/contracts/claim')
+const PolicyMapping = require('../../fabric/contracts/policyusermapping')
 
 const router = new express.Router()
 
@@ -258,16 +259,46 @@ router.delete('/deletePolicy', fetchuser, async (req, res) => {
             return
         }
         //TODO: check if policy belongs to company
-        let reply = await PolicyContract.DeletePolicy(
+        // check if any insurance purchased for this policy
+        let flg = 0;
+        let result = await PolicyMapping.ViewRequestedPolicies(
             { username: req.body.username, organization: 'insurer' },
-            [req.body.username, req.body.policyid],
+            [req.body.username],
         )
-        // check if error key exists in reply
-        if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+        if (result.error) {
+            console.log("contract error: ", result.error)
+            return res.status(500).send({ error: result.error })
         }
-        res.status(200).send({ reply, message: 'Policy Successfully Deleted.' })
+        if (result.policies) {
+            result.policies.forEach((policy) => {
+                console.log( {policy})
+                if (policy.policyid === req.body.policyid) {
+                    if (flg == 0) {
+                        flg = 1;
+                        console.log("policy found")
+                        return res.status(403).send({
+                            error: 'Policy has insurance purchased for it!',
+                        })
+                    } else {
+                        return;
+                    }
+                }
+            })
+        }
+        if (flg == 1) {
+            return;
+        } else {
+            let reply = await PolicyContract.DeletePolicy(
+                { username: req.body.username, organization: 'insurer' },
+                [req.body.username, req.body.policyid],
+            )
+            // check if error key exists in reply
+            if (reply.error) {
+                res.status(500).send({ error: reply.error })
+                return
+            }
+            res.status(200).send({ reply, message: 'Policy Successfully Deleted.' })
+        }
     } catch (error) {
         console.log(error)
         res.status(500).send({ error: 'Policy NOT Deleted!', error })
@@ -295,7 +326,7 @@ router.post('/claim/accept', fetchuser, async (req, res) => {
             return
         }
         let reply = await ClaimContract.approveClaim(
-            {username: req.body.username, organization: 'insurer'},
+            { username: req.body.username, organization: 'insurer' },
             [req.body.username, req.body.mappingid],
         )
         // check if error key exists in reply
@@ -309,7 +340,7 @@ router.post('/claim/accept', fetchuser, async (req, res) => {
         res.status(500).send({ error: 'Claim NOT Approved!', error })
     }
 })
- 
+
 /**
  * Reject a claim request.
  * @async
@@ -331,7 +362,7 @@ router.post('/claim/reject', fetchuser, async (req, res) => {
             return
         }
         let reply = await ClaimContract.rejectClaim(
-            {username: req.body.username, organization: 'insurer'},
+            { username: req.body.username, organization: 'insurer' },
             [req.body.username, req.body.mappingid],
         )
         // check if error key exists in reply
@@ -343,7 +374,7 @@ router.post('/claim/reject', fetchuser, async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).send({ error: 'Claim NOT Rejected!', error })
-    }   
+    }
 })
 
 router.get('/claim/get', fetchuser, async (req, res) => {
@@ -373,7 +404,7 @@ router.get('/claim/approved', fetchuser, async (req, res) => {
             return
         }
         let reply = await ClaimContract.viewClaimedPolicies(
-            {username: req.body.username, organization: 'insurer'},
+            { username: req.body.username, organization: 'insurer' },
             [req.body.username],
         )
         // check if error key exists in reply
