@@ -113,7 +113,7 @@
     },
     "name": "metasurance",
     "organizations": {
-        "insurer": {
+        "user": {
             "mspid": "InsurerMSP",
             "peers": [
                 "peer0.insurer.metasurance.com"
@@ -128,7 +128,7 @@
                 "path": "../backend/crypto-config/peerOrganizations/insurer.metasurance.com/users/Admin@insurer.metasurance.com/msp/signcerts/Admin@insurer.metasurance.com-cert.pem"
             }
         },
-        "user": {
+        "insurer": {
             "mspid": "UserMSP",
             "peers": [
                 "peer0.user.metasurance.com"
@@ -160,7 +160,7 @@
         }
     },
     "peers": {
-        "peer0.insurer.metasurance.com": {
+        "peer0.user.metasurance.com": {
             "url": "grpcs://localhost:7051",
             "tlsCACerts": {
                 "pem": "PEERPEM1"
@@ -170,7 +170,7 @@
                 "hostnameOverride": "peer0.insurer.metasurance.com"
             }
         },
-        "peer0.user.metasurance.com": {
+        "peer0.insurer.metasurance.com": {
             "url": "grpcs://localhost:8051",
             "tlsCACerts": {
                 "pem": "PEERPEM2"
@@ -192,7 +192,7 @@
         }
     },
     "certificateAuthorities": {
-        "ca.insurer.metasurance.com": {
+        "ca.user.metasurance.com": {
             "url": "https://localhost:7054",
             "caName": "ca-insurer",
             "tlsCACerts": {
@@ -202,7 +202,7 @@
                 "verify": false
             }
         },
-        "ca.user.metasurance.com": {
+        "ca.insurer.metasurance.com": {
             "url": "https://localhost:8054",
             "caName": "ca-user",
             "tlsCACerts": {
