@@ -1,0 +1,53 @@
+testConfig: &testConfig
+    rtps: &test_rtps 50
+    ctps: &test_ctps 5
+    etps: &test_etps 50
+    txDuration: &test_txduration 20
+    seed: &test_seed 1
+
+test:
+    name: caliper_benchmark
+    description: test_benchmark
+    workers:
+        type: local
+        number: 2
+    rounds:
+        - label: createUser
+          description: Create User benchmark
+          chaincodeId: user_cc
+          txDuration: *test_txduration
+          rateControl:
+              type: fixed-rate
+              opts:
+                  tps: *test_ctps
+          callback: benchmarks/callbacks/createProfileBenchmark.js
+          arguments:
+              assets: 10
+
+monitor:
+    type:
+        - docker
+        - process
+    docker:
+        containers:
+            - all
+        charting:
+            polar:
+                metrics:
+                    - all
+            bar:
+                metrics:
+                    - Memory(max)
+    process:
+        processes:
+            - command: node
+              arguments: fabricClientWorker.js
+              multiOutput: avg
+        charting:
+            bar:
+                metrics:
+                    - all
+
+observer:
+    type: local
+    interval: 5
