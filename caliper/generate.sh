@@ -4,7 +4,7 @@ if [ ! -d "node_modules" ]; then
 fi
 
 echo "Binding Caliper to Fabric v1.4.4 . . . ."
-npx caliper bind --caliper-bind-sut fabric:1.4.4 --caliper-bind-cwd ./ --caliper-bind-args="-g"
+npx caliper bind --caliper-bind-sut fabric:1.4.4
 
 
 echo "Generating Network Config for Caliper . . . ."
