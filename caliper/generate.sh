@@ -1,10 +1,10 @@
-if [ ! -d "node_modules" ]; then
-    echo "Installing Dependencies . . . ."
-    npm install
-fi
+# if [ ! -d "node_modules" ]; then
+#     echo "Installing Dependencies . . . ."
+#     npm install
+# fi
 
-echo "Binding Caliper to Fabric v1.4.4 . . . ."
-npx caliper bind --caliper-bind-sut fabric:1.4
+# echo "Binding Caliper to Fabric v1.4.4 . . . ."
+# npx caliper bind --caliper-bind-sut fabric:1.4
 
 
 echo "Generating Network Config for Caliper . . . ."
@@ -23,12 +23,11 @@ for ORG in user insurer verifier; do
     echo "Commiting $ORG . . . ."
     # SET PRIVATE KEYS
     KEY_PATH="../backend/crypto-config/peerOrganizations/${ORG}.metasurance.com/users/Admin@${ORG}.metasurance.com/msp/keystore/"
-    echo $KEY_PATH
-    echo $INDEX
     cd $KEY_PATH
     PRIV_KEY=$(ls *_sk)
     cd $CURRENT_DIR
-    sed -i "s/C${INDEX}_PRIVATE_KEY/${PRIV_KEY}/g" networks/network_config.json
+    PP=$(one_line_pem ${KEY_PATH}${PRIV_KEY})
+    sed -i -e "s#PEERPK${INDEX}#${PP}#" networks/network_config.json
 
     # SET PEERPEM
     PEERPEM="../backend/crypto-config/peerOrganizations/${ORG}.metasurance.com/tlsca/tlsca.${ORG}.metasurance.com-cert.pem"

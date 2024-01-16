@@ -1,34 +1,61 @@
-"use strict";
+'use strict';
 
-module.exports.info = "Create user profiles";
+const { WorkloadModuleBase } = require('@hyperledger/caliper-core');
 
-const contractID = "user_cc";
-const version = "1.8";
+class MyWorkload extends WorkloadModuleBase {
+    constructor() {
+        super();
+    }
 
-let bc, ctx, clientArgs, clientIdx;
+    async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
+        await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
 
-module.exports.init = async function (blockchain, context, args) {
-    bc = blockchain;
-    ctx = context;
-    clientArgs = args;
-    clientIdx = context.clientIdx.toString();
-};
-
-module.exports.run = async function () {
-    for (let i = 0; i < clientArgs.assets; i++) {
-        try {
-            const uname = `PP_${clientIdx}_${i}_${Date.now()}`;
-            // console.log(`Client ${clientIdx}: Creating PatientProfile ${assetID}`);
-            const myArgs = {
-                chaincodeFunction: "register",
-                invokerIdentity: "Admin@user.metasurance.com",
-                chaincodeArguments: [uname, "user1", "user@email.com", "1234567890", "1234"],
+        for (let i = 0; i < this.roundArguments.assets; i++) {
+            const uname = `${this.workerIndex}_${i}`;
+            console.log(`Worker ${this.workerIndex}: Creating user ${uname}`);
+            const request = {
+                contractId: "user_cc",
+                contractFunction: 'register',
+                invokerIdentity: 'user1',
+                contractArguments: [uname, "user1", "user@email.com", "1234567890", "1234"],
+                readOnly: false
             };
-            return await bc.bcObj.invokeSmartContract(ctx, contractID, version, myArgs);
-        } catch (error) {
-            console.log(`Client ${clientIdx}: Smart Contract threw with error: ${error}`);
+
+            await this.sutAdapter.sendRequests(request);
         }
     }
-};
 
-module.exports.end = async function () { };
+    async submitTransaction() {
+        const randomId = Math.floor(Math.random() * this.roundArguments.assets);
+        const myArgs = {
+            contractId: "user_cc",
+            contractFunction: 'readUserProfile',
+            invokerIdentity: 'user1',
+            contractArguments: [`${this.workerIndex}_${randomId}`],
+            readOnly: true
+        };
+
+        await this.sutAdapter.sendRequests(myArgs);
+    }
+
+    async cleanupWorkloadModule() {
+        for (let i = 0; i < this.roundArguments.assets; i++) {
+            const assetID = `${this.workerIndex}_${i}`;
+            console.log(`Worker ${this.workerIndex}: Checking user ${assetID}`);
+            const request = {
+                contractId: "user_cc",
+                contractFunction: 'checkUserExists',
+                invokerIdentity: 'user1',
+                contractArguments: [assetID],
+                readOnly: false
+            };
+            await this.sutAdapter.sendRequests(request);
+        }
+    }
+}
+
+function createWorkloadModule() {
+    return new MyWorkload();
+}
+
+module.exports.createWorkloadModule = createWorkloadModule;
