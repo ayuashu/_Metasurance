@@ -6,7 +6,7 @@ import ClaimForm from './claimForm';
 
 const HOST = 'http://localhost:3000';
 
-const PolicyIssued = ({ username }) => {
+const PolicyIssued = ({ username, balance }) => {
     const router = useRouter();
     const [policies, setPolicies] = useState([]);
     const cardRef = useRef(null);
@@ -19,20 +19,23 @@ const PolicyIssued = ({ username }) => {
     const [premiumspaid, setPremiumsPaid] = useState({});
     const [companyName, setCompanyName] = useState({});
     const [claimsperyear, setClaimsPerYear] = useState(new Map());
-    const navigate = (location) => {
-        router.push(location);
-    };
+    const [premiumAmount, setPremiumAmount] = useState({});
 
-    const handlePayPremium = async (mappingid) => {
+    const handlePayPremium = async (mappingid, minBalance) => {
+        if (balance < minBalance) {
+            alert(`Insufficient balance, please purchase at least ${minBalance} tokens`);
+            return;
+        }
         try {
             const response = await fetch(`${HOST}/api/user/policy/paypremium`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ mappingid: mappingid }),
-                credentials: 'include',
+                body: JSON.stringify({ mappingid: mappingid, purchaseAmount: String(minBalance) }),
             });
+
             if (response.ok) {
                 setPolicies((prevPolicies) =>
                     prevPolicies.map((policy) => {
@@ -47,6 +50,7 @@ const PolicyIssued = ({ username }) => {
                 );
                 alert('Payment was successful');
                 console.log('Payment was successful');
+                window.location.reload();
             } else {
                 console.error('Failed to pay');
             }
@@ -128,6 +132,7 @@ const PolicyIssued = ({ username }) => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Fetching claims per year');
+                console.log(data);
 
                 if (
                     data.reply &&
@@ -144,7 +149,9 @@ const PolicyIssued = ({ username }) => {
                                 // Use an object as the value to store multiple properties
                                 claimsPerYrMap.set(policy.policyid, {
                                     claimsperyear: policy.claimsperyear,
-                                    companyName: company.companyName, // Include companyName
+                                    companyName: company.companyName,
+                                    premiumAmount: policy.premiumamount,
+                                    insuranceCover: policy.insurancecover,
                                 });
                             }
                         }
@@ -266,7 +273,7 @@ const PolicyIssued = ({ username }) => {
             console.log('Response Status:', response.status);
             const responseData = await response.json();
             console.log('Response Data:', responseData);
-            if(responseData.error) {
+            if (responseData.error) {
                 alert(responseData.error);
                 return;
             }
@@ -286,10 +293,8 @@ const PolicyIssued = ({ username }) => {
 
                 alert('Claim submitted successfully');
                 setShowClaimForm(false);
-                // Optionally, you can refetch data or perform other actions after successful submission
-
-                // Add a console log to indicate successful submission
                 console.log('Claim submission process complete');
+                window.location.reload();
             } else {
                 console.error('Failed to submit claim', responseData);
             }
@@ -297,8 +302,6 @@ const PolicyIssued = ({ username }) => {
             console.error('Error in claim submission', error);
         }
     };
-
-
 
     return (
         <div className="main-card-container">
@@ -313,6 +316,11 @@ const PolicyIssued = ({ username }) => {
                     } = policy;
 
                     const companyName = insuranceCoverData[policyid]?.companyName || 'Not available';
+                    const minBalance = Math.ceil(
+                        ((claimsperyear[policyid]?.premiumAmount || 0) /
+                            (insuranceCoverData[policyid]?.insurancecover *
+                                (claimsperyear[policyid]?.claimsperyear || 1)))
+                    );
 
                     return (
                         <div className="card-container" key={mappingid}>
@@ -326,6 +334,7 @@ const PolicyIssued = ({ username }) => {
                                 >
                                     Policy ID: {policyid}
                                 </span>
+
                                 <hr style={{ border: '1px solid black', width: '70%', margin: 'auto 0' }} />
                                 <br />
                                 <div className="card-body">
@@ -406,8 +415,9 @@ const PolicyIssued = ({ username }) => {
                                     {!claimed && (
                                         <button
                                             className="card-tag"
-                                            onClick={() => handlePayPremium(mappingid)}
-                                            disabled={claimed}
+                                            onClick={() => handlePayPremium(mappingid, minBalance)}
+                                            disabled={claimed || insuranceCoverData[policyid]?.insurancecover - premiumspaid === 0}
+                                            style={insuranceCoverData[policyid]?.insurancecover - premiumspaid === 0 ? { cursor: 'not-allowed', pointerEvents: 'none', opacity: 0.5 } : {}}
                                         >
                                             Pay Premium
                                         </button>
@@ -419,8 +429,8 @@ const PolicyIssued = ({ username }) => {
                                     >
                                         {showClaimForm && selectedMappingId === mappingid ? 'Hide Claim' : 'Claim'}
                                     </button>
-
                                 </div>
+
                             </div>
                             {/* Conditionally render ClaimForm based on the selectedMappingId */}
                             {showClaimForm && selectedMappingId === policy.mappingid && (
@@ -431,7 +441,7 @@ const PolicyIssued = ({ username }) => {
                                     assetid={assetid}
                                     premiumspaid={premiumspaid}
                                     docslinked={[]}
-                                    companyName={companyName} // Pass companyName to ClaimForm
+                                    companyName={companyName}
                                     onClose={() => setShowClaimForm(false)}
                                     onUpload={handleUpload}
                                 />

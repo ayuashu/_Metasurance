@@ -1,18 +1,23 @@
 // 'use client'
-import React, { useEffect, useState, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
-const HOST = 'http://localhost:3000'
+const HOST = 'http://localhost:3000';
 
-const AllRequestPolicyCard = ({ assetid, assetType }) => {
-    const [policyCompanies, setPolicyCompanies] = useState([])
-    const cardRef = useRef(null)
-    const router = useRouter()
+const AllRequestPolicyCard = ({ assetid, assetType, balance }) => {
+    const [policyCompanies, setPolicyCompanies] = useState([]);
+    const cardRef = useRef(null);
+    const router = useRouter();
     const navigate = (location) => {
-        router.push(location)
-    }
+        router.push(location);
+    };
 
-    const handleRequestPolicy = async (policyid, assetid) => {
+    const handleRequestPolicy = async (policyid, assetid, minBalance) => {
+        if (balance < minBalance) {
+            alert(`Insufficient balance, please purchase at least ${minBalance} tokens`);
+            return;
+        }
+        
         try {
             const response = await fetch(`${HOST}/api/user/policy/request`, {
                 method: 'POST',
@@ -23,6 +28,7 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                 body: JSON.stringify({
                     policyid: policyid, // Include policyid
                     assetid: assetid,   // Include assetid
+                    purchaseAmount : String(minBalance),    // Include purchaseAmount of one premium
                 }),
             });
             if (response.ok) {
@@ -59,8 +65,8 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                 console.error('Error fetching policy data', error)
             }
         }
-        fetchData() // Call the fetchData function when the component mounts
-    }, [])
+        fetchData(); // Call the fetchData function when the component mounts
+    }, []);
 
     return (
         <div className="main-card-container">
@@ -72,7 +78,7 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                         <div key={companyName}>
                             {policies && policies.length > 0 ? (
                                 policies
-                                    .filter((policy) => policy.insurancetype === assetType) // Filter policies based on assetType
+                                    .filter((policy) => policy.insurancetype === assetType)
                                     .map((policy) => {
                                         const {
                                             policyid,
@@ -83,7 +89,8 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                                             claimsperyear
                                         } = policy
 
-                                        const policyId = `policy-${policyid}`
+                                        const policyId = `policy-${policyid}`;
+                                        const minBalance = Math.ceil(premiumamount / (insurancecover * claimsperyear));
 
                                         return (
                                             <div
@@ -129,7 +136,7 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
                                                     <div>
                                                         <button
                                                             className="card-tag"
-                                                            onClick={() => handleRequestPolicy(policyid, assetid)}>
+                                                            onClick={() => handleRequestPolicy(policyid, assetid, minBalance)}>
                                                             Purchase
                                                         </button>
                                                     </div>
@@ -154,4 +161,4 @@ const AllRequestPolicyCard = ({ assetid, assetType }) => {
     )
 }
 
-export default AllRequestPolicyCard
+export default AllRequestPolicyCard;

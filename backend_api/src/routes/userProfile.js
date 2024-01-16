@@ -5,6 +5,7 @@ const AssetContract = require('../../fabric/contracts/asset')
 const PolicyContract = require('../../fabric/contracts/policy')
 const ClaimContract = require('../../fabric/contracts/claim')
 const PolicyMapping = require('../../fabric/contracts/policyusermapping')
+const TokenContract = require('../../fabric/contracts/token')
 const db = require('../utils/db')
 const getSessionToken = require('../utils/getSessionToken')
 
@@ -106,6 +107,40 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: 'User NOT Logged In!', error })
+    }
+})
+
+/**
+ * Logs in a user with the provided username and balance.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user to log in.
+ * @param {string} req.body.balance - The balance of the user to log in.
+ * @returns {Promise} A promise that resolves with the login response.
+ */
+router.post('/updatebalance', async (req, res) => {
+    try {
+        if (
+            req.body.username === undefined ||
+            req.body.balance === undefined
+        ) {
+            res.status(400).send({
+                error: 'Invalid Request! Request must contain two fields',
+            })
+            return
+        }
+        let reply = await UserContract.UpdateBalance(
+            { username: req.body.username, organization: 'user' },
+            [req.body.username, req.body.balance],
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({ reply, message: 'User Balance updated In.' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'User Balance NOT In!', error })
     }
 })
 
@@ -293,44 +328,65 @@ router.post('/policy/request', fetchuser, async (req, res) => {
     if (
         req.body.username === undefined ||
         req.body.policyid === undefined ||
-        req.body.assetid === undefined
+        req.body.assetid === undefined || 
+        req.body.purchaseAmount === undefined
     ) {
         res.status(400).send({
-            error: 'Invalid Request! Request must contain username, policyid and assetid',
-        })
-        return
+            error: 'Invalid Request! Request must contain username, policyid, assetid and purchaseAmount',
+        });
+        return;
     }
+
     try {
-        // check if asset belongs to user
+        // Check if asset belongs to user
         let result = await AssetContract.CheckUserOwnAsset(
             { username: req.body.username, organization: 'user' },
             [req.body.username, req.body.assetid],
-        )
+        );
+
         if (result.error) {
-            res.status(500).send({ error: res.error })
-            return
+            res.status(500).send({ error: result.error });
+            return;
         }
+
         if (result.status === 'false') {
-            res.status(500).send({ error: 'Asset does not belong to user!' })
-            return
+            res.status(500).send({ error: 'Asset does not belong to the user!' });
+            return;
         }
+
+        // Request policy
         let reply = await PolicyMapping.RequestPolicy(
             { username: req.body.username, organization: 'user' },
             [req.body.username, req.body.policyid, req.body.assetid],
-        )
+        );
+
         if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+            res.status(500).send({ error: reply.error });
+            return;
         }
+
+        // Update user balance
+        let resp = await UserContract.AfterPurchaseBalanceUpdate(
+            { username: req.body.username, organization: 'user' },
+            [req.body.username, req.body.purchaseAmount],
+        );
+
+        if (resp.error) {
+            res.status(500).send({ error: resp.error });
+            return;
+        }
+
+        // Send a combined response
         res.status(200).send({
             reply,
-            message: 'Policy Requested Successfully.',
-        })
+            resp,
+            message: 'Policy Requested Successfully. User Balance Updated Successfully.',
+        });
     } catch (error) {
-        console.log(error)
-        res.status(500).send({ message: 'Unable to request policy!', error })
+        console.log(error);
+        res.status(500).send({ message: 'Unable to request policy!', error });
     }
-})
+});
 
 // view requested policies
 router.get('/policy/view', fetchuser, async (req, res) => {
@@ -357,9 +413,9 @@ router.get('/policy/view', fetchuser, async (req, res) => {
 })
 
 router.post('/policy/paypremium', fetchuser, async (req, res) => {
-    if (req.body.username === undefined || req.body.mappingid === undefined) {
+    if (req.body.username === undefined || req.body.mappingid === undefined || req.body.purchaseAmount === undefined) {
         res.status(400).send({
-            error: 'Invalid Request! Request must contain username and mappingid',
+            error: 'Invalid Request! Request must contain username, mappingid and purchaseAmount',
         })
         return
     }
@@ -372,7 +428,24 @@ router.post('/policy/paypremium', fetchuser, async (req, res) => {
             res.status(500).send({ error: reply.error })
             return
         }
-        res.status(200).send({ reply, message: 'Premium Paid Successfully.' })
+
+        // Update user balance
+        let resp = await UserContract.AfterPurchaseBalanceUpdate(
+            { username: req.body.username, organization: 'user' },
+            [req.body.username, req.body.purchaseAmount],
+        );
+
+        if (resp.error) {
+            res.status(500).send({ error: resp.error });
+            return;
+        }
+
+        // Send a combined response
+        res.status(200).send({
+            reply,
+            resp,
+            message: 'Premium paid Successfully. User Balance Updated Successfully.',
+        });
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: 'Unable to pay premium!', error })
@@ -489,6 +562,33 @@ router.post('/policy/getDetails', fetchuser, async (req, res) => {
         { username: req.body.username, organization: 'user' },
         [req.body.policyid],
     )
+})
+
+/**
+ * Reads the user profile from the blockchain.
+ * @async
+ * @function
+ * @returns {Promise<Object>} The profile of the user.
+ */
+router.get('/gettokenvalue', fetchuser, async (req, res) => {
+    try {
+        let reply = await TokenContract.GetTokenValue(
+            { username: req.body.username, organization: 'user' },
+            [],
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({
+            reply,
+            message: 'User Profile Successfully Read.',
+        })
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Token Value NOT Read!', error })
+    }
 })
 
 module.exports = router

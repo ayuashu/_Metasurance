@@ -5,6 +5,8 @@ const getSessionToken = require('../utils/getSessionToken')
 const InsurerContract = require('../../fabric/contracts/insurer')
 const PolicyContract = require('../../fabric/contracts/policy')
 const ClaimContract = require('../../fabric/contracts/claim')
+const TokenContract = require('../../fabric/contracts/token')
+const UserContract = require('../../fabric/contracts/user')
 
 const router = new express.Router()
 
@@ -108,6 +110,40 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: 'Company NOT Logged In!', error })
+    }
+})
+
+/**
+ * Logs in a user with the provided username and balance.
+ * @async
+ * @function
+ * @param {string} req.body.username - The username of the user to log in.
+ * @param {string} req.body.balance - The balance of the user to log in.
+ * @returns {Promise} A promise that resolves with the login response.
+ */
+router.post('/updatebalance', async (req, res) => {
+    try {
+        if (
+            req.body.username === undefined ||
+            req.body.balance === undefined
+        ) {
+            res.status(400).send({
+                error: 'Invalid Request! Request must contain two fields',
+            })
+            return
+        }
+        let reply = await InsurerContract.UpdateBalance(
+            { username: req.body.username, organization: 'insurer' },
+            [req.body.username, req.body.balance],
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({ reply, message: 'Insurer Balance updated In.' })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Insurer Balance NOT In!', error })
     }
 })
 
@@ -274,41 +310,77 @@ router.delete('/deletePolicy', fetchuser, async (req, res) => {
     }
 })
 
-/**
- * Approve a claim request.
- * @async
- * @function
- * @param {Object} req - The request object.
- * @param {string} req.body.username - The username of the company approving the claim.
- * @param {string} req.body.mappingid - The ID of the claim to be approved.
- * @returns {Promise} A Promise that resolves with the result of the claim approval.
- */
 router.post('/claim/accept', fetchuser, async (req, res) => {
     try {
         if (
             req.body.username === undefined ||
-            req.body.mappingid === undefined
+            req.body.companyname === undefined ||
+            req.body.mappingid === undefined ||
+            req.body.refund === undefined
         ) {
             res.status(400).send({
-                error: 'Invalid Request! Request must contain mappingid',
-            })
-            return
+                error: 'Invalid Request! Request must contain mappingid, username, companyname, and refund.',
+            });
+            return;
         }
-        let reply = await ClaimContract.approveClaim(
-            {username: req.body.username, organization: 'insurer'},
+
+        console.log('Request Body:', req.body);
+
+        // Approve claim
+        console.log('Approving Claim...');
+        let claimApprovalResult = await ClaimContract.approveClaim(
+            { username: req.body.username, organization: 'insurer' },
             [req.body.username, req.body.mappingid],
-        )
-        // check if error key exists in reply
-        if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+        );
+
+        console.log('Claim Approval Result:', claimApprovalResult);
+
+        if (claimApprovalResult.error) {
+            res.status(500).send({ error: claimApprovalResult.error });
+            return;
         }
-        res.status(200).send({ reply, message: 'Claim Successfully Approved.' })
+
+        // Refund amount from the insurer
+        console.log('Refunding from Insurer...');
+        let insurerRefundResult = await InsurerContract.RefundClaimAmount(
+            { username: req.body.username, organization: 'insurer' },
+            [req.body.username, req.body.refund],
+        );
+
+        console.log('Insurer Refund Result:', insurerRefundResult);
+
+        if (insurerRefundResult.error) {
+            res.status(500).send({ error: insurerRefundResult.error });
+            return;
+        }
+
+        // Refund amount to the user
+        console.log('Refunding to User...');
+        let userRefundResult = await UserContract.RefundClaimAmount(
+            { username: req.body.username, organization: 'insurer' },
+            [req.body.username, req.body.refund],
+        );
+
+        console.log('User Refund Result:', userRefundResult);
+
+        if (userRefundResult.error) {
+            res.status(500).send({ error: userRefundResult.error });
+            return;
+        }
+
+        res.status(200).send({
+            claimApprovalResult,
+            insurerRefundResult,
+            userRefundResult,
+            message: 'Claim Successfully Approved. Company balance updated. User balance updated.',
+        });
     } catch (error) {
-        console.log(error)
-        res.status(500).send({ error: 'Claim NOT Approved!', error })
+        console.log('Error:', error);
+        res.status(500).send({ error: 'Claim NOT Approved!', error });
     }
-})
+});
+
+
  
 /**
  * Reject a claim request.
@@ -385,6 +457,33 @@ router.get('/claim/approved', fetchuser, async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).send({ error: 'Claims NOT Fetched!', error })
+    }
+})
+
+/**
+ * Reads the user profile from the blockchain.
+ * @async
+ * @function
+ * @returns {Promise<Object>} The profile of the user.
+ */
+router.get('/gettokenvalue', fetchuser, async (req, res) => {
+    try {
+        let reply = await TokenContract.GetTokenValue(
+            { username: req.body.username, organization: 'insurer' },
+            [],
+        )
+        if (reply.error) {
+            res.status(500).send({ error: reply.error })
+            return
+        }
+        res.status(200).send({
+            reply,
+            message: 'Insurer Profile Successfully Read.',
+        })
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Token Value NOT Read!', error })
     }
 })
 

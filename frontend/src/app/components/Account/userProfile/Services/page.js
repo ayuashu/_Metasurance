@@ -13,6 +13,7 @@ const Services = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [balance, setBalance] = useState("");
   const [userDataLoaded, setUserDataLoaded] = useState(false);
   const [selectedInsuranceType, setSelectedInsuranceType] = useState("");
   const [selectedCompanyName, setSelectedCompanyName] = useState("");
@@ -38,6 +39,7 @@ const Services = () => {
           setName(user.reply.name);
           setPhone(user.reply.phone);
           setEmail(user.reply.email);
+          setBalance(parseInt(user.reply.balance,10));
           setUserDataLoaded(true);
         } else {
           alert("User data is missing or invalid.");
@@ -85,7 +87,7 @@ const Services = () => {
 
   const getUniqueInsuranceTypes = (policyCompanies) => {
     const uniqueTypes = new Set();
-  
+
     if (policyCompanies) {
       policyCompanies.forEach((company) => {
         if (company.policies) {
@@ -97,11 +99,11 @@ const Services = () => {
     }
     return [...uniqueTypes];
   };
-  
-  
+
+
   const getUniqueCompanyNames = (policyCompanies) => {
     const uniqueNames = new Set();
-  
+
     if (policyCompanies) {
       policyCompanies.forEach((company) => {
         if (company.companyName) {
@@ -111,7 +113,7 @@ const Services = () => {
     }
     return [...uniqueNames];
   };
-  
+
 
   return (
     <>
@@ -179,9 +181,18 @@ const Services = () => {
                 <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
                 {userDataLoaded ? (
                   <>
-                    <h5 className="mb-1 text-xl font-medium text-white">Hello, {name}</h5>
-                    <h3 className="mb-1 text-xl font-medium text-white">Email: {email}</h3>
-                    <h3 className="mb-1 text-xl font-medium text-white">Mobile: {phone}</h3>
+                    <h5 className="mb-1 text-xl font-semibold text-gray-100">
+                      Hello, {name}
+                    </h5>
+                    <h3 className="mb-1 text-lg font-medium text-gray-300">
+                      Email: <b>{email}</b>
+                    </h3>
+                    <h3 className="text-lg font-medium text-gray-300">
+                      Mobile: <b>{phone}</b>
+                    </h3>
+                    <h3 className="text-lg font-medium text-gray-300">
+                      Balance: <b>{parseInt(balance,10)}</b>
+                    </h3>
                   </>
                 ) : (
                   <p>Loading user data...</p>

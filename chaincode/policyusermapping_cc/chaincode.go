@@ -47,7 +47,7 @@ func (ac *Chaincode) requestPolicy(stub shim.ChaincodeStubInterface, args []stri
 	if len(args) != 3 {
 		return shim.Success([]byte("{\"error\": \"Incorrect number of arguments. Expecting 3\"}"))
 	}
-	var policyMap = PolicyMap{Mappingid: uuid.New().String(), Policyid: args[1], Assetid: args[2], Premiumspaid: 0, Claimed: false}
+	var policyMap = PolicyMap{Mappingid: uuid.New().String(), Policyid: args[1], Assetid: args[2], Premiumspaid: 1, Claimed: false}
 	policyList, err := stub.GetState(args[0]) // username
 	if err != nil {
 		return shim.Success([]byte("{\"error\": \"Failed to get existing user policies: " + err.Error() + "\"}"))

@@ -13,11 +13,34 @@ const addPolicy = ({ name }) => {
     const [premiumamount, setPremiumAmount] = useState('')
     const [insurancecover, setInsuranceCover] = useState('')
     const [claimsperyear, setClaimsPerYear] = useState("")
+    const [tokenValue, setTokenValue] = useState('')
 
     const router = useRouter()
     const navigate = (location) => {
         router.push(location)
     }
+
+    useEffect(() => {
+        const handletokenValue = async () => {
+            try {
+                const response = await fetch(`${HOST}/api/company/gettokenvalue`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+    
+                if (response.status === 200) {
+                    const res = await response.json();
+                    const tokenValue = parseInt(res.reply.value, 10);
+                    setTokenValue(tokenValue);
+                } else {
+                    console.error('Failed to fetch token value');
+                }
+            } catch (error) {
+                console.error('Error fetching token value:', error);
+            }
+        }
+        handletokenValue();
+    }, [])
 
     useEffect(() => {
         const policy = localStorage.getItem('policy')
@@ -192,7 +215,7 @@ const addPolicy = ({ name }) => {
                                         </div>
                                         <div>
                                             <label className="block mt-2 text-sm">
-                                                Premium Amount (in INR)
+                                                Premium Amount (in tokens)(1 token = ₹{tokenValue})
                                             </label>
                                             <input
                                                 type="number"

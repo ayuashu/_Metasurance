@@ -13,6 +13,7 @@
     "axios": "^1.6.2",
     "bootstrap": "5.2.3",
     "flowbite": "^1.8.1",
+    "framer-motion": "^10.17.12",
     "i": "^0.3.7",
     "ipfs-http-client": "^60.0.1",
     "mdb-react-ui-kit": "^6.3.0",

@@ -4,7 +4,7 @@ import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/p
 
 const HOST = 'http://localhost:3000';
 
-const AssetCard = () => {
+const AssetCard = ({balance}) => {
     const [assets, setAssets] = useState([]);
     const [selectedAssetID, setSelectedAssetID] = useState(null);
 
@@ -96,7 +96,7 @@ const AssetCard = () => {
                                                 </tr>
                                                 <tr>
                                                     <td><b>Value</b></td>
-                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{value} INR</td>
+                                                    <td colSpan="3" style={{ paddingLeft: '20px' }}>{value} tokens</td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Age</b></td>
@@ -125,6 +125,7 @@ const AssetCard = () => {
                                     <AllRequestPolicyCard
                                         assetid={assetID}
                                         assetType={assetType}
+                                        balance={balance}
                                         rendered={true}
                                     />
                                 )}
