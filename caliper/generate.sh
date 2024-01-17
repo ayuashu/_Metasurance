@@ -1,7 +1,7 @@
-# if [ ! -d "node_modules" ]; then
-#     echo "Installing Dependencies . . . ."
-#     npm install
-# fi
+if [ ! -d "node_modules" ]; then
+    echo "Installing Dependencies . . . ."
+    npm install
+fi
 
 # echo "Binding Caliper to Fabric v1.4.4 . . . ."
 # npx caliper bind --caliper-bind-sut fabric:1.4

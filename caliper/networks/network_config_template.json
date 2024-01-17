@@ -24,7 +24,7 @@
                     }
                 ],
                 "wallet": {
-                    "path": "../wallets/wallet_user",
+                    "path": "../backend_api/wallets/wallet_user",
                     "adminNames": [
                         "admin"
                     ]
@@ -50,7 +50,7 @@
                     }
                 ],
                 "wallet": {
-                    "path": "../wallets/wallet_insurer",
+                    "path": "../backend_api/wallets/wallet_insurer",
                     "adminNames": [
                         "admin"
                     ]
@@ -76,7 +76,7 @@
                     }
                 ],
                 "wallet": {
-                    "path": "../wallets/wallet_verifier",
+                    "path": "../backend_api/wallets/wallet_verifier",
                     "adminNames": [
                         "admin"
                     ]

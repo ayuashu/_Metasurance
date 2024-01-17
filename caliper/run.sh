@@ -1,9 +1,7 @@
 npx caliper launch manager \
-    --caliper-bind-sut fabric:1.4 \
+    --caliper-bind-sut fabric:2.2 \
     --caliper-benchconfig benchmarks/benchmark_config.yaml \
     --caliper-networkconfig networks/network_config.json \
-    --caliper-bind-file bind.yaml \
     --caliper-workspace ./ \
-    --caliper-flow-only-test \
-    --caliper-fabric-gateway-usegateway \
-    --caliper-fabric-gateway-discovery
+    --caliper-fabric-gateway-enabled \
+    --caliper-fabric-gateway-localhost true

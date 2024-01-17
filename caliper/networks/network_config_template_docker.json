@@ -1,0 +1,125 @@
+{
+    "name": "metasurance",
+    "version": "2.0.0",
+    "caliper": {
+        "blockchain": "fabric"
+    },
+    "organizations":[
+        {
+            "mspid": "UserMSP",
+            "connectionProfile": {
+                "path": "../connections/connection-user.json",
+                "discover": true
+            },
+            "identities": {
+                "certificates": [
+                    {
+                        "name": "user1",
+                        "clientPrivateKey": {
+                            "pem": "PEERPK1"
+                        },
+                        "clientSignedCert": {
+                            "pem": "PEERPEM1"
+                        }
+                    }
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_user",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
+            }
+        },
+        {
+            "mspid": "InsurerMSP",
+            "connectionProfile": {
+                "path": "../connections/connection-insurer.json",
+                "discover": true
+            },
+            "identities": {
+                "certificates": [
+                    {
+                        "name": "insurer1",
+                        "clientPrivateKey": {
+                            "pem": "PEERPK2"
+                        },
+                        "clientSignedCert": {
+                            "pem": "PEERPEM2"
+                        }
+                    }
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_insurer",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
+            }
+        },
+        {
+            "mspid": "VerifierMSP",
+            "connectionProfile": {
+                "path": "../connections/connection-verifier.json",
+                "discover": true
+            },
+            "identities": {
+                "certificates": [
+                    {
+                        "name": "verifier1",
+                        "clientPrivateKey": {
+                            "pem": "PEERPK3"
+                        },
+                        "clientSignedCert": {
+                            "pem": "PEERPEM3"
+                        }
+                    }
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_verifier",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
+            }
+        }
+    ],
+    "channels":[
+        {
+            "channelName": "commonchannel",
+            "orderers": [
+                "orderer0.metasurance.com"
+            ],
+            "contracts":[
+                {
+                    "id": "user_cc",
+                    "version": "1.8"
+                },
+                {
+                    "id": "insurer_cc",
+                    "version": "1.9"
+                },
+                {
+                    "id": "verifier_cc",
+                    "version": "1.8"
+                },
+                {
+                    "id": "asset_cc",
+                    "version": "1.8"
+                },
+                {
+                    "id": "policy_cc",
+                    "version": "2.7"
+                },
+                {
+                    "id": "policyusermapping_cc",
+                    "version": "1.8"
+                },
+                {
+                    "id": "claim_cc",
+                    "version": "1.9"
+                }
+            ]
+        }
+    ]
+}

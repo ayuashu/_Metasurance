@@ -1,0 +1,179 @@
+version: "2"
+
+services:
+    orderer0.metasurance.com:
+        container_name: orderer0.metasurance.com
+        extends:
+            file: peer-base.yaml
+            service: orderer-base
+        volumes:
+            - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer0.genesis.block
+            - ../crypto-config/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/msp:/var/hyperledger/orderer/msp
+            - ../crypto-config/ordererOrganizations/metasurance.com/orderers/orderer0.metasurance.com/tls/:/var/hyperledger/orderer/tls
+            - orderer0.metasurance.com:/var/hyperledger/production/orderer
+        ports:
+            - 7050:7050
+
+    peer0.insurer.metasurance.com:
+        container_name: peer0.insurer.metasurance.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer0.insurer.metasurance.com
+            - CORE_PEER_ADDRESS=peer0.insurer.metasurance.com:7051
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+            - CORE_PEER_CHAINCODEADDRESS=peer0.insurer.metasurance.com:7052
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.user.metasurance.com:8051
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.insurer.metasurance.com:7051
+            - CORE_PEER_LOCALMSPID=InsurerMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.insurer.metasurance.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/insurer.metasurance.com/peers/peer0.insurer.metasurance.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/insurer.metasurance.com/peers/peer0.insurer.metasurance.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.insurer.metasurance.com:/var/hyperledger/production
+        ports:
+            - 7051:7051
+
+    peer0.user.metasurance.com:
+        container_name: peer0.user.metasurance.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer0.user.metasurance.com
+            - CORE_PEER_ADDRESS=peer0.user.metasurance.com:8051
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+            - CORE_PEER_CHAINCODEADDRESS=peer0.user.metasurance.com:8052
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.user.metasurance.com:8051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.insurer.metasurance.com:7051
+            - CORE_PEER_LOCALMSPID=UserMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.user.metasurance.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/user.metasurance.com/peers/peer0.user.metasurance.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/user.metasurance.com/peers/peer0.user.metasurance.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.user.metasurance.com:/var/hyperledger/production
+        ports:
+            - 8051:8051
+
+    peer0.verifier.metasurance.com:
+        container_name: peer0.verifier.metasurance.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer0.verifier.metasurance.com
+            - CORE_PEER_ADDRESS=peer0.verifier.metasurance.com:9051
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+            - CORE_PEER_CHAINCODEADDRESS=peer0.verifier.metasurance.com:9052
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.verifier.metasurance.com:9051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.insurer.metasurance.com:7051
+            - CORE_PEER_LOCALMSPID=VerifierMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.verifier.metasurance.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/peers/peer0.verifier.metasurance.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/peers/peer0.verifier.metasurance.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.verifier.metasurance.com:/var/hyperledger/production
+        ports:
+            - 9051:9051
+
+    peer0.exampleadmin.metasurance.com:
+        container_name: peer0.exampleadmin.metasurance.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer0.exampleadmin.metasurance.com
+            - CORE_PEER_ADDRESS=peer0.exampleadmin.metasurance.com:10051
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
+            - CORE_PEER_CHAINCODEADDRESS=peer0.exampleadmin.metasurance.com:10052
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:10052
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.exampleadmin.metasurance.com:10051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.insurer.metasurance.com:7051
+            - CORE_PEER_LOCALMSPID=MetaAdminMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.exampleadmin.metasurance.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/exampleadmin.metasurance.com/peers/peer0.exampleadmin.metasurance.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/exampleadmin.metasurance.com/peers/peer0.exampleadmin.metasurance.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.exampleadmin.metasurance.com:/var/hyperledger/production
+        ports:
+            - 10051:10051
+
+    ca.insurer.metasurance.com:
+        image: hyperledger/fabric-ca:$IMAGE_TAG
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca-insurer
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.insurer.metasurance.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/599a54af96e694e24bc7bc22911b62d55d28ff6c45f58f369f5b074de29bf60b_sk
+            - FABRIC_CA_SERVER_PORT=7054
+        ports:
+            - "7054:7054"
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.insurer.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/599a54af96e694e24bc7bc22911b62d55d28ff6c45f58f369f5b074de29bf60b_sk -b admin:adminpw -d'
+        volumes:
+            - ../crypto-config/peerOrganizations/insurer.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+    ca.user.metasurance.com:
+        image: hyperledger/fabric-ca:$IMAGE_TAG
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca-user
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.user.metasurance.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/51470dac9dd3113dc618f0a24498d125f9f3985b4c03ec721e0531c7437140d3_sk
+            - FABRIC_CA_SERVER_PORT=8054
+        ports:
+            - "8054:8054"
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.user.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/51470dac9dd3113dc618f0a24498d125f9f3985b4c03ec721e0531c7437140d3_sk -b admin:adminpw -d'
+        volumes:
+            - ../crypto-config/peerOrganizations/user.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+    ca.verifier.metasurance.com:
+        image: hyperledger/fabric-ca:$IMAGE_TAG
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca-verifier
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.verifier.metasurance.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/8d09d6a3a6c6e1785460eb31cc3dae0bb130621cabf3ae7259a7b06e1bfddf99_sk
+            - FABRIC_CA_SERVER_PORT=9054
+        ports:
+            - "9054:9054"
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.verifier.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/8d09d6a3a6c6e1785460eb31cc3dae0bb130621cabf3ae7259a7b06e1bfddf99_sk -b admin:adminpw -d'
+        volumes:
+            - ../crypto-config/peerOrganizations/verifier.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+    ca.exampleadmin.metasurance.com:
+        image: hyperledger/fabric-ca:$IMAGE_TAG
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca-exampleadmin
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.exampleadmin.metasurance.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/bbace6674066c5c1546adba07ea14aaeaa3fe501182449fa9868d5d70a210c46_sk
+            - FABRIC_CA_SERVER_PORT=10054
+        ports:
+            - "10054:10054"
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.exampleadmin.metasurance.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/bbace6674066c5c1546adba07ea14aaeaa3fe501182449fa9868d5d70a210c46_sk -b admin:adminpw -d'
+        volumes:
+            - ../crypto-config/peerOrganizations/exampleadmin.metasurance.com/ca/:/etc/hyperledger/fabric-ca-server-config
