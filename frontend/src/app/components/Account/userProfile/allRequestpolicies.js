@@ -137,7 +137,7 @@ const AllRequestPolicyCard = ({ assetid, assetType, balance }) => {
                                                         <button
                                                             className="card-tag"
                                                             onClick={() => handleRequestPolicy(policyid, assetid, minBalance)}>
-                                                            Purchase
+                                                            Purchase via {minBalance} tokens
                                                         </button>
                                                     </div>
                                                 </div>

@@ -9,7 +9,6 @@ const PurchaseToken = ({ username, amount, onBalanceUpdate, isModal }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [balance, setBalance] = useState(parseInt(amount, 10));
 
-  console.log('Balance:', balance)
   const handleClose = async() => {
     setIsOpen(false);
     try{

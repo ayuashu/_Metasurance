@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import AllRequestPolicyCard from './allRequestpolicies';
 import UserAddAssetAnimation from '../../PolicyAnimation/UserAddAssetAnimation/page';
+import { motion } from 'framer-motion';
+import { ImCross } from 'react-icons/im';
+import Backdrop from '../../assets/Backdrop/page';
 
 const HOST = 'http://localhost:3000';
 
-const AssetCard = ({balance}) => {
+
+
+const AssetCard = ({ balance }) => {
     const [assets, setAssets] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [assetType, setAssetType] = useState(null);
     const [selectedAssetID, setSelectedAssetID] = useState(null);
+
 
     const handleDelete = async (assetID) => {
         try {
@@ -21,7 +29,7 @@ const AssetCard = ({balance}) => {
 
             let text = await response.json();
 
-            if(text.error){
+            if (text.error) {
                 alert(text.error)
             }
 
@@ -60,18 +68,14 @@ const AssetCard = ({balance}) => {
         fetchData();
     }, []);
 
-    const handleRequestPolicy = (assetID) => {
+    const handleDisplay = (assetID, assetType) => {
         setSelectedAssetID(assetID);
+        setAssetType(assetType);
+        setShowModal(true);
     }
 
-    const togglePolicyDisplay = (assetID) => {
-        setSelectedAssetID((prevSelectedAssetID) => {
-            if (prevSelectedAssetID === assetID) {
-                return null; // Toggle off
-            } else {
-                return assetID; // Toggle on
-            }
-        });
+    const handleClose = () => {
+        setShowModal(false);
     }
 
     return (
@@ -80,7 +84,7 @@ const AssetCard = ({balance}) => {
                 {assets && assets.length > 0 ? (
                     assets.map((asset) => {
                         const { assetID, assetName, assetType, value, age } = asset;
-                        const isPolicyVisible = selectedAssetID === assetID;
+                        const selectedAssetID = assetID;
 
                         return (
                             <div className="card-container" key={assetID}>
@@ -108,9 +112,9 @@ const AssetCard = ({balance}) => {
                                     <div>
                                         <button
                                             className="card-tag"
-                                            onClick={() => togglePolicyDisplay(assetID)}
+                                            onClick={() => handleDisplay(assetID, assetType)}
                                         >
-                                            {isPolicyVisible ? 'Hide Policies' : 'Get a Policy'}
+                                            Get a Policy
                                         </button>
 
                                         <button
@@ -121,14 +125,6 @@ const AssetCard = ({balance}) => {
                                         </button>
                                     </div>
                                 </div>
-                                {isPolicyVisible && (
-                                    <AllRequestPolicyCard
-                                        assetid={assetID}
-                                        assetType={assetType}
-                                        balance={balance}
-                                        rendered={true}
-                                    />
-                                )}
                             </div>
                         );
                     })
@@ -151,6 +147,47 @@ const AssetCard = ({balance}) => {
                     </div>
                 )}
             </div>
+
+
+            {showModal && (
+                <>
+                    <Backdrop onClick={handleClose} />
+                    <div
+                        className="fixed top-0 left-0 w-full h-full bg-black opacity-60 z-100"
+                        onClick={handleClose}
+                    ></div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        className="fixed top-1/4 bg-slate-900 drop-shadow-md flex flex-col z-[101] rounded-xl overflow-hidden"
+                        style={{ maxHeight: '50vh', width: '50vw' }}
+                    >
+                        <div className="w-full flex items-center justify-end p-4 cursor-pointer">
+                            <p></p>
+                            <p className="text-black text-lg font-semibold"></p>
+
+                            <motion.p
+                                whileTap={{ scale: 0.75 }}
+                                className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-200 rounded-md hover:shadow-xl hover:bg-grey-500 cursor-pointer text-textColor text-base"
+                                onClick={handleClose}
+                            >
+                                <ImCross />
+                            </motion.p>
+                        </div>
+                        <div className="w-full flex flex-col overflow-y-auto py-5 bar">
+                            {selectedAssetID && (
+                                <AllRequestPolicyCard
+                                    assetid={selectedAssetID}
+                                    assetType={assetType}
+                                    balance={balance}
+                                />
+                            )}
+                        </div>
+                    </motion.div>
+                </>
+            )}
         </>
     );
 }

@@ -4,6 +4,8 @@ const db = require('../utils/db');
 const getSessionToken = require('../utils/getSessionToken');
 const VerifierContract = require('../../fabric/contracts/verifier');
 const ClaimContract = require('../../fabric/contracts/claim');
+const InsurerContract = require('../../fabric/contracts/insurer');
+const UserContract = require('../../fabric/contracts/user');
 
 const router = new express.Router();
 
@@ -155,42 +157,76 @@ router.get('/logout', fetchuser, async (req, res) => {
     }
 });
 
-/**
- * Approve a claim request.
- * @async
- * @function
- * @param {Object} req - The request object.
- * @param {string} req.body.username - The username of the company approving the claim.
- * @param {string} req.body.mappingid - The ID of the claim to be approved.
- * @returns {Promise} A Promise that resolves with the result of the claim approval.
- */
+ // Approve a claim request.
 router.post('/claim/accept', fetchuser, async (req, res) => {
     try {
         if (
             req.body.username === undefined ||
-            req.body.mappingid === undefined
+            req.body.insuredname === undefined ||
+            req.body.insurername === undefined ||
+            req.body.mappingid === undefined ||
+            req.body.refund === undefined
         ) {
             res.status(400).send({
-                error: 'Invalid Request! Request must contain mappingid',
+                error: 'Invalid Request! Request must contain mappingid, username, insuredname, insurername and refund.',
             })
             return
         }
-        let reply = await ClaimContract.approveClaim(
-            {username: req.body.username, organization: 'verifier'},
-            [req.body.username, req.body.mappingid],
-        )
-        // check if error key exists in reply
-        if (reply.error) {
-            res.status(500).send({ error: reply.error })
-            return
+        console.log('Request Body:', req.body);
+
+        // Approve claim
+        console.log('Approving Claim...');
+        let claimApprovalResult = await ClaimContract.approveClaim(
+                {username: req.body.username, organization: 'verifier'},
+                [req.body.username, req.body.mappingid],
+        );
+        console.log('Claim Approval Result:', claimApprovalResult);
+
+        if (claimApprovalResult.error) {
+            res.status(500).send({ error: claimApprovalResult.error });
+            return;
         }
-        res.status(200).send({ reply, message: 'Claim Successfully Approved.' })
+
+        // Refund amount from the insurer
+        console.log('Refunding from Insurer...');
+        let insurerRefundResult = await InsurerContract.RefundClaimAmount(
+            { username: req.body.username, organization: 'verifier' },
+            [req.body.insurername, req.body.refund],
+        );
+
+        console.log('Insurer Refund Result:', insurerRefundResult);
+
+        if (insurerRefundResult.error) {
+            res.status(500).send({ error: insurerRefundResult.error });
+            return;
+        }
+
+        // Refund amount to the user
+        console.log('Refunding to User...');
+        let userRefundResult = await UserContract.RefundClaimAmount(
+            { username: req.body.username, organization: 'verifier' },
+            [req.body.insuredname, req.body.refund],
+        );
+
+        console.log('User Refund Result:', userRefundResult);
+
+        if (userRefundResult.error) {
+            res.status(500).send({ error: userRefundResult.error });
+            return;
+        }
+
+        res.status(200).send({
+            claimApprovalResult,
+            insurerRefundResult,
+            userRefundResult,
+            message: 'Claim Successfully Approved. Company balance updated. User balance updated.',
+        });
     } catch (error) {
-        console.log(error)
-        res.status(500).send({ error: 'Claim NOT Approved!', error })
+        console.log('Error:', error);
+        res.status(500).send({ error: 'Claim NOT Approved!', error });
     }
-})
- 
+});
+
 /**
  * Reject a claim request.
  * @async

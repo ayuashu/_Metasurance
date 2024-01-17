@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Footer from '../../../Footer/footer';
-import Navigation from '../../../Navigation/page';
 import AllPolicyCard from './allPolicies';
 
 const HOST = "http://localhost:3000";
@@ -117,10 +115,6 @@ const Services = () => {
 
   return (
     <>
-      <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
-        style={{ overflowY: 'hidden', height: '100%', margin: '0', padding: '0' }}>
-        <style jsx global>{`html, body { overflow: hidden; height: 100%; margin: 0; padding: 0;}`}</style>
-        <Navigation />
         <div className="flex items-center justify-end space-x-4 p-4">
           <div className="relative">
             <label htmlFor="insuranceType" className="text-white p-2">
@@ -172,56 +166,12 @@ const Services = () => {
         </div>
 
         <hr
-          className="w-60 ml-auto border-t border-white"
+          className="w-60 ml-auto border-t border-white mb-4"
         />
-        <div className="grid grid-cols-3 gap-4 min-h-screen px-10 py-10">
-          <div className="..." style={{ height: '70vh' }}>
-            <div className="w-full max-w-sm min-h-full bg-slate-900 border border-gray-200 rounded-lg shadow ">
-              <div className="flex flex-col items-center pb-10 pt-20">
-                <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/Images/pic.jpeg" alt="" />
-                {userDataLoaded ? (
-                  <>
-                    <h5 className="mb-1 text-xl font-semibold text-gray-100">
-                      Hello, {name}
-                    </h5>
-                    <h3 className="mb-1 text-lg font-medium text-gray-300">
-                      Email: <b>{email}</b>
-                    </h3>
-                    <h3 className="text-lg font-medium text-gray-300">
-                      Mobile: <b>{phone}</b>
-                    </h3>
-                    <h3 className="text-lg font-medium text-gray-300">
-                      Balance: <b>{parseInt(balance,10)}</b>
-                    </h3>
-                  </>
-                ) : (
-                  <p>Loading user data...</p>
-                )}
-              </div>
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={() => navigate('/components/Account/userProfile')}
-                  className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900">
-                  <b>Profile</b>
-                </button>
-              </div>
-
-              {/* logout button */}
-              <div className="flex items-center justify-center pt-5">
-                <button
-                  onClick={(e) => handleLogout(e)}
-                  className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover-bg-slate-900">
-                  <b>Logout</b>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="col-span-2 ... bar" style={{ border: "2px solid white", height: '70vh', overflow: 'auto' }}>
+          <div className='bar' style={{ border: "2px solid white", height: '70vh', overflow: 'auto' }}>
             <AllPolicyCard selectedInsuranceType={selectedInsuranceType} selectedCompanyName={selectedCompanyName} />
           </div>
-        </div>
-        <Footer />
-      </div>
+ 
     </>
   )
 }

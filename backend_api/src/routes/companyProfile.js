@@ -314,12 +314,12 @@ router.post('/claim/accept', fetchuser, async (req, res) => {
     try {
         if (
             req.body.username === undefined ||
-            req.body.companyname === undefined ||
+            req.body.insuredname === undefined ||
             req.body.mappingid === undefined ||
             req.body.refund === undefined
         ) {
             res.status(400).send({
-                error: 'Invalid Request! Request must contain mappingid, username, companyname, and refund.',
+                error: 'Invalid Request! Request must contain mappingid, username, insuredname, and refund.',
             });
             return;
         }
@@ -358,7 +358,7 @@ router.post('/claim/accept', fetchuser, async (req, res) => {
         console.log('Refunding to User...');
         let userRefundResult = await UserContract.RefundClaimAmount(
             { username: req.body.username, organization: 'insurer' },
-            [req.body.username, req.body.refund],
+            [req.body.insuredname, req.body.refund],
         );
 
         console.log('User Refund Result:', userRefundResult);

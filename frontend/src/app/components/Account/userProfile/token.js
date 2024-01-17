@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ImCross } from 'react-icons/im';
+import Backdrop from '../../assets/Backdrop/page';
 
 const HOST = 'http://localhost:3000'
 
@@ -55,6 +56,7 @@ const PurchaseToken = ({ username, amount, onBalanceUpdate, isModal }) => {
     <>
       {isOpen && (
         <>
+          <Backdrop onClick={handleClose} />
           <div
             className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-100"
             onClick={handleClose}

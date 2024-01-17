@@ -63,7 +63,7 @@ const ClaimRequests = ( { company,balance }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: selectedUsername, companyname: selectedCompanyname, mappingid: selectedMappingId, refund: String(refundValue) }),
+        body: JSON.stringify({ insuredname: selectedUsername, mappingid: selectedMappingId, refund: String(refundValue) }),
       });
 
       if (response.ok) {
@@ -82,8 +82,6 @@ const ClaimRequests = ( { company,balance }) => {
   };
 
   const handleReject = async (username, mappingid) => {
-    console.log(username, mappingid);
-    return
     try {
       const response = await fetch(`${HOST}/api/company/claim/reject`, {
         method: 'POST',

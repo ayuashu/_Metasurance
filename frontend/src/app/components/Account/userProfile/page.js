@@ -6,6 +6,10 @@ import Navigation from '../../Navigation/page'
 import AssetCard from './assetCard'
 import PolicyIssued from './policyIssued'
 import PurchaseToken from './token'
+import Services from './Services/page'
+import Backdrop from '../../assets/Backdrop/page'
+import { motion } from 'framer-motion'
+import { ImCross } from 'react-icons/im'
 
 const HOST = 'http://localhost:3000'
 
@@ -19,6 +23,7 @@ const UserProfile = () => {
     const [userDataLoaded, setUserDataLoaded] = useState(false)
     const [viewPolicies, setViewPolicies] = useState(false)
     const [purchaseModal, setPurchaseModal] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const navigate = (location) => {
         router.push(location)
     }
@@ -74,6 +79,14 @@ const UserProfile = () => {
         setBalance(updatedBalance);
     };
 
+    const handleDisplay = () => {
+        setShowModal(true)
+    }
+
+    const handleClose = () => {
+        setShowModal(false)
+    }   
+
     return (
         <>
             <div className="bg-slate-700 bg-blend-lighten hover:bg-blend-darken min-h-screen"
@@ -124,11 +137,7 @@ const UserProfile = () => {
                             </div>
                             <div className="flex items-center justify-center">
                                 <button
-                                    onClick={() =>
-                                        navigate(
-                                            '/components/Account/userProfile/Services',
-                                        )
-                                    }
+                                    onClick={handleDisplay}
                                     className="h-10 px-11 text-indigo-100 text-lg transition-colors duration-150 bg-slate-700 rounded-full focus:shadow-outline hover:bg-slate-900"
                                 >
                                     <b>Services</b>
@@ -182,6 +191,39 @@ const UserProfile = () => {
                 <Footer />
             </div>
             {purchaseModal && <PurchaseToken username={username} amount={balance} onBalanceUpdate={handleBalanceUpdate} isModal={setPurchaseModal} />}
+            {showModal && (
+                <>
+                    <Backdrop onClick={handleClose} />
+                    <div
+                        className="fixed top-0 left-0 w-full h-full bg-black opacity-60 z-100"
+                        onClick={handleClose}
+                    ></div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        className="fixed bottom-40 right-1/4 bg-slate-900 drop-shadow-md flex flex-col z-[101] rounded-xl overflow-hidden"
+                        style={{ maxHeight: '70vh', width: '60vw' }}
+                    >
+                        <div className="w-full flex items-center justify-end p-4 cursor-pointer">
+                            <p></p>
+                            <p className="text-black text-lg font-semibold"></p>
+
+                            <motion.p
+                                whileTap={{ scale: 0.75 }}
+                                className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-200 rounded-md hover:shadow-xl hover:bg-grey-500 cursor-pointer text-textColor text-base"
+                                onClick={handleClose}
+                            >
+                                <ImCross />
+                            </motion.p>
+                        </div>
+                        <div className="w-full flex flex-col overflow-y-auto py-5 px-32">
+                            <Services />
+                        </div>
+                    </motion.div>
+                </>
+            )}
         </>
     )
 }
