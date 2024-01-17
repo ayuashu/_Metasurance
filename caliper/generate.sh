@@ -30,8 +30,11 @@ for ORG in user insurer verifier; do
     sed -i -e "s#PEERPK${INDEX}#${PP}#" networks/network_config.json
 
     # SET PEERPEM
-    PEERPEM="../backend/crypto-config/peerOrganizations/${ORG}.metasurance.com/tlsca/tlsca.${ORG}.metasurance.com-cert.pem"
-    PP=$(one_line_pem $PEERPEM)
+    CERT_PATH="../backend/crypto-config/peerOrganizations/${ORG}.metasurance.com/users/Admin@${ORG}.metasurance.com/msp/signcerts/"
+    cd $CERT_PATH
+    CERT=$(ls *.pem)
+    cd $CURRENT_DIR
+    PP=$(one_line_pem ${CERT_PATH}${CERT})
     sed -i -e "s#PEERPEM${INDEX}#$PP#" networks/network_config.json
 
     # SET CAPEM

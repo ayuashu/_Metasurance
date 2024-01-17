@@ -9,7 +9,7 @@
             "mspid": "UserMSP",
             "connectionProfile": {
                 "path": "../connections/connection-user.json",
-                "discover": false
+                "discover": true
             },
             "identities": {
                 "certificates": [
@@ -22,14 +22,20 @@
                             "pem": "PEERPEM1"
                         }
                     }
-                ]
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_user",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
             }
         },
         {
             "mspid": "InsurerMSP",
             "connectionProfile": {
                 "path": "../connections/connection-insurer.json",
-                "discover": false
+                "discover": true
             },
             "identities": {
                 "certificates": [
@@ -42,14 +48,20 @@
                             "pem": "PEERPEM2"
                         }
                     }
-                ]
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_insurer",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
             }
         },
         {
             "mspid": "VerifierMSP",
             "connectionProfile": {
                 "path": "../connections/connection-verifier.json",
-                "discover": false
+                "discover": true
             },
             "identities": {
                 "certificates": [
@@ -62,7 +74,13 @@
                             "pem": "PEERPEM3"
                         }
                     }
-                ]
+                ],
+                "wallet": {
+                    "path": "../wallets/wallet_verifier",
+                    "adminNames": [
+                        "admin"
+                    ]
+                }
             }
         }
     ],
