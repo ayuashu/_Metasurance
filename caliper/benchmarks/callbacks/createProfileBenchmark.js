@@ -10,7 +10,7 @@ class MyWorkload extends WorkloadModuleBase {
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
 
-        for (let i = 0; i < this.roundArguments.assets; i++) {
+        for (let i = 0; i < this.roundArguments.times; i++) {
             const uname = `${this.workerIndex}_${i}`;
             console.log(`Worker ${this.workerIndex}: Creating user ${uname}`);
             const request = {
@@ -26,7 +26,7 @@ class MyWorkload extends WorkloadModuleBase {
     }
 
     async submitTransaction() {
-        const randomId = Math.floor(Math.random() * this.roundArguments.assets);
+        const randomId = Math.floor(Math.random() * this.roundArguments.times);
         const myArgs = {
             contractId: "user_cc",
             contractFunction: 'readUserProfile',
@@ -39,7 +39,7 @@ class MyWorkload extends WorkloadModuleBase {
     }
 
     async cleanupWorkloadModule() {
-        for (let i = 0; i < this.roundArguments.assets; i++) {
+        for (let i = 0; i < this.roundArguments.times; i++) {
             const assetID = `${this.workerIndex}_${i}`;
             console.log(`Worker ${this.workerIndex}: Checking user ${assetID}`);
             const request = {
