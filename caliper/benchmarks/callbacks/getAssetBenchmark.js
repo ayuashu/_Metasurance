@@ -5,8 +5,8 @@ const { WorkloadModuleBase } = require('@hyperledger/caliper-core');
 class MyWorkload extends WorkloadModuleBase {
     constructor() {
         super();
+        this.assetids = []
     }
-
     async initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext) {
         await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext);
 
@@ -20,7 +20,16 @@ class MyWorkload extends WorkloadModuleBase {
                 contractArguments: [aname, "NFT", "500", "3", "user1"],
                 readOnly: false
             };
-            await this.sutAdapter.sendRequests(request);
+            let res = await this.sutAdapter.sendRequests(request);
+            let buf = res.status.result
+            if(typeof buf.toJSON === 'function') {
+              let JSONbuf = buf.toJSON()
+              let bufdata = JSONbuf.data
+              let bufDataString = Buffer.from(bufdata).toString('utf-8')
+              let dataJSON = JSON.parse(bufDataString)
+              // console.log(dataJSON)
+              this.assetids.push(dataJSON.assetID)
+            }
         }
     }
 
@@ -33,28 +42,22 @@ class MyWorkload extends WorkloadModuleBase {
             contractArguments: ["user1"],
             readOnly: true
         };
-       let res = await this.sutAdapter.sendRequests(myArgs);
-      let buf = res.status.result
-      let JSONbuf = buf.toJSON()
-      let bufdata = JSONbuf.data
-      let bufDataString = Buffer.from(bufdata).toString('utf-8')
-       console.log(JSON.parse(bufDataString));
+       await this.sutAdapter.sendRequests(myArgs);
     }
 
-    // async cleanupWorkloadModule() {
-    //     for (let i = 0; i < this.roundArguments.policies; i++) {
-    //         const pname = `${this.workerIndex}_${i}`;
-    //         console.log(`Worker ${this.workerIndex}: Getting policy ${pname}`);
-    //         const request = {
-    //             contractId: "policy_cc",
-    //             contractFunction: 'viewAllPolices',
-    //             invokerIdentity: 'user1',
-    //             contractArguments: [assetID],
-    //             readOnly: false
-    //         };
-    //         await this.sutAdapter.sendRequests(request);
-    //     }
-    // }
+    async cleanupWorkloadModule() {
+        for (let i = 0; i < this.assetids.length; i++) {
+            console.log(`Worker ${this.workerIndex}: deleting asset id ${this.assetids[i]}`);
+            const request = {
+                contractId: "asset_cc",
+                contractFunction: 'deleteAsset',
+                invokerIdentity: 'user1',
+                contractArguments: ["user1", this.assetids[i]],
+                readOnly: false
+            };
+            await this.sutAdapter.sendRequests(request);
+        }
+    }
 }
 
 function createWorkloadModule() {

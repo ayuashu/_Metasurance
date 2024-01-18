@@ -2,30 +2,30 @@ test:
     name: caliper_benchmark
     description: test benchmark
     workers:
-      number: 4
+      number: 1
     rounds:
-      # - label: Read User
-      #   description: Query User benchmark
-      #   txDuration: 30
-      #   rateControl:
-      #     type: fixed-load
-      #     opts:
-      #       transactionLoad: 2
-      #   workload:
-      #     module: benchmarks/callbacks/createProfileBenchmark.js
-      #     arguments:
-      #       times: 10
-      # - label: Get Policies
-      #   description: Show all Policies
-      #   txDuration: 30
-      #   rateControl:
-      #     type: fixed-rate
-      #     opts:
-      #       transactionLoad: 2
-      #   workload:
-      #     module: benchmarks/callbacks/getPolicyBenchmark.js
-      #     arguments:
-      #       policies: 10
+      - label: Read User
+        description: Query User benchmark
+        txDuration: 30
+        rateControl:
+          type: fixed-load
+          opts:
+            transactionLoad: 2
+        workload:
+          module: benchmarks/callbacks/createProfileBenchmark.js
+          arguments:
+            times: 10
+      - label: Get Policies
+        description: Show all Policies
+        txDuration: 30
+        rateControl:
+          type: fixed-rate
+          opts:
+            transactionLoad: 2
+        workload:
+          module: benchmarks/callbacks/getPolicyBenchmark.js
+          arguments:
+            policies: 10
       - label: Get Assets
         description: Show registered Assets
         txDuration: 30
@@ -37,3 +37,36 @@ test:
           module: benchmarks/callbacks/getAssetBenchmark.js
           arguments:
             assets: 10
+      - label: View issued policies
+        description: Show issued policies
+        txDuration: 30
+        rateControl:
+          type: fixed-load
+          opts:
+            transactionLoad: 2
+        workload:
+          module: benchmarks/callbacks/mapPolicyUser.js
+          arguments:
+            issues: 10
+      - label: pay premium
+        description: Pay the premium
+        txDuration: 30
+        rateControl:
+          type: fixed-rate
+          opts:
+            tps: 10
+        workload:
+          module: benchmarks/callbacks/payPremium.js
+          arguments:
+            issues: 10
+      - label: claim policy
+        description: Claim a policy
+        txDuration: 30
+        rateControl:
+          type: fixed-rate
+          opts:
+            tps: 10
+        workload:
+          module: benchmarks/callbacks/claimBenchmark.js
+          arguments:
+            issues: 10
