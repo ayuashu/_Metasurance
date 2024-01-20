@@ -8,9 +8,9 @@ test:
         description: Query User benchmark
         txDuration: 30
         rateControl:
-          type: fixed-load
+          type: fixed-rate
           opts:
-            transactionLoad: 2
+            tps: 600
         workload:
           module: benchmarks/callbacks/createProfileBenchmark.js
           arguments:
@@ -21,7 +21,7 @@ test:
         rateControl:
           type: fixed-rate
           opts:
-            transactionLoad: 2
+            tps: 600
         workload:
           module: benchmarks/callbacks/getPolicyBenchmark.js
           arguments:
@@ -30,9 +30,9 @@ test:
         description: Show registered Assets
         txDuration: 30
         rateControl:
-          type: fixed-load
+          type: fixed-rate
           opts:
-            transactionLoad: 2
+            tps: 600
         workload:
           module: benchmarks/callbacks/getAssetBenchmark.js
           arguments:
@@ -41,9 +41,9 @@ test:
         description: Show issued policies
         txDuration: 30
         rateControl:
-          type: fixed-load
+          type: fixed-rate
           opts:
-            transactionLoad: 2
+            tps: 600
         workload:
           module: benchmarks/callbacks/mapPolicyUser.js
           arguments:
@@ -54,7 +54,7 @@ test:
         rateControl:
           type: fixed-rate
           opts:
-            tps: 10
+            tps: 600
         workload:
           module: benchmarks/callbacks/payPremium.js
           arguments:
@@ -65,7 +65,7 @@ test:
         rateControl:
           type: fixed-rate
           opts:
-            tps: 10
+            tps: 600
         workload:
           module: benchmarks/callbacks/claimBenchmark.js
           arguments:

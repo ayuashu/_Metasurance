@@ -94,7 +94,7 @@ class MyWorkload extends WorkloadModuleBase {
             contractId: "claim_cc",
             contractFunction: 'claimPolicy',
             invokerIdentity: 'user1',
-            contractArguments: ["user1", this.mappingdis[randomId], this.policyids[randomId], this.assetids[randomId], "5", "fire", "LIC", "[\"http://dock.kom\"]"],
+            contractArguments: ["user"+randomId.toString(), this.mappingdis[randomId], this.policyids[randomId], this.assetids[randomId], randomId.toString(), "fire", "LIC"+randomId.toString(), "[\"http://dock.kom\"]"],
             readOnly: false
         };
        await this.sutAdapter.sendRequests(myArgs);

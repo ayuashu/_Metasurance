@@ -94,7 +94,7 @@ class MyWorkload extends WorkloadModuleBase {
             contractId: "policyusermapping_cc",
             contractFunction: 'payPremium',
             invokerIdentity: 'user1',
-            contractArguments: ["user1", this.mappingdis[randomId]],
+            contractArguments: ["user"+randomId.toString(), this.mappingdis[randomId]],
             readOnly: false
         };
        await this.sutAdapter.sendRequests(myArgs);
