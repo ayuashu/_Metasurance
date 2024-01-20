@@ -1,3 +1,0 @@
-[34m2024-01-20 11:35:34.667 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 001[0m Using default escc
-[34m2024-01-20 11:35:34.668 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 002[0m Using default vscc
-[34m2024-01-20 11:35:35.944 UTC [chaincodeCmd] install -> INFO 003[0m Installed remotely response:<status:200 payload:"OK" > 
